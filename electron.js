@@ -1,9 +1,8 @@
 // electron.js
-
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
-const isDev = require('electron-is-dev')
 const Datastore = require('nedb')
+const isDev = require('electron-is-dev')
 
 let mainWindow
 let db
@@ -19,18 +18,46 @@ function createWindow() {
     },
   })
 
+  // Код для работы меню электрон с навигацией реакт
+  //-------нужно разобраться
+  // mainWindow.webContents.on('did-finish-load', () => {
+  //   mainWindow.webContents.send('ipcRenderer-ready')
+  // })
+
   const startUrl = isDev
     ? 'http://localhost:3000'
     : `file://${path.join(__dirname, '../build/index.html')}`
 
   mainWindow.loadURL(startUrl)
 
+  // Создаем меню
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'Page 1',
+      click: () => mainWindow.webContents.send('navigate', 'page1'),
+    },
+    {
+      label: 'Pages',
+      submenu: [
+        {
+          label: 'Page 1',
+          click: () => mainWindow.webContents.send('navigate', 'page1'),
+        },
+        { type: 'separator' },
+        { role: 'quit' },
+      ],
+    },
+  ])
+
+  // Устанавливаем созданное меню
+  Menu.setApplicationMenu(menu)
+
   if (isDev) {
     mainWindow.webContents.openDevTools()
   }
 
   mainWindow.on('closed', () => {
-    mainWindow = null
+    mainWindow?.destroy()
   })
 }
 
@@ -58,23 +85,54 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.handle('write-file', (event, data) => {
-  const timestamp = Date.now()
+ipcMain.on('navigate', (event, page) => {
+  mainWindow.webContents.send('navigate', page)
+})
 
-  // Ваша схема данных
+ipcMain.handle('write-file', (event, personData) => {
+  const timestamp = Date.now()
+  const defoltStamp = 1685000178013
+
   const schema = {
-    timestamp,
-    firstName: data.inputFName,
-    secondName: data.inputSName,
-    // Дополнительные поля согласно вашей схеме
-    // Например: name, sex, plan, tasks и так далее
+    //основные данные введенные вручную
+    lastFirstName: personData.lastFirstName,
+    gender: personData.gender,
+    responsibility: personData.responsibility,
+    portnerOnly: personData.portnerOnly,
+    secondClassOnly: personData.secondClassOnly,
+    notBibleStudy: personData.notBibleStudy,
+    dontUse: personData.dontUse,
+    commemts: personData.comments,
+    // Дополнительные поля добавляемые автоматически
+    plan: false,
+    portners: [],
+    mainStarting: defoltStamp,
+    mainFollowing: defoltStamp,
+    mainMaking: defoltStamp,
+    mainRead: defoltStamp,
+    mainExplaining: defoltStamp,
+    smalStarting: defoltStamp,
+    smalFollowing: defoltStamp,
+    smalMaking: defoltStamp,
+    smalRead: defoltStamp,
+    smalExplaining: defoltStamp,
+    chairMan: defoltStamp,
+    firstSpeach: defoltStamp,
+    gems: defoltStamp,
+    live: defoltStamp,
+    study: defoltStamp,
+    pray: defoltStamp,
+    studyReader: defoltStamp,
+    secondShair: defoltStamp,
+    mainSlave: defoltStamp,
+    smalSlave: defoltStamp,
   }
 
   db.insert(schema, (err, newDoc) => {
     if (err) {
       console.error('Error inserting data into NeDB:', err)
     } else {
-      console.log('Data inserted into NeDB:', newDoc)
+      //console.log('Data inserted into NeDB:', newDoc)
     }
   })
 })
