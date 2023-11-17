@@ -1,33 +1,54 @@
 import React, { useState, useEffect } from 'react'
-
+import InputMale from './InputMale'
+import InputFemale from './InputFemale'
+//добавить поиск в базе данных имен при добавлении нового для исключеия дублей----------------
 interface IPersonData {
   lastFirstName: string
   gender: string
-  responsibility: string
-  portnerOnly: boolean
-  secondClassOnly: boolean
-  notBibleStudy: boolean
+  chairman?: boolean
+  secondChairM?: boolean
+  firstSpeach?: boolean
+  gems?: boolean
+  live?: boolean
+  studyB?: boolean
+  studyBReader?: boolean
+  endPray?: boolean
+  portnerOnly?: boolean
+  secondClassOnly?: boolean
+  notBibleStudy?: boolean
   dontUse: boolean
   comments: string
+  plan: boolean
 }
 
 const AddNewPerson: React.FC = () => {
+  const defaultMaleData = {
+    chairman: false,
+    secondChairM: false,
+    firstSpeach: false,
+    gems: false,
+    live: false,
+    studyB: false,
+    studyBReader: false,
+    endPray: false,
+  }
+
+  const defaultFemaleData = {
+    portnerOnly: false,
+    secondClassOnly: false,
+    notBibleStudy: false,
+  }
+
+  const [maleData, setMaleData] = useState(defaultMaleData)
+  const [femaleData, setFemaleData] = useState(defaultFemaleData)
   const [inputLFName, setInputLFName] = useState('')
-  const [gender, setGender] = useState('Female')
-  const [responsib, setResponsib] = useState('Publisher')
-  const [portnerOnly, setPortnerOnly] = useState(false)
-  const [secondClassOnly, setSecondClassOnly] = useState(false)
-  const [notStudy, setNotStudy] = useState(false)
+  const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
 
-  const setClearSate = () => {
+  const setClearState = () => {
     setInputLFName('')
-    setGender('Female')
-    setResponsib('Publisher')
-    setPortnerOnly(false)
-    setSecondClassOnly(false)
-    setNotStudy(false)
+    setGender('')
     setDontUse(false)
     setComments('')
   }
@@ -36,33 +57,41 @@ const AddNewPerson: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      if (gender === 'Male') {
+      if (gender === 'Male' && inputLFName !== '') {
         personData = {
           lastFirstName: inputLFName,
           gender: gender,
-          responsibility: responsib,
-          portnerOnly: portnerOnly,
-          secondClassOnly: secondClassOnly,
-          notBibleStudy: notStudy,
+          chairman: maleData.chairman,
+          secondChairM: maleData.secondChairM,
+          firstSpeach: maleData.firstSpeach,
+          gems: maleData.gems,
+          live: maleData.live,
+          studyB: maleData.studyB,
+          studyBReader: maleData.studyBReader,
+          endPray: maleData.endPray,
           dontUse: dontUse,
           comments: comments,
+          plan: false,
         }
-      } else {
-        personData = {
-          lastFirstName: inputLFName,
-          gender: gender,
-          responsibility: 'Publisher',
-          portnerOnly: portnerOnly,
-          secondClassOnly: secondClassOnly,
-          notBibleStudy: notStudy,
-          dontUse: dontUse,
-          comments: comments,
-        }
+        await window.api.writeDatabase(personData)
       }
-      await window.api.writeDatabase(personData)
-      setClearSate()
+
+      if (gender === 'Female' && inputLFName !== '') {
+        personData = {
+          lastFirstName: inputLFName,
+          gender: gender,
+          portnerOnly: femaleData.portnerOnly,
+          secondClassOnly: femaleData.secondClassOnly,
+          notBibleStudy: femaleData.notBibleStudy,
+          dontUse: dontUse,
+          comments: comments,
+          plan: false,
+        }
+        await window.api.writeDatabase(personData)
+      }
+      setClearState()
     } catch (error) {
-      console.error('Error writing to database:', error)
+      //console.log('Error writing to database:', error)
     }
   }
 
@@ -90,64 +119,29 @@ const AddNewPerson: React.FC = () => {
       />
       -Female
       {gender === 'Male' ? (
-        <div>
-          <input
-            type="checkbox"
-            value="Publisher"
-            checked={responsib === 'Publisher'}
-            onChange={(e) => setResponsib(e.target.value)}
-          />
-          -Publisher
-          <input
-            type="checkbox"
-            value="Servant"
-            checked={responsib === 'Servant'}
-            onChange={(e) => setResponsib(e.target.value)}
-          />
-          -Servant
-          <input
-            type="checkbox"
-            value="Elder"
-            checked={responsib === 'Elder'}
-            onChange={(e) => setResponsib(e.target.value)}
-          />
-          -Elder
-        </div>
+        <InputMale setMaleData={setMaleData} />
+      ) : gender === 'Female' ? (
+        <InputFemale setFemaleData={setFemaleData} />
       ) : (
+        <div>Input lastname, firstname and choose the gender</div>
+      )}
+      {(gender === 'Male' || gender === 'Female') && (
         <div>
           <input
             type="checkbox"
-            checked={portnerOnly}
-            onChange={(e) => setPortnerOnly(!portnerOnly)}
+            checked={dontUse}
+            onChange={(e) => setDontUse(!dontUse)}
           />
-          -Portner only
+          -Do not use
           <input
-            type="checkbox"
-            checked={secondClassOnly}
-            onChange={(e) => setSecondClassOnly(!secondClassOnly)}
+            placeholder="Short comments"
+            type="text"
+            value={comments}
+            onChange={(e) => setComments(e.target.value)}
           />
-          -Second class only
-          <input
-            type="checkbox"
-            checked={notStudy}
-            onChange={(e) => setNotStudy(!notStudy)}
-          />
-          -Not a Bible study
+          <button onClick={handleSubmit}>Save</button>
         </div>
       )}
-      <input
-        type="checkbox"
-        checked={dontUse}
-        onChange={(e) => setDontUse(!dontUse)}
-      />
-      -Do not use
-      <input
-        placeholder="Short comments"
-        type="text"
-        value={comments}
-        onChange={(e) => setComments(e.target.value)}
-      />
-      <button onClick={handleSubmit}>Submit</button>
     </div>
   )
 }

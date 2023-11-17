@@ -4,10 +4,10 @@
 import React, { useState, useEffect } from 'react'
 import { Route, Link, Routes, useNavigate } from 'react-router-dom'
 
-import MainPage from './Pages/MainPage/MainPage'
+import PersonsList from './Pages/PersonsList/PersonsList'
 import AddNewPerson from './Pages/AddNewPerson/AddNewPerson'
+import AddInfoByWeek from './Pages/AddInfoByWeek/AddInfoByWeek'
 const Page1: React.FC = () => <div>Page 1</div>
-const Page2: React.FC = () => <div>Page 2</div>
 
 const App: React.FC = () => {
   //------нужно разобраться
@@ -33,7 +33,10 @@ const App: React.FC = () => {
             <Link to="/AddNewPerson">Add new person</Link>
           </li>
           <li>
-            <Link to="/page2">Page 2</Link>
+            <Link to="/PersonsList">Persons List</Link>
+          </li>
+          <li>
+            <Link to="/AddInfoByWeek">Add info by week</Link>
           </li>
         </ul>
       </nav>
@@ -41,7 +44,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Page1 />} />
         <Route path="/AddNewPerson" element={<AddNewPerson />} />
-        <Route path="/page2" element={<Page2 />} />
+        <Route path="/PersonsList" element={<PersonsList />} />
+        <Route path="/AddInfoByWeek" element={<AddInfoByWeek />} />
       </Routes>
     </div>
   )

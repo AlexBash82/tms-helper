@@ -7,10 +7,7 @@ import App from './App'
 import './index.css'
 
 interface unitDB {
-  timestamp: number
-  firstName: string
-  secondName: string
-  _id: string
+  lastFirstName: string
 }
 
 declare global {

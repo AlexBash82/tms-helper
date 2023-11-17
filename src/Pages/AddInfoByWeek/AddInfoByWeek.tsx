@@ -4,8 +4,8 @@ interface unitDB {
   lastFirstName: string
 }
 
-const MainPage: React.FC = () => {
-  const [inputFName, setInputFName] = useState('')
+const AddInfoByWeek: React.FC = () => {
+  const [dateOfMeet, setDateOfMeet] = useState('')
   const [inputSName, setInputSName] = useState('')
   const [inputSearch, setInputSearch] = useState('')
   const [inputNewName, setInputNewName] = useState('')
@@ -17,16 +17,6 @@ const MainPage: React.FC = () => {
       setAllFileContent(allData)
     } catch (error) {
       console.error('Error reading all data:', error)
-    }
-  }
-
-  const handleSubmit = async () => {
-    try {
-      await window.api.writeDatabase({ inputFName, inputSName })
-      setInputFName('')
-      setInputSName('')
-    } catch (error) {
-      console.error('Error writing to database:', error)
     }
   }
 
@@ -51,18 +41,11 @@ const MainPage: React.FC = () => {
   return (
     <div>
       <input
-        placeholder="FirstName"
-        type="text"
-        value={inputFName}
-        onChange={(e) => setInputFName(e.target.value)}
+        placeholder="Date of meeting"
+        type="date"
+        value={dateOfMeet}
+        onChange={(e) => setDateOfMeet(e.target.value)}
       />
-      <input
-        placeholder="SecondName"
-        type="text"
-        value={inputSName}
-        onChange={(e) => setInputSName(e.target.value)}
-      />
-      <button onClick={handleSubmit}>Submit</button>
 
       <div>
         <button onClick={handleReadAll}>Read All Data</button>
@@ -94,4 +77,4 @@ const MainPage: React.FC = () => {
   )
 }
 
-export default MainPage
+export default AddInfoByWeek
