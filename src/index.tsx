@@ -6,8 +6,29 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
 
-interface unitDB {
+interface IunitDB {
   lastFirstName: string
+  gender: string
+  chairman?: boolean
+  secondChairM?: boolean
+  firstSpeach?: boolean
+  gems?: boolean
+  live?: boolean
+  studyB?: boolean
+  studyBReader?: boolean
+  endPray?: boolean
+  portnerOnly?: boolean
+  secondClassOnly?: boolean
+  notBibleStudy?: boolean
+  dontUse: boolean
+  comments: string
+  plan: boolean
+  _id: string
+}
+
+type Result = {
+  success: boolean
+  message: string
 }
 
 declare global {
@@ -15,10 +36,11 @@ declare global {
     api: {
       send: (channel: string, data?: any) => void
       receive: (channel: string, func: (...args: any[]) => void) => void
-      readAllDatabase: () => Promise<Array<unitDB>>
+      readAllDatabase: () => Promise<Array<IunitDB>>
       writeDatabase: (data: object) => Promise<void>
       updateItem: (data: object) => Promise<void>
-      searchUsersByLastname: (lastFirstName: string) => Promise<Array<unitDB>>
+      searchUsersByLastname: (lastFirstName: string) => Promise<Array<IunitDB>>
+      deleteUser: (lastFirstName: string) => Promise<Result>
     }
   }
 }

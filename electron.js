@@ -224,3 +224,24 @@ ipcMain.handle('search-users-by-lastname', async (event, searchTerm) => {
     return []
   }
 })
+
+ipcMain.handle('delete-item', async (event, lastFirstName) => {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      db.remove({ lastFirstName: lastFirstName }, {}, (err, numRemoved) => {
+        if (err) {
+          reject(err)
+        } else if (numRemoved > 0) {
+          resolve({ success: true, message: 'User deleted successfully' })
+        } else {
+          resolve({ success: false, message: 'User not found' })
+        }
+      })
+    })
+
+    return result
+  } catch (error) {
+    console.error('Error deleting user by lastFirstName:', error)
+    return { success: false, message: 'Error deleting user' }
+  }
+})

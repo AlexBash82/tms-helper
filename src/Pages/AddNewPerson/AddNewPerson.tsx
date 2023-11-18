@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import InputMale from './InputMale'
 import InputFemale from './InputFemale'
-//добавить поиск в базе данных имен при добавлении нового для исключеия дублей----------------
+//исключить возможность добавления одноименных пользователей----------------
+//исключить возможность пробела в начале, в конце, и более одного между-----
 interface IPersonData {
   lastFirstName: string
   gender: string
@@ -62,7 +63,7 @@ const AddNewPerson: React.FC = () => {
         .then((filteredUsers) => {
           // Обработка отфильтрованных пользователей
           result = filteredUsers.map((item) => item.lastFirstName)
-          console.log(result)
+          //console.log(result)
         })
         .catch((error) => {
           console.error('Error searching users by lastname:', error)
@@ -159,7 +160,7 @@ const AddNewPerson: React.FC = () => {
             value={comments}
             onChange={(e) => setComments(e.target.value)}
           />
-          <button onClick={handleSubmit}>Save</button>
+          <button onClick={() => handleSubmit()}>Save</button>
         </div>
       )}
     </div>
