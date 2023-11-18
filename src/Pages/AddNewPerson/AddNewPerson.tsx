@@ -45,12 +45,31 @@ const AddNewPerson: React.FC = () => {
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
+  const [found, setFound] = useState([''])
 
   const setClearState = () => {
     setInputLFName('')
     setGender('')
     setDontUse(false)
     setComments('')
+  }
+
+  const searchByLetter = async (inputLatters: string) => {
+    let result = ['']
+    if (inputLatters) {
+      await window.api
+        .searchUsersByLastname(inputLatters)
+        .then((filteredUsers) => {
+          // Обработка отфильтрованных пользователей
+          result = filteredUsers.map((item) => item.lastFirstName)
+          console.log(result)
+        })
+        .catch((error) => {
+          console.error('Error searching users by lastname:', error)
+        })
+    }
+    setInputLFName(inputLatters)
+    setFound(result)
   }
 
   let personData: IPersonData
@@ -91,7 +110,7 @@ const AddNewPerson: React.FC = () => {
       }
       setClearState()
     } catch (error) {
-      //console.log('Error writing to database:', error)
+      console.log('Error writing to database:', error)
     }
   }
 
@@ -102,8 +121,9 @@ const AddNewPerson: React.FC = () => {
         placeholder="Last name and first name"
         type="text"
         value={inputLFName}
-        onChange={(e) => setInputLFName(e.target.value)}
+        onChange={(e) => searchByLetter(e.target.value)}
       />
+      {found.map((item, index) => item && <p key={index}>I found: {item}</p>)}
       <input
         type="checkbox"
         value="Male"

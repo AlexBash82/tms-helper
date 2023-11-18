@@ -7,6 +7,7 @@ import { Route, Link, Routes, useNavigate } from 'react-router-dom'
 import PersonsList from './Pages/PersonsList/PersonsList'
 import AddNewPerson from './Pages/AddNewPerson/AddNewPerson'
 import AddInfoByWeek from './Pages/AddInfoByWeek/AddInfoByWeek'
+import MainPage from './Pages/MainPage/MainPage'
 const Page1: React.FC = () => <div>Page 1</div>
 
 const App: React.FC = () => {
@@ -42,7 +43,7 @@ const App: React.FC = () => {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Page1 />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/AddNewPerson" element={<AddNewPerson />} />
         <Route path="/PersonsList" element={<PersonsList />} />
         <Route path="/AddInfoByWeek" element={<AddInfoByWeek />} />

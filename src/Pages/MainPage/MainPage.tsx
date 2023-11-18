@@ -1,15 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface unitDB {
   lastFirstName: string
 }
 
 const MainPage: React.FC = () => {
-  const [inputFName, setInputFName] = useState('')
-  const [inputSName, setInputSName] = useState('')
+  const [lastFirstName, setLastFirstName] = useState('')
+  const [found, setFound] = useState([''])
   const [inputSearch, setInputSearch] = useState('')
   const [inputNewName, setInputNewName] = useState('')
   const [allFileContent, setAllFileContent] = useState<Array<unitDB>>([])
+
+  const searchByLetter = (inputLatters) => {
+    window.api
+      .searchUsersByLastname(inputLatters)
+      .then((filteredUsers) => {
+        // Обработка отфильтрованных пользователей
+        const result = filteredUsers.map((item) => item.lastFirstName)
+        setLastFirstName(inputLatters)
+        setFound(result)
+      })
+      .catch((error) => {
+        console.error('Error searching users by lastname:', error)
+      })
+  }
 
   const handleReadAll = async () => {
     try {
@@ -20,15 +34,15 @@ const MainPage: React.FC = () => {
     }
   }
 
-  const handleSubmit = async () => {
-    try {
-      await window.api.writeDatabase({ inputFName, inputSName })
-      setInputFName('')
-      setInputSName('')
-    } catch (error) {
-      console.error('Error writing to database:', error)
-    }
-  }
+  // const handleSubmit = async () => {
+  //   try {
+  //     await window.api.writeDatabase({ inputFName, inputSName })
+  //     setInputFName('')
+  //     setInputSName('')
+  //   } catch (error) {
+  //     console.error('Error writing to database:', error)
+  //   }
+  // }
 
   const rewrite = async () => {
     try {
@@ -53,16 +67,17 @@ const MainPage: React.FC = () => {
       <input
         placeholder="FirstName"
         type="text"
-        value={inputFName}
-        onChange={(e) => setInputFName(e.target.value)}
+        value={lastFirstName}
+        onChange={(e) => searchByLetter(e.target.value)}
       />
-      <input
+      {found.map((item, index) => item && <p key={index}>I found: {item}</p>)}
+      {/* <input
         placeholder="SecondName"
         type="text"
         value={inputSName}
         onChange={(e) => setInputSName(e.target.value)}
       />
-      <button onClick={handleSubmit}>Submit</button>
+      <button onClick={handleSubmit}>Submit</button> */}
 
       <div>
         <button onClick={handleReadAll}>Read All Data</button>

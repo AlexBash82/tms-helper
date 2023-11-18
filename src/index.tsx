@@ -18,6 +18,7 @@ declare global {
       readAllDatabase: () => Promise<Array<unitDB>>
       writeDatabase: (data: object) => Promise<void>
       updateItem: (data: object) => Promise<void>
+      searchUsersByLastname: (lastFirstName: string) => Promise<Array<unitDB>>
     }
   }
 }

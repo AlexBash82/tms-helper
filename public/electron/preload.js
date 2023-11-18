@@ -29,4 +29,6 @@ contextBridge.exposeInMainWorld('api', {
   readAllDatabase: async () => ipcRenderer.invoke('read-all'),
   writeDatabase: async (data) => ipcRenderer.invoke('write-file', data),
   updateItem: async (data) => ipcRenderer.invoke('update-item', data),
+  searchUsersByLastname: async (data) =>
+    ipcRenderer.invoke('search-users-by-lastname', data),
 })

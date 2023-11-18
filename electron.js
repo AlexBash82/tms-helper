@@ -202,3 +202,25 @@ ipcMain.handle('update-item', async (event, updatedItem) => {
     return { success: false, message: 'Error updating item' }
   }
 })
+
+ipcMain.handle('search-users-by-lastname', async (event, searchTerm) => {
+  try {
+    const filteredUsers = await new Promise((resolve, reject) => {
+      db.find(
+        { lastFirstName: { $regex: new RegExp(`^${searchTerm}`, 'i') } },
+        (err, docs) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(docs)
+          }
+        }
+      )
+    })
+
+    return filteredUsers
+  } catch (error) {
+    console.error('Error searching users by lastname:', error)
+    return []
+  }
+})
