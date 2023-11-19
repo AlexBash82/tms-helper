@@ -13,7 +13,7 @@ const MainPage: React.FC = () => {
 
   const searchByLetter = (inputLatters) => {
     window.api
-      .searchUsersByLastname(inputLatters)
+      .getUsersByLastname(inputLatters)
       .then((filteredUsers) => {
         // Обработка отфильтрованных пользователей
         const result = filteredUsers.map((item) => item.lastFirstName)
@@ -27,7 +27,7 @@ const MainPage: React.FC = () => {
 
   const handleReadAll = async () => {
     try {
-      const allData = await window.api.readAllDatabase()
+      const allData = await window.api.getAllUsers()
       setAllFileContent(allData)
     } catch (error) {
       console.error('Error reading all data:', error)
@@ -50,7 +50,7 @@ const MainPage: React.FC = () => {
         oldFirstname: inputSearch,
         newFirstname: inputNewName,
       }
-      const result = await window.api.updateItem(updatedItem)
+      const result = await window.api.updateOneUser(updatedItem)
       console.log('result update', result)
 
       // После обновления, возможно, вы захотите вызвать функцию для повторного чтения данных и обновления состояния компонента

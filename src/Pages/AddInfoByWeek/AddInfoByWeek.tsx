@@ -1,19 +1,16 @@
 import React, { useState } from 'react'
-
-interface unitDB {
-  lastFirstName: string
-}
+import { IUserDB } from '../interfaces'
 
 const AddInfoByWeek: React.FC = () => {
   const [dateOfMeet, setDateOfMeet] = useState('')
-  const [inputSName, setInputSName] = useState('')
+  //const [inputSName, setInputSName] = useState('')
   const [inputSearch, setInputSearch] = useState('')
   const [inputNewName, setInputNewName] = useState('')
-  const [allFileContent, setAllFileContent] = useState<Array<unitDB>>([])
+  const [allFileContent, setAllFileContent] = useState<Array<IUserDB>>([])
 
   const handleReadAll = async () => {
     try {
-      const allData = await window.api.readAllDatabase()
+      const allData = await window.api.getAllUsers()
       setAllFileContent(allData)
     } catch (error) {
       console.error('Error reading all data:', error)
@@ -26,7 +23,7 @@ const AddInfoByWeek: React.FC = () => {
         oldFirstname: inputSearch,
         newFirstname: inputNewName,
       }
-      const result = await window.api.updateItem(updatedItem)
+      const result = await window.api.updateOneUser(updatedItem)
       console.log('result update', result)
 
       // После обновления, возможно, вы захотите вызвать функцию для повторного чтения данных и обновления состояния компонента

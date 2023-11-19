@@ -1,26 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import InputMale from './InputMale'
 import InputFemale from './InputFemale'
+import { IUserDB } from '../interfaces'
+
 //исключить возможность добавления одноименных пользователей----------------
 //исключить возможность пробела в начале, в конце, и более одного между-----
-interface IPersonData {
-  lastFirstName: string
-  gender: string
-  chairman?: boolean
-  secondChairM?: boolean
-  firstSpeach?: boolean
-  gems?: boolean
-  live?: boolean
-  studyB?: boolean
-  studyBReader?: boolean
-  endPray?: boolean
-  portnerOnly?: boolean
-  secondClassOnly?: boolean
-  notBibleStudy?: boolean
-  dontUse: boolean
-  comments: string
-  plan: boolean
-}
 
 const AddNewPerson: React.FC = () => {
   const defaultMaleData = {
@@ -59,7 +43,7 @@ const AddNewPerson: React.FC = () => {
     let result = ['']
     if (inputLatters) {
       await window.api
-        .searchUsersByLastname(inputLatters)
+        .getUsersByLastname(inputLatters)
         .then((filteredUsers) => {
           // Обработка отфильтрованных пользователей
           result = filteredUsers.map((item) => item.lastFirstName)
@@ -73,7 +57,7 @@ const AddNewPerson: React.FC = () => {
     setFound(result)
   }
 
-  let personData: IPersonData
+  let personData: IUserDB
 
   const handleSubmit = async () => {
     try {
@@ -91,9 +75,8 @@ const AddNewPerson: React.FC = () => {
           endPray: maleData.endPray,
           dontUse: dontUse,
           comments: comments,
-          plan: false,
         }
-        await window.api.writeDatabase(personData)
+        await window.api.writeOneUser(personData)
       }
 
       if (gender === 'Female' && inputLFName !== '') {
@@ -105,9 +88,8 @@ const AddNewPerson: React.FC = () => {
           notBibleStudy: femaleData.notBibleStudy,
           dontUse: dontUse,
           comments: comments,
-          plan: false,
         }
-        await window.api.writeDatabase(personData)
+        await window.api.writeOneUser(personData)
       }
       setClearState()
     } catch (error) {

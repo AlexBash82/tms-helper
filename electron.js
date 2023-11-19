@@ -5,7 +5,8 @@ const Datastore = require('nedb')
 const isDev = require('electron-is-dev')
 
 let mainWindow
-let db
+let usersDB
+let weeksDB
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -63,8 +64,12 @@ function createWindow() {
 
 function initializeDatabase() {
   // Используем NeDB для создания базы данных в папке приложения
-  db = new Datastore({
-    filename: path.join(app.getAppPath(), 'data.db'),
+  usersDB = new Datastore({
+    filename: path.join(app.getAppPath(), 'users.db'),
+    autoload: true,
+  })
+  weeksDB = new Datastore({
+    filename: path.join(app.getAppPath(), 'weeks.db'),
     autoload: true,
   })
 
@@ -89,46 +94,64 @@ ipcMain.on('navigate', (event, page) => {
   mainWindow.webContents.send('navigate', page)
 })
 
-ipcMain.handle('write-file', (event, personData) => {
+ipcMain.handle('write-one-user', (event, personData) => {
   const timestamp = Date.now()
   const defoltStamp = 1685000178013
+  let schema = {}
 
-  const schema = {
-    //основные данные введенные вручную
-    lastFirstName: personData.lastFirstName,
-    gender: personData.gender,
-    responsibility: personData.responsibility,
-    portnerOnly: personData.portnerOnly,
-    secondClassOnly: personData.secondClassOnly,
-    notBibleStudy: personData.notBibleStudy,
-    dontUse: personData.dontUse,
-    commemts: personData.comments,
-    // Дополнительные поля добавляемые автоматически
-    plan: false,
-    portners: [],
-    mainStarting: defoltStamp,
-    mainFollowing: defoltStamp,
-    mainMaking: defoltStamp,
-    mainRead: defoltStamp,
-    mainExplaining: defoltStamp,
-    smalStarting: defoltStamp,
-    smalFollowing: defoltStamp,
-    smalMaking: defoltStamp,
-    smalRead: defoltStamp,
-    smalExplaining: defoltStamp,
-    chairMan: defoltStamp,
-    firstSpeach: defoltStamp,
-    gems: defoltStamp,
-    live: defoltStamp,
-    study: defoltStamp,
-    pray: defoltStamp,
-    studyReader: defoltStamp,
-    secondShair: defoltStamp,
-    mainSlave: defoltStamp,
-    smalSlave: defoltStamp,
+  if (personData.gender === 'Male') {
+    schema = {
+      //основные данные введенные вручную
+      ...personData,
+      // Дополнительные поля добавляемые автоматически
+      plan: false,
+      portners: [],
+      mainStarting: defoltStamp,
+      mainFollowing: defoltStamp,
+      mainMaking: defoltStamp,
+      mainRead: defoltStamp,
+      mainExplaining: defoltStamp,
+      smalStarting: defoltStamp,
+      smalFollowing: defoltStamp,
+      smalMaking: defoltStamp,
+      smalRead: defoltStamp,
+      smalExplaining: defoltStamp,
+      chairMan: defoltStamp,
+      firstSpeach: defoltStamp,
+      gems: defoltStamp,
+      live: defoltStamp,
+      study: defoltStamp,
+      pray: defoltStamp,
+      studyReader: defoltStamp,
+      secondShair: defoltStamp,
+      mainSlave: defoltStamp,
+      smalSlave: defoltStamp,
+      latest: defoltStamp,
+    }
+  } else if (personData.gender === 'Female') {
+    schema = {
+      //основные данные введенные вручную
+      ...personData,
+      // Дополнительные поля добавляемые автоматически
+      plan: false,
+      portners: [],
+      mainStarting: defoltStamp,
+      mainFollowing: defoltStamp,
+      mainMaking: defoltStamp,
+      mainRead: defoltStamp,
+      mainExplaining: defoltStamp,
+      smalStarting: defoltStamp,
+      smalFollowing: defoltStamp,
+      smalMaking: defoltStamp,
+      smalRead: defoltStamp,
+      smalExplaining: defoltStamp,
+      mainSlave: defoltStamp,
+      smalSlave: defoltStamp,
+      latest: defoltStamp,
+    }
   }
 
-  db.insert(schema, (err, newDoc) => {
+  usersDB.insert(schema, (err, newDoc) => {
     if (err) {
       console.error('Error inserting data into NeDB:', err)
     } else {
@@ -137,10 +160,10 @@ ipcMain.handle('write-file', (event, personData) => {
   })
 })
 
-ipcMain.handle('read-all', async (event) => {
+ipcMain.handle('read-all-users', async (event) => {
   try {
     const allDocs = await new Promise((resolve, reject) => {
-      db.find({}, (err, docs) => {
+      usersDB.find({}, (err, docs) => {
         if (err) {
           reject(err)
         } else {
@@ -150,7 +173,7 @@ ipcMain.handle('read-all', async (event) => {
     })
 
     // Сбрасываем кэш базы данных
-    db.loadDatabase()
+    usersDB.loadDatabase()
 
     return allDocs
   } catch (error) {
@@ -159,13 +182,13 @@ ipcMain.handle('read-all', async (event) => {
   }
 })
 
-ipcMain.handle('update-item', async (event, updatedItem) => {
+ipcMain.handle('update-one-user', async (event, updatedItem) => {
   try {
     const { oldFirstname, newFirstname } = updatedItem
 
     // Получаем оригинальный объект из базы данных
     const originalItem = await new Promise((resolve, reject) => {
-      db.findOne({ firstName: oldFirstname }, (err, doc) => {
+      usersDB.findOne({ firstName: oldFirstname }, (err, doc) => {
         if (err) {
           reject(err)
         } else {
@@ -182,7 +205,7 @@ ipcMain.handle('update-item', async (event, updatedItem) => {
     const updatedObject = { ...originalItem, firstName: newFirstname }
 
     // Обновляем объект в базе данных
-    db.update(
+    usersDB.update(
       { firstName: oldFirstname },
       updatedObject,
       {},
@@ -206,7 +229,7 @@ ipcMain.handle('update-item', async (event, updatedItem) => {
 ipcMain.handle('search-users-by-lastname', async (event, searchTerm) => {
   try {
     const filteredUsers = await new Promise((resolve, reject) => {
-      db.find(
+      usersDB.find(
         { lastFirstName: { $regex: new RegExp(`^${searchTerm}`, 'i') } },
         (err, docs) => {
           if (err) {
@@ -225,23 +248,49 @@ ipcMain.handle('search-users-by-lastname', async (event, searchTerm) => {
   }
 })
 
-ipcMain.handle('delete-item', async (event, lastFirstName) => {
+ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
   try {
     const result = await new Promise((resolve, reject) => {
-      db.remove({ lastFirstName: lastFirstName }, {}, (err, numRemoved) => {
-        if (err) {
-          reject(err)
-        } else if (numRemoved > 0) {
-          resolve({ success: true, message: 'User deleted successfully' })
-        } else {
-          resolve({ success: false, message: 'User not found' })
+      usersDB.remove(
+        { lastFirstName: lastFirstName },
+        {},
+        (err, numRemoved) => {
+          if (err) {
+            reject(err)
+          } else if (numRemoved > 0) {
+            resolve({ success: true, message: 'User deleted successfully' })
+          } else {
+            resolve({ success: false, message: 'User not found' })
+          }
         }
-      })
+      )
     })
 
     return result
   } catch (error) {
     console.error('Error deleting user by lastFirstName:', error)
     return { success: false, message: 'Error deleting user' }
+  }
+})
+
+// Получение всех пользователей с сортировкой по времени
+ipcMain.handle('get-sortet-users-by-litest', async (event) => {
+  try {
+    const filteredUsers = new Promise((resolve, reject) => {
+      usersDB
+        .find({})
+        .sort({ latest: 1 })
+        .exec((err, users) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(users)
+          }
+        })
+    })
+    return filteredUsers
+  } catch (error) {
+    console.error('Error searching users by latest:', error)
+    return []
   }
 })

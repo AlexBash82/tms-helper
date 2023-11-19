@@ -7,11 +7,14 @@ contextBridge.exposeInMainWorld('api', {
   receive: (channel, func) =>
     ipcRenderer.on(channel, (event, ...args) => func(...args)),
   ipcRenderer,
-  readAllDatabase: async () => ipcRenderer.invoke('read-all'),
-  writeDatabase: async (data) => ipcRenderer.invoke('write-file', data),
-  updateItem: async (data) => ipcRenderer.invoke('update-item', data),
-  searchUsersByLastname: async (data) =>
+
+  writeOneUser: async (data) => ipcRenderer.invoke('write-one-user', data),
+  getAllUsers: async () => ipcRenderer.invoke('read-all-users'),
+  getUsersByLastname: async (data) =>
     ipcRenderer.invoke('search-users-by-lastname', data),
-  deleteUser: async (lastFirstName) =>
-    ipcRenderer.invoke('delete-item', lastFirstName),
+  getUsersByLatest: async () =>
+    ipcRenderer.invoke('get-sortet-users-by-litest'),
+  updateOneUser: async (data) => ipcRenderer.invoke('update-one-user', data),
+  deleteOneUser: async (lastFirstName) =>
+    ipcRenderer.invoke('delete-one-user', lastFirstName),
 })

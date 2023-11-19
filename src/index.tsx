@@ -22,7 +22,6 @@ interface IunitDB {
   notBibleStudy?: boolean
   dontUse: boolean
   comments: string
-  plan: boolean
   _id: string
 }
 
@@ -36,11 +35,13 @@ declare global {
     api: {
       send: (channel: string, data?: any) => void
       receive: (channel: string, func: (...args: any[]) => void) => void
-      readAllDatabase: () => Promise<Array<IunitDB>>
-      writeDatabase: (data: object) => Promise<void>
-      updateItem: (data: object) => Promise<void>
-      searchUsersByLastname: (lastFirstName: string) => Promise<Array<IunitDB>>
-      deleteUser: (lastFirstName: string) => Promise<Result>
+
+      writeOneUser: (data: object) => Promise<void>
+      getAllUsers: () => Promise<Array<IunitDB>>
+      getUsersByLastname: (lastFirstName: string) => Promise<Array<IunitDB>>
+      getUsersByLatest: () => Promise<Array<IunitDB>>
+      updateOneUser: (data: object) => Promise<void>
+      deleteOneUser: (lastFirstName: string) => Promise<Result>
     }
   }
 }
