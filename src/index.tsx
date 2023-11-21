@@ -39,7 +39,7 @@ declare global {
       writeOneUser: (data: object) => Promise<void>
       getAllUsers: () => Promise<Array<IunitDB>>
       getUsersByLastname: (lastFirstName: string) => Promise<Array<IunitDB>>
-      getUsersByLatest: () => Promise<Array<IunitDB>>
+      getUsersByLatest: (addParam: object) => Promise<Array<IunitDB>>
       updateOneUser: (data: object) => Promise<void>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
     }

@@ -105,27 +105,29 @@ ipcMain.handle('write-one-user', (event, personData) => {
       ...personData,
       // Дополнительные поля добавляемые автоматически
       plan: false,
-      portners: [],
-      mainStarting: defoltStamp,
-      mainFollowing: defoltStamp,
-      mainMaking: defoltStamp,
-      mainRead: defoltStamp,
-      mainExplaining: defoltStamp,
-      smalStarting: defoltStamp,
-      smalFollowing: defoltStamp,
-      smalMaking: defoltStamp,
-      smalRead: defoltStamp,
-      smalExplaining: defoltStamp,
       chairMan: defoltStamp,
+      secondChair: defoltStamp,
       firstSpeach: defoltStamp,
       gems: defoltStamp,
+      mainRead: defoltStamp,
+      smallRead: defoltStamp,
+      mainStarting: defoltStamp,
+      smallStarting: defoltStamp,
+      mainFollowing: defoltStamp,
+      smallFollowing: defoltStamp,
+      mainMaking: defoltStamp,
+      smallMaking: defoltStamp,
+      mainExplaining: defoltStamp,
+      smallExplaining: defoltStamp,
+      mainSpeech: defoltStamp,
+      smallSpeech: defoltStamp,
+      mainSlave: defoltStamp,
+      smallSlave: defoltStamp,
+      portners: [],
       live: defoltStamp,
       study: defoltStamp,
-      pray: defoltStamp,
       studyReader: defoltStamp,
-      secondShair: defoltStamp,
-      mainSlave: defoltStamp,
-      smalSlave: defoltStamp,
+      pray: defoltStamp,
       latest: defoltStamp,
     }
   } else if (personData.gender === 'Female') {
@@ -134,19 +136,17 @@ ipcMain.handle('write-one-user', (event, personData) => {
       ...personData,
       // Дополнительные поля добавляемые автоматически
       plan: false,
-      portners: [],
       mainStarting: defoltStamp,
+      smallStarting: defoltStamp,
       mainFollowing: defoltStamp,
+      smallFollowing: defoltStamp,
       mainMaking: defoltStamp,
-      mainRead: defoltStamp,
+      smallMaking: defoltStamp,
       mainExplaining: defoltStamp,
-      smalStarting: defoltStamp,
-      smalFollowing: defoltStamp,
-      smalMaking: defoltStamp,
-      smalRead: defoltStamp,
-      smalExplaining: defoltStamp,
+      smallExplaining: defoltStamp,
       mainSlave: defoltStamp,
-      smalSlave: defoltStamp,
+      smallSlave: defoltStamp,
+      portners: [],
       latest: defoltStamp,
     }
   }
@@ -226,7 +226,7 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
   }
 })
 
-ipcMain.handle('search-users-by-lastname', async (event, searchTerm) => {
+ipcMain.handle('get-sortet-users-by-lastname', async (event, searchTerm) => {
   try {
     const filteredUsers = await new Promise((resolve, reject) => {
       usersDB.find(
@@ -273,13 +273,13 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
   }
 })
 
-// Получение всех пользователей с сортировкой по времени
-ipcMain.handle('get-sortet-users-by-litest', async (event) => {
+ipcMain.handle('get-sortet-users-by-litest', async (event, addParam) => {
   try {
     const filteredUsers = new Promise((resolve, reject) => {
       usersDB
-        .find({})
+        .find({ dontUse: false, plan: false, ...addParam })
         .sort({ latest: 1 })
+        .limit(10)
         .exec((err, users) => {
           if (err) {
             reject(err)

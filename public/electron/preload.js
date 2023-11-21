@@ -11,9 +11,9 @@ contextBridge.exposeInMainWorld('api', {
   writeOneUser: async (data) => ipcRenderer.invoke('write-one-user', data),
   getAllUsers: async () => ipcRenderer.invoke('read-all-users'),
   getUsersByLastname: async (data) =>
-    ipcRenderer.invoke('search-users-by-lastname', data),
-  getUsersByLatest: async () =>
-    ipcRenderer.invoke('get-sortet-users-by-litest'),
+    ipcRenderer.invoke('get-sortet-users-by-lastname', data),
+  getUsersByLatest: async (addParam) =>
+    ipcRenderer.invoke('get-sortet-users-by-litest', addParam),
   updateOneUser: async (data) => ipcRenderer.invoke('update-one-user', data),
   deleteOneUser: async (lastFirstName) =>
     ipcRenderer.invoke('delete-one-user', lastFirstName),
