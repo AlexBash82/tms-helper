@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { IUserDB } from '../interfaces'
 import './PlanNewWeek.css'
+import ListOfCandidates from '../../Components/ListOfCandidates/ListOfCandidates'
+import CoupleInput from '../../Components/CoupleInput/CoupleInput'
 
 //отображать планирование в зависимости от выбраннх полей: учебные и/или обучающие
 //функцию получения запланированых недель
@@ -18,24 +20,32 @@ const PlanNewWeek: React.FC = () => {
   const [teaching, setTeaching] = useState(false)
   const [training, setTraining] = useState(false)
   const [smallClass, setSmallClass] = useState(false)
-  const [readPointChBx, setReadPointChBx] = useState(false)
   const [startingPointChBx, setStartingPointChBx] = useState(false)
   const [followingPointChBx, setFollowingPointChBx] = useState(false)
   const [makingPointChBx, setMakingPointChBx] = useState(false)
   const [explainingPointChBx, setExplainingPointChBx] = useState(false)
   const [speechPointChBx, setSpeechPointChBx] = useState(false)
-  const [readPointMC, setReadPointMC] = useState('Didnt choose yet')
-  const [startPointMC, setStartPointMC] = useState('Didnt choose yet')
-  const [followPointMC, setFollowPointMC] = useState('Didnt choose yet')
-  const [makePointMC, setMakePointMC] = useState('Didnt choose yet')
-  const [explainPointMC, setExplainPointMC] = useState('Didnt choose yet')
-  const [speechPointMC, setSpeechPointMC] = useState('Didnt choose yet')
-  const [readPointSC, setReadPointSC] = useState('Didnt choose yet')
-  const [startPointSC, setStartPointSC] = useState('Didnt choose yet')
-  const [followPointSC, setFollowPointSC] = useState('Didnt choose yet')
-  const [makePointSC, setMakePointSC] = useState('Didnt choose yet')
-  const [explainPointSC, setExplainPointSC] = useState('Didnt choose yet')
-  const [speechPointSC, setSpeechPointSC] = useState('Didnt choose yet')
+  const [readPointStMC, setReadPointStMC] = useState('Didnt choose yet')
+  const [startPointStMC, setStartPointStMC] = useState('Didnt choose yet')
+  const [startPointAsMC, setStartPointASMC] = useState('Didnt choose yet')
+  const [followPointStMC, setFollowPointStMC] = useState('Didnt choose yet')
+  const [followPointAsMC, setFollowPointAsMC] = useState('Didnt choose yet')
+  const [makePointStMC, setMakePointStMC] = useState('Didnt choose yet')
+  const [makePointAsMC, setMakePointAsMC] = useState('Didnt choose yet')
+  const [explainPointStMC, setExplainPointStMC] = useState('Didnt choose yet')
+  const [explainPointAsMC, setExplainPointAsMC] = useState('Didnt choose yet')
+  const [speechPointStMC, setSpeechPointStMC] = useState('Didnt choose yet')
+  const [readPointStSC, setReadPointStSC] = useState('Didnt choose yet')
+  const [startPointStSC, setStartPointStSC] = useState('Didnt choose yet')
+  const [startPointAsSC, setStartPointAsSC] = useState('Didnt choose yet')
+  const [followPointStSC, setFollowPointStSC] = useState('Didnt choose yet')
+  const [followPointAsSC, setFollowPointAsSC] = useState('Didnt choose yet')
+  const [makePointStSC, setMakePointStSC] = useState('Didnt choose yet')
+  const [makePointAsSC, setMakePointAsSC] = useState('Didnt choose yet')
+  const [explainPointStSC, setExplainPointStSC] = useState('Didnt choose yet')
+  const [explainPointAsSC, setExplainPointAsSC] = useState('Didnt choose yet')
+  const [speechPointStSC, setSpeechPointStSC] = useState('Didnt choose yet')
+  const [openedList, setOpenedList] = useState('')
   const [planedWeeks, setPlanedWeeks] = useState([])
   const [usersLatest, setUsersLatest] = useState<Array<IUserDB>>([])
 
@@ -54,8 +64,8 @@ const PlanNewWeek: React.FC = () => {
     getUsersLatest({})
   }, [])
 
-  const openAndChoose = (task: string, clas: string) => {
-    console.log('I am here!')
+  const openAndChoose = (task: string) => {
+    openedList === task ? setOpenedList('') : setOpenedList(task)
   }
 
   return (
@@ -86,11 +96,7 @@ const PlanNewWeek: React.FC = () => {
           <div>
             <div>Choose</div>
             <div className="df">
-              <input
-                type="checkbox"
-                checked={readPointChBx}
-                onChange={(e) => setReadPointChBx(!readPointChBx)}
-              />
+              <input type="checkbox" checked={true} />
               <div> - Bible Reading</div>
             </div>
             <div className="df">
@@ -137,70 +143,92 @@ const PlanNewWeek: React.FC = () => {
           {/*---------------------------Main class--------------------------- */}
           <div>
             <div>Training points main class</div>
-            {readPointChBx && (
-              <div className="df">
-                <div>Bible Reading - </div>
-                <div
-                  className="input-box"
-                  onClick={() => openAndChoose('read', 'mainClass')}
-                >
-                  {readPointMC}
-                </div>
+
+            <div className="df">
+              <div>Bible Reading - </div>
+              <div
+                className="input-box"
+                onClick={() => openAndChoose('readPointStMc')}
+              >
+                {readPointStMC}
               </div>
-            )}
+              {openedList === 'readPointStMc' && (
+                <ListOfCandidates
+                  close={setOpenedList}
+                  presentValue={readPointStMC}
+                  task="readPointStMc"
+                />
+              )}
+            </div>
+
             {startingPointChBx && (
-              <div className="df">
-                <div>Starting a Conversation - </div>
-                <div
-                  className="input-box"
-                  onClick={() => openAndChoose('start', 'mainClass')}
-                >
-                  {startPointMC}
-                </div>
-              </div>
+              <CoupleInput
+                title={'Starting a Conversation - '}
+                openAndChoose={openAndChoose}
+                openedList={openedList}
+                close={setOpenedList}
+                firstInput={startPointStMC}
+                firstInputStr="startPointStMC"
+                secondInput={startPointAsMC}
+                secondInputStr="startPointAsMC"
+              />
             )}
+
             {followingPointChBx && (
-              <div className="df">
-                <div>Following Up - </div>
-                <div
-                  className="input-box"
-                  onClick={() => openAndChoose('follow', 'mainClass')}
-                >
-                  {followPointMC}
-                </div>
-              </div>
+              <CoupleInput
+                title="Following Up - "
+                openAndChoose={openAndChoose}
+                openedList={openedList}
+                close={setOpenedList}
+                firstInput={followPointStMC}
+                firstInputStr="followPointStMC"
+                secondInput={followPointAsMC}
+                secondInputStr="followPointAsMC"
+              />
             )}
+
             {makingPointChBx && (
-              <div className="df">
-                <div>Making Disciples - </div>
-                <div
-                  className="input-box"
-                  onClick={() => openAndChoose('make', 'mainClass')}
-                >
-                  {makePointMC}
-                </div>
-              </div>
+              <CoupleInput
+                title="Making Disciples - "
+                openAndChoose={openAndChoose}
+                openedList={openedList}
+                close={setOpenedList}
+                firstInput={makePointStMC}
+                firstInputStr="makePointStMC"
+                secondInput={makePointAsMC}
+                secondInputStr="makePointAsMC"
+              />
             )}
+
             {explainingPointChBx && (
-              <div className="df">
-                <div>Explaining Your Beliefs - </div>
-                <div
-                  className="input-box"
-                  onClick={() => openAndChoose('explain', 'mainClass')}
-                >
-                  {explainPointMC}
-                </div>
-              </div>
+              <CoupleInput
+                title="Explaining Your Beliefs - "
+                openAndChoose={openAndChoose}
+                openedList={openedList}
+                close={setOpenedList}
+                firstInput={explainPointStMC}
+                firstInputStr="explainPointStMC"
+                secondInput={explainPointAsMC}
+                secondInputStr="explainPointAsMC"
+              />
             )}
+
             {speechPointChBx && (
               <div className="df">
                 <div>Talk - </div>
                 <div
                   className="input-box"
-                  onClick={() => openAndChoose('speech', 'mainClass')}
+                  onClick={() => openAndChoose('speechPointStMC')}
                 >
-                  {speechPointMC}
+                  {speechPointStMC}
                 </div>
+                {openedList === 'speechPointStMC' && (
+                  <ListOfCandidates
+                    close={setOpenedList}
+                    presentValue={speechPointStMC}
+                    task="speechPointStMC"
+                  />
+                )}
               </div>
             )}
           </div>
@@ -216,70 +244,91 @@ const PlanNewWeek: React.FC = () => {
             </div>
             {smallClass && (
               <div>
-                {readPointChBx && (
-                  <div className="df">
-                    <div>Bible Reading - </div>
-                    <div
-                      className="input-box"
-                      onClick={() => openAndChoose('read', 'smallClass')}
-                    >
-                      {readPointSC}
-                    </div>
+                <div className="df">
+                  <div>Bible Reading - </div>
+                  <div
+                    className="input-box"
+                    onClick={() => openAndChoose('readPointStSC')}
+                  >
+                    {readPointStSC}
                   </div>
-                )}
+                  {openedList === 'readPointStSC' && (
+                    <ListOfCandidates
+                      close={setOpenedList}
+                      presentValue={readPointStSC}
+                      task="readPointStSC"
+                    />
+                  )}
+                </div>
+
                 {startingPointChBx && (
-                  <div className="df">
-                    <div>Starting a Conversation - </div>
-                    <div
-                      className="input-box"
-                      onClick={() => openAndChoose('start', 'smallClass')}
-                    >
-                      {startPointSC}
-                    </div>
-                  </div>
+                  <CoupleInput
+                    title="Starting a Conversation - "
+                    openAndChoose={openAndChoose}
+                    openedList={openedList}
+                    close={setOpenedList}
+                    firstInput={startPointStSC}
+                    firstInputStr="startPointStSC"
+                    secondInput={startPointAsSC}
+                    secondInputStr="startPointAsSC"
+                  />
                 )}
+
                 {followingPointChBx && (
-                  <div className="df">
-                    <div>Following Up - </div>
-                    <div
-                      className="input-box"
-                      onClick={() => openAndChoose('follow', 'smallClass')}
-                    >
-                      {followPointSC}
-                    </div>
-                  </div>
+                  <CoupleInput
+                    title="Following Up - "
+                    openAndChoose={openAndChoose}
+                    openedList={openedList}
+                    close={setOpenedList}
+                    firstInput={followPointStSC}
+                    firstInputStr="followPointStSC"
+                    secondInput={followPointAsSC}
+                    secondInputStr="followPointAsSC"
+                  />
                 )}
+
                 {makingPointChBx && (
-                  <div className="df">
-                    <div>Making Disciples - </div>
-                    <div
-                      className="input-box"
-                      onClick={() => openAndChoose('make', 'smallClass')}
-                    >
-                      {makePointSC}
-                    </div>
-                  </div>
+                  <CoupleInput
+                    title="Making Disciples - "
+                    openAndChoose={openAndChoose}
+                    openedList={openedList}
+                    close={setOpenedList}
+                    firstInput={makePointStSC}
+                    firstInputStr="makePointStSC"
+                    secondInput={makePointAsSC}
+                    secondInputStr="makePointAsSC"
+                  />
                 )}
+
                 {explainingPointChBx && (
-                  <div className="df">
-                    <div>Explaining Your Beliefs - </div>
-                    <div
-                      className="input-box"
-                      onClick={() => openAndChoose('explain', 'smallClass')}
-                    >
-                      {explainPointSC}
-                    </div>
-                  </div>
+                  <CoupleInput
+                    title="Explaining Your Beliefs - "
+                    openAndChoose={openAndChoose}
+                    openedList={openedList}
+                    close={setOpenedList}
+                    firstInput={explainPointStSC}
+                    firstInputStr="explainPointStSC"
+                    secondInput={explainPointAsSC}
+                    secondInputStr="explainPointAsSC"
+                  />
                 )}
+
                 {speechPointChBx && (
                   <div className="df">
                     <div>Talk - </div>
                     <div
                       className="input-box"
-                      onClick={() => openAndChoose('speech', 'smallClass')}
+                      onClick={() => openAndChoose('speechPointStSC')}
                     >
-                      {speechPointSC}
+                      {speechPointStSC}
                     </div>
+                    {openedList === 'speechPointStSC' && (
+                      <ListOfCandidates
+                        close={setOpenedList}
+                        presentValue={speechPointStSC}
+                        task="speechPointStSC"
+                      />
+                    )}
                   </div>
                 )}
               </div>
