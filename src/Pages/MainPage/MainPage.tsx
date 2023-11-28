@@ -45,21 +45,20 @@ const MainPage: React.FC = () => {
   // }
 
   const rewrite = async () => {
-    try {
-      const updatedItem = {
-        oldFirstname: inputSearch,
-        newFirstname: inputNewName,
-      }
-      const result = await window.api.updateOneUser(updatedItem)
-      console.log('result update', result)
-
-      // После обновления, возможно, вы захотите вызвать функцию для повторного чтения данных и обновления состояния компонента
-      setInputSearch('')
-      setInputNewName('')
-      handleReadAll()
-    } catch (error) {
-      console.error('Error updating item:', error)
-    }
+    // try {
+    //   const updatedItem = {
+    //     studentName: inputSearch,
+    //     newFirstname: inputNewName,
+    //   }
+    //   const result = await window.api.updateOneUser(updatedItem)
+    //   console.log('result update', result)
+    //   // После обновления, возможно, вы захотите вызвать функцию для повторного чтения данных и обновления состояния компонента
+    //   setInputSearch('')
+    //   setInputNewName('')
+    //   handleReadAll()
+    // } catch (error) {
+    //   console.error('Error updating item:', error)
+    // }
   }
 
   return (

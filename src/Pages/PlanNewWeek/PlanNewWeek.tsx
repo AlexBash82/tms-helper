@@ -4,16 +4,13 @@ import './PlanNewWeek.css'
 import ListOfCandidates from '../../Components/ListOfCandidates/ListOfCandidates'
 import CoupleInput from '../../Components/CoupleInput/CoupleInput'
 
-//отображать планирование в зависимости от выбраннх полей: учебные и/или обучающие
 //функцию получения запланированых недель
 //после выбора недели проверить не прошлое ли это и есть ли план на эту неделю
 //выводить календарь - какие недели запланированы
 //функцию получения всех юзеров и расстановка по самому последнему выстыпавшему (в отдельный масс)
 //отображение в выпадающем окне из этого массива. сортировка по полям, одно поле "оставить пустым"
-//поле партнера добавить
 //кнопку формирования бланка
 //кнопку сохранения недели
-//чтение должно быть выбрано без возможности отменить
 
 const PlanNewWeek: React.FC = () => {
   const [dateOfMeet, setDateOfMeet] = useState('')
@@ -157,6 +154,7 @@ const PlanNewWeek: React.FC = () => {
                   close={setOpenedList}
                   presentValue={readPointStMC}
                   task="readPointStMc"
+                  setChoose={setReadPointStMC}
                 />
               )}
             </div>
@@ -169,8 +167,10 @@ const PlanNewWeek: React.FC = () => {
                 close={setOpenedList}
                 firstInput={startPointStMC}
                 firstInputStr="startPointStMC"
+                firstSetChoose={setStartPointStMC}
                 secondInput={startPointAsMC}
                 secondInputStr="startPointAsMC"
+                secondSetChoose={setStartPointASMC}
               />
             )}
 
@@ -182,8 +182,10 @@ const PlanNewWeek: React.FC = () => {
                 close={setOpenedList}
                 firstInput={followPointStMC}
                 firstInputStr="followPointStMC"
+                firstSetChoose={setFollowPointStMC}
                 secondInput={followPointAsMC}
                 secondInputStr="followPointAsMC"
+                secondSetChoose={setFollowPointAsMC}
               />
             )}
 
@@ -195,8 +197,10 @@ const PlanNewWeek: React.FC = () => {
                 close={setOpenedList}
                 firstInput={makePointStMC}
                 firstInputStr="makePointStMC"
+                firstSetChoose={setMakePointStMC}
                 secondInput={makePointAsMC}
                 secondInputStr="makePointAsMC"
+                secondSetChoose={setMakePointAsMC}
               />
             )}
 
@@ -208,8 +212,10 @@ const PlanNewWeek: React.FC = () => {
                 close={setOpenedList}
                 firstInput={explainPointStMC}
                 firstInputStr="explainPointStMC"
+                firstSetChoose={setExplainPointStMC}
                 secondInput={explainPointAsMC}
                 secondInputStr="explainPointAsMC"
+                secondSetChoose={setExplainPointAsMC}
               />
             )}
 
@@ -227,6 +233,7 @@ const PlanNewWeek: React.FC = () => {
                     close={setOpenedList}
                     presentValue={speechPointStMC}
                     task="speechPointStMC"
+                    setChoose={setSpeechPointStMC}
                   />
                 )}
               </div>
@@ -257,6 +264,7 @@ const PlanNewWeek: React.FC = () => {
                       close={setOpenedList}
                       presentValue={readPointStSC}
                       task="readPointStSC"
+                      setChoose={setReadPointStSC}
                     />
                   )}
                 </div>
@@ -269,8 +277,10 @@ const PlanNewWeek: React.FC = () => {
                     close={setOpenedList}
                     firstInput={startPointStSC}
                     firstInputStr="startPointStSC"
+                    firstSetChoose={setStartPointStSC}
                     secondInput={startPointAsSC}
                     secondInputStr="startPointAsSC"
+                    secondSetChoose={setStartPointAsSC}
                   />
                 )}
 
@@ -282,8 +292,10 @@ const PlanNewWeek: React.FC = () => {
                     close={setOpenedList}
                     firstInput={followPointStSC}
                     firstInputStr="followPointStSC"
+                    firstSetChoose={setFollowPointStSC}
                     secondInput={followPointAsSC}
                     secondInputStr="followPointAsSC"
+                    secondSetChoose={setFollowPointAsSC}
                   />
                 )}
 
@@ -295,8 +307,10 @@ const PlanNewWeek: React.FC = () => {
                     close={setOpenedList}
                     firstInput={makePointStSC}
                     firstInputStr="makePointStSC"
+                    firstSetChoose={setMakePointStSC}
                     secondInput={makePointAsSC}
                     secondInputStr="makePointAsSC"
+                    secondSetChoose={setMakePointAsSC}
                   />
                 )}
 
@@ -308,8 +322,10 @@ const PlanNewWeek: React.FC = () => {
                     close={setOpenedList}
                     firstInput={explainPointStSC}
                     firstInputStr="explainPointStSC"
+                    firstSetChoose={setExplainPointStSC}
                     secondInput={explainPointAsSC}
                     secondInputStr="explainPointAsSC"
+                    secondSetChoose={setExplainPointAsSC}
                   />
                 )}
 
@@ -327,6 +343,7 @@ const PlanNewWeek: React.FC = () => {
                         close={setOpenedList}
                         presentValue={speechPointStSC}
                         task="speechPointStSC"
+                        setChoose={setSpeechPointStSC}
                       />
                     )}
                   </div>

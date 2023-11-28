@@ -11,6 +11,8 @@ interface ICoupleInputProps {
   firstInputStr: string
   secondInput: string
   secondInputStr: string
+  firstSetChoose: (arg: string) => void
+  secondSetChoose: (arg: string) => void
   //dateOfMeet:string
 }
 
@@ -24,30 +26,41 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
     firstInputStr,
     secondInput,
     secondInputStr,
+    firstSetChoose,
+    secondSetChoose,
   } = props
   return (
     <div className="df">
       <div>{title}</div>
-      <div className="input-box" onClick={() => openAndChoose(firstInputStr)}>
-        {firstInput}
+      <div className="pos-rel">
+        <div className="input-box" onClick={() => openAndChoose(firstInputStr)}>
+          {firstInput}
+        </div>
+        {openedList === firstInputStr && (
+          <ListOfCandidates
+            close={close}
+            presentValue={firstInput}
+            task={firstInputStr}
+            setChoose={firstSetChoose}
+          />
+        )}
       </div>
-      {openedList === firstInputStr && (
-        <ListOfCandidates
-          close={close}
-          presentValue={firstInput}
-          task={firstInputStr}
-        />
-      )}
-      <div className="input-box" onClick={() => openAndChoose(secondInputStr)}>
-        {secondInput}
+      <div className="pos-rel">
+        <div
+          className="input-box"
+          onClick={() => openAndChoose(secondInputStr)}
+        >
+          {secondInput}
+        </div>
+        {openedList === secondInputStr && (
+          <ListOfCandidates
+            close={close}
+            presentValue={secondInput}
+            task={secondInputStr}
+            setChoose={secondSetChoose}
+          />
+        )}
       </div>
-      {openedList === secondInputStr && (
-        <ListOfCandidates
-          close={close}
-          presentValue={secondInput}
-          task={secondInputStr}
-        />
-      )}
     </div>
   )
 }

@@ -10,8 +10,8 @@ let weeksDB
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1100,
+    height: 700,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -183,12 +183,14 @@ ipcMain.handle('read-all-users', async (event) => {
 })
 
 ipcMain.handle('update-one-user', async (event, updatedItem) => {
+  console.log(updatedItem)
   try {
-    const { oldFirstname, newFirstname } = updatedItem
+    //нужно получать имя для поиска, названия поля для обновления и новое значение
+    const { studentName, keyName, newValue } = updatedItem
 
     // Получаем оригинальный объект из базы данных
     const originalItem = await new Promise((resolve, reject) => {
-      usersDB.findOne({ firstName: oldFirstname }, (err, doc) => {
+      usersDB.findOne({ lastFirstName: studentName }, (err, doc) => {
         if (err) {
           reject(err)
         } else {
@@ -202,11 +204,11 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
     }
 
     // Создаем обновленный объект с новым значением
-    const updatedObject = { ...originalItem, firstName: newFirstname }
+    const updatedObject = { ...originalItem, [keyName]: newValue }
 
     // Обновляем объект в базе данных
     usersDB.update(
-      { firstName: oldFirstname },
+      { lastFirstName: studentName },
       updatedObject,
       {},
       (err, numReplaced) => {
@@ -273,7 +275,7 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
   }
 })
 
-ipcMain.handle('get-sortet-users-by-litest', async (event, addParam) => {
+ipcMain.handle('get-sortet-users-by-latest', async (event, addParam) => {
   try {
     const filteredUsers = new Promise((resolve, reject) => {
       usersDB

@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld('api', {
   getUsersByLastname: async (data) =>
     ipcRenderer.invoke('get-sortet-users-by-lastname', data),
   getUsersByLatest: async (addParam) =>
-    ipcRenderer.invoke('get-sortet-users-by-litest', addParam),
+    ipcRenderer.invoke('get-sortet-users-by-latest', addParam),
   updateOneUser: async (data) => ipcRenderer.invoke('update-one-user', data),
   deleteOneUser: async (lastFirstName) =>
     ipcRenderer.invoke('delete-one-user', lastFirstName),
