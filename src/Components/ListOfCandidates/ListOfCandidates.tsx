@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './ListOfCandidates.css'
 
-//нужно передать сюда дату недели!!!
+//нужно передать сюда дату недели!!! Зачем?
 
 interface ListOfCandidatesProps {
   close: (arg: string) => void
@@ -77,7 +77,7 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
   }
 
   return (
-    <div className="pos-abs">
+    <div className="listOfCand">
       {students.map((student) => (
         <div
           key={student._id}

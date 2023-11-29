@@ -95,7 +95,6 @@ ipcMain.on('navigate', (event, page) => {
 })
 
 ipcMain.handle('write-one-user', (event, personData) => {
-  const timestamp = Date.now()
   const defoltStamp = 1685000178013
   let schema = {}
 

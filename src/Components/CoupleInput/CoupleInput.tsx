@@ -32,7 +32,7 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
   return (
     <div className="df">
       <div>{title}</div>
-      <div className="pos-rel">
+      <div className="">
         <div className="input-box" onClick={() => openAndChoose(firstInputStr)}>
           {firstInput}
         </div>
@@ -45,7 +45,7 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
           />
         )}
       </div>
-      <div className="pos-rel">
+      <div className="">
         <div
           className="input-box"
           onClick={() => openAndChoose(secondInputStr)}

@@ -44,25 +44,49 @@ const PlanNewWeek: React.FC = () => {
   const [speechPointStSC, setSpeechPointStSC] = useState('Didnt choose yet')
   const [openedList, setOpenedList] = useState('')
   const [planedWeeks, setPlanedWeeks] = useState([])
-  const [usersLatest, setUsersLatest] = useState<Array<IUserDB>>([])
 
-  //получаем тех кто не выступал дольше всех в количестве до 10, и кто может и не запланирован
-  const getUsersLatest = async (addParam: object) => {
-    try {
-      const users = await window.api.getUsersByLatest(addParam)
-      setUsersLatest(users)
-      console.log(users)
-    } catch (error) {
-      console.error('Error fetching users:', error)
-    }
-  }
+  // const [usersLatest, setUsersLatest] = useState<Array<IUserDB>>([])
 
-  useEffect(() => {
-    getUsersLatest({})
-  }, [])
+  // //получаем тех кто не выступал дольше всех в количестве до 10, и кто может и не запланирован
+  // const getUsersLatest = async (addParam: object) => {
+  //   try {
+  //     const users = await window.api.getUsersByLatest(addParam)
+  //     setUsersLatest(users)
+  //     //console.log(users)
+  //   } catch (error) {
+  //     console.error('Error fetching users:', error)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getUsersLatest({})
+  // }, [])
 
   const openAndChoose = (task: string) => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
+  }
+
+  const planOfMeet = (datePart: string) => {
+    const timePart = '21:45'
+    const [year, month, day] = datePart.split('-').map(Number)
+    const [hour, minute] = timePart.split(':').map(Number)
+
+    // Месяцы в JavaScript начинаются с 0, поэтому вычитаем 1
+    const dateObject = new Date(year, month - 1, day, hour, minute)
+
+    // Получаем метку времени
+    const timestamp = dateObject.getTime()
+    const timestampNow = Date.now()
+
+    if (timestamp > timestampNow) {
+      console.log('future')
+    }
+    if (timestamp < timestampNow) {
+      console.log('past')
+    }
+
+    //console.log(dateObject)
+    setDateOfMeet(datePart)
   }
 
   return (
@@ -71,7 +95,7 @@ const PlanNewWeek: React.FC = () => {
         placeholder="Date of meeting"
         type="date"
         value={dateOfMeet}
-        onChange={(e) => setDateOfMeet(e.target.value)}
+        onChange={(e) => planOfMeet(e.target.value)}
       />
       <input
         type="checkbox"
@@ -143,20 +167,22 @@ const PlanNewWeek: React.FC = () => {
 
             <div className="df">
               <div>Bible Reading - </div>
-              <div
-                className="input-box"
-                onClick={() => openAndChoose('readPointStMc')}
-              >
-                {readPointStMC}
+              <div className="">
+                <div
+                  className="input-box"
+                  onClick={() => openAndChoose('readPointStMc')}
+                >
+                  {readPointStMC}
+                </div>
+                {openedList === 'readPointStMc' && (
+                  <ListOfCandidates
+                    close={setOpenedList}
+                    presentValue={readPointStMC}
+                    task="readPointStMc"
+                    setChoose={setReadPointStMC}
+                  />
+                )}
               </div>
-              {openedList === 'readPointStMc' && (
-                <ListOfCandidates
-                  close={setOpenedList}
-                  presentValue={readPointStMC}
-                  task="readPointStMc"
-                  setChoose={setReadPointStMC}
-                />
-              )}
             </div>
 
             {startingPointChBx && (
@@ -222,20 +248,22 @@ const PlanNewWeek: React.FC = () => {
             {speechPointChBx && (
               <div className="df">
                 <div>Talk - </div>
-                <div
-                  className="input-box"
-                  onClick={() => openAndChoose('speechPointStMC')}
-                >
-                  {speechPointStMC}
+                <div className="">
+                  <div
+                    className="input-box"
+                    onClick={() => openAndChoose('speechPointStMC')}
+                  >
+                    {speechPointStMC}
+                  </div>
+                  {openedList === 'speechPointStMC' && (
+                    <ListOfCandidates
+                      close={setOpenedList}
+                      presentValue={speechPointStMC}
+                      task="speechPointStMC"
+                      setChoose={setSpeechPointStMC}
+                    />
+                  )}
                 </div>
-                {openedList === 'speechPointStMC' && (
-                  <ListOfCandidates
-                    close={setOpenedList}
-                    presentValue={speechPointStMC}
-                    task="speechPointStMC"
-                    setChoose={setSpeechPointStMC}
-                  />
-                )}
               </div>
             )}
           </div>
@@ -253,20 +281,22 @@ const PlanNewWeek: React.FC = () => {
               <div>
                 <div className="df">
                   <div>Bible Reading - </div>
-                  <div
-                    className="input-box"
-                    onClick={() => openAndChoose('readPointStSC')}
-                  >
-                    {readPointStSC}
+                  <div className="">
+                    <div
+                      className="input-box"
+                      onClick={() => openAndChoose('readPointStSC')}
+                    >
+                      {readPointStSC}
+                    </div>
+                    {openedList === 'readPointStSC' && (
+                      <ListOfCandidates
+                        close={setOpenedList}
+                        presentValue={readPointStSC}
+                        task="readPointStSC"
+                        setChoose={setReadPointStSC}
+                      />
+                    )}
                   </div>
-                  {openedList === 'readPointStSC' && (
-                    <ListOfCandidates
-                      close={setOpenedList}
-                      presentValue={readPointStSC}
-                      task="readPointStSC"
-                      setChoose={setReadPointStSC}
-                    />
-                  )}
                 </div>
 
                 {startingPointChBx && (
@@ -332,20 +362,22 @@ const PlanNewWeek: React.FC = () => {
                 {speechPointChBx && (
                   <div className="df">
                     <div>Talk - </div>
-                    <div
-                      className="input-box"
-                      onClick={() => openAndChoose('speechPointStSC')}
-                    >
-                      {speechPointStSC}
+                    <div className="">
+                      <div
+                        className="input-box"
+                        onClick={() => openAndChoose('speechPointStSC')}
+                      >
+                        {speechPointStSC}
+                      </div>
+                      {openedList === 'speechPointStSC' && (
+                        <ListOfCandidates
+                          close={setOpenedList}
+                          presentValue={speechPointStSC}
+                          task="speechPointStSC"
+                          setChoose={setSpeechPointStSC}
+                        />
+                      )}
                     </div>
-                    {openedList === 'speechPointStSC' && (
-                      <ListOfCandidates
-                        close={setOpenedList}
-                        presentValue={speechPointStSC}
-                        task="speechPointStSC"
-                        setChoose={setSpeechPointStSC}
-                      />
-                    )}
                   </div>
                 )}
               </div>
