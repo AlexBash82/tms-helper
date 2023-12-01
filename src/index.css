@@ -11,3 +11,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.df {
+  display: flex;
+}
+
+.g-1 {
+  gap: 1rem;
+}
+.g-2 {
+  gap: 2rem;
+}
+.w-1 {
+  width: 1rem;
+}
+.w-1-5 {
+  width: 1.5rem;
+}
+.w-2 {
+  width: 2rem;
+}
+.w-3 {
+  width: 3rem;
+}
+
+.input-box {
+  border: solid black 1px;
+  border-radius: 5px;
+}
+
+.pos-rel {
+  position: relative;
+}

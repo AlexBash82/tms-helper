@@ -15,6 +15,7 @@ const PersonsList: React.FC = () => {
     try {
       const allData = await window.api.getAllUsers()
       setAllUsers(allData)
+      console.log('allData', allData)
     } catch (err) {
       //console.log('Error reading all data:', err)
     }
@@ -42,7 +43,7 @@ const PersonsList: React.FC = () => {
         }
       })
       .catch((error) => {
-        console.log('Error deleting user by lastname:', error)
+        console.log('Error deleting user by lastFirstName:', error)
       })
     readAllData()
   }
@@ -75,35 +76,50 @@ const PersonsList: React.FC = () => {
         {allUsers.map((user, index) => (
           <li key={index}>
             <div>
-              <p>FirstName: {user.lastFirstName}</p>
-              <button onClick={() => editPerson(user.lastFirstName)}>
-                Edit
-              </button>
-              {showConfirm && user.lastFirstName === deletingName ? (
-                <div>
-                  <p>
-                    Inter '{genCode}' for delete user '{user.lastFirstName}'
-                    from DB
-                  </p>
-                  <input
-                    placeholder="Inter confirmation code"
-                    type="text"
-                    value={inputCode}
-                    onChange={(e) => setInputCode(e.target.value)}
-                  />
-                  <button
-                    onClick={() => confirmation(inputCode, user.lastFirstName)}
-                  >
-                    Confirm
-                  </button>
+              <div className="df g-2">
+                <div className="df g-1">
+                  <div>Name: </div>
+                  <div>{user.lastFirstName}</div>
                 </div>
-              ) : (
-                <div>
-                  <button onClick={() => askConfirm(user.lastFirstName)}>
-                    Delite
-                  </button>
+                <div className="df g-1">
+                  <div>Gender: </div>
+                  <div>{user.gender}</div>
                 </div>
-              )}
+              </div>
+              <div className="df g-2">
+                <button onClick={() => editPerson(user.lastFirstName)}>
+                  Edit
+                </button>
+                {showConfirm && user.lastFirstName === deletingName ? (
+                  <div className="df g-1">
+                    <div>
+                      Inter '{genCode}' for delete user '{user.lastFirstName}'
+                      from DB
+                    </div>
+                    <input
+                      className="w-1-5"
+                      placeholder="-/-/-"
+                      type="text"
+                      maxLength={3}
+                      value={inputCode}
+                      onChange={(e) => setInputCode(e.target.value)}
+                    />
+                    <button
+                      onClick={() =>
+                        confirmation(inputCode, user.lastFirstName)
+                      }
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button onClick={() => askConfirm(user.lastFirstName)}>
+                      Delite
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </li>
         ))}

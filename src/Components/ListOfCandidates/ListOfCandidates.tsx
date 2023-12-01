@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import './ListOfCandidates.css'
 
-//нужно передать сюда дату недели!!! Зачем?
+//нужно передать сюда дату недели!!! для обновления поля недели при выборе юзера
+//повесить слушатель клика вне окошка на закрытие
+//добавить фильтрацию по колонкам: перый разговор, повтор, главный зал...
+//можно в виде перебора массива и если поле с таском самое старое то в начало массива
+//а если нет,то в конец массива
+//а в самом массиве можно сделать среднее дефолтное значение - разделитель
 
 interface ListOfCandidatesProps {
   close: (arg: string) => void
@@ -65,6 +70,9 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
           newValue: true,
         }
         const newResult = await window.api.updateOneUser(updateNew)
+        //при внесении поля план-тру, нужно также сохранять это поле в неделе, чтобы при закрытии
+        //страницы учащийся не выпадал из списка навсегда как запланированный
+        //например: updateOneField в неделе
 
         console.log('newResult', newResult)
       } catch (error) {
