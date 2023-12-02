@@ -15,7 +15,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'public/electron/preload.js'), // Используем расширение .js
+      preload: path.join(__dirname, 'preload.js'), // Используем расширение .js
     },
   })
 
@@ -65,11 +65,11 @@ function createWindow() {
 function initializeDatabase() {
   // Используем NeDB для создания базы данных в папке приложения
   usersDB = new Datastore({
-    filename: path.join(app.getAppPath(), 'users.db'),
+    filename: path.join(app.getAppPath(), '../data/users.db'),
     autoload: true,
   })
   weeksDB = new Datastore({
-    filename: path.join(app.getAppPath(), 'weeks.db'),
+    filename: path.join(app.getAppPath(), '../data/weeks.db'),
     autoload: true,
   })
 

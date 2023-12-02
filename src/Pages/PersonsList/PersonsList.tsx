@@ -15,7 +15,7 @@ const PersonsList: React.FC = () => {
     try {
       const allData = await window.api.getAllUsers()
       setAllUsers(allData)
-      console.log('allData', allData)
+      //console.log('allData', allData)
     } catch (err) {
       //console.log('Error reading all data:', err)
     }

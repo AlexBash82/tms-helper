@@ -51,10 +51,8 @@ const root = document.getElementById('root')
 if (root) {
   const reactRoot = ReactDOM.createRoot(root)
   reactRoot.render(
-    <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   )
 }
