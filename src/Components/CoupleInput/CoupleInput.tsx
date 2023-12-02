@@ -14,6 +14,7 @@ interface ICoupleInputProps {
   firstSetChoose: (arg: string) => void
   secondSetChoose: (arg: string) => void
   //dateOfMeet:string
+  action: string
 }
 
 const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
@@ -28,6 +29,7 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
     secondInputStr,
     firstSetChoose,
     secondSetChoose,
+    action,
   } = props
   return (
     <div className="df">
@@ -42,6 +44,7 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
             presentValue={firstInput}
             task={firstInputStr}
             setChoose={firstSetChoose}
+            action={action}
           />
         )}
       </div>
@@ -58,6 +61,7 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
             presentValue={secondInput}
             task={secondInputStr}
             setChoose={secondSetChoose}
+            action={action}
           />
         )}
       </div>

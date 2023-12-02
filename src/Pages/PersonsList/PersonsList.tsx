@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { IUserDB } from '../interfaces'
 
-//написать функцию для редактирования user-------------------------------------
-//ставить курсор в инпут при введении когда
-
 const PersonsList: React.FC = () => {
   const [allUsers, setAllUsers] = useState<Array<IUserDB>>([])
   const [showConfirm, setShowConfirm] = useState(false)

@@ -42,6 +42,7 @@ const PlanNewWeek: React.FC = () => {
   const [explainPointAsSC, setExplainPointAsSC] = useState('Didnt choose yet')
   const [speechPointStSC, setSpeechPointStSC] = useState('Didnt choose yet')
   const [openedList, setOpenedList] = useState('')
+  const [action, setAction] = useState('')
   const [planedWeeks, setPlanedWeeks] = useState([])
 
   const openAndChoose = (task: string) => {
@@ -66,9 +67,14 @@ const PlanNewWeek: React.FC = () => {
     const timestampNow = Date.now()
 
     if (timestamp > timestampNow) {
+      setAction('plan')
       console.log('future')
     }
     if (timestamp < timestampNow) {
+      //если есть неделя для подтверждения то______________________________
+      setAction('update')
+      //если нет для подтверждения, то
+      setAction('confirm')
       console.log('past')
     }
 
@@ -173,6 +179,7 @@ const PlanNewWeek: React.FC = () => {
                         presentValue={readPointStMC}
                         task="readPointStMc"
                         setChoose={setReadPointStMC}
+                        action={action}
                       />
                     )}
                   </div>
@@ -190,6 +197,7 @@ const PlanNewWeek: React.FC = () => {
                     secondInput={startPointAsMC}
                     secondInputStr="startPointAsMC"
                     secondSetChoose={setStartPointASMC}
+                    action={action}
                   />
                 )}
 
@@ -205,6 +213,7 @@ const PlanNewWeek: React.FC = () => {
                     secondInput={followPointAsMC}
                     secondInputStr="followPointAsMC"
                     secondSetChoose={setFollowPointAsMC}
+                    action={action}
                   />
                 )}
 
@@ -220,6 +229,7 @@ const PlanNewWeek: React.FC = () => {
                     secondInput={makePointAsMC}
                     secondInputStr="makePointAsMC"
                     secondSetChoose={setMakePointAsMC}
+                    action={action}
                   />
                 )}
 
@@ -235,6 +245,7 @@ const PlanNewWeek: React.FC = () => {
                     secondInput={explainPointAsMC}
                     secondInputStr="explainPointAsMC"
                     secondSetChoose={setExplainPointAsMC}
+                    action={action}
                   />
                 )}
 
@@ -254,6 +265,7 @@ const PlanNewWeek: React.FC = () => {
                           presentValue={speechPointStMC}
                           task="speechPointStMC"
                           setChoose={setSpeechPointStMC}
+                          action={action}
                         />
                       )}
                     </div>
@@ -287,6 +299,7 @@ const PlanNewWeek: React.FC = () => {
                             presentValue={readPointStSC}
                             task="readPointStSC"
                             setChoose={setReadPointStSC}
+                            action={action}
                           />
                         )}
                       </div>
@@ -304,6 +317,7 @@ const PlanNewWeek: React.FC = () => {
                         secondInput={startPointAsSC}
                         secondInputStr="startPointAsSC"
                         secondSetChoose={setStartPointAsSC}
+                        action={action}
                       />
                     )}
 
@@ -319,6 +333,7 @@ const PlanNewWeek: React.FC = () => {
                         secondInput={followPointAsSC}
                         secondInputStr="followPointAsSC"
                         secondSetChoose={setFollowPointAsSC}
+                        action={action}
                       />
                     )}
 
@@ -334,6 +349,7 @@ const PlanNewWeek: React.FC = () => {
                         secondInput={makePointAsSC}
                         secondInputStr="makePointAsSC"
                         secondSetChoose={setMakePointAsSC}
+                        action={action}
                       />
                     )}
 
@@ -349,6 +365,7 @@ const PlanNewWeek: React.FC = () => {
                         secondInput={explainPointAsSC}
                         secondInputStr="explainPointAsSC"
                         secondSetChoose={setExplainPointAsSC}
+                        action={action}
                       />
                     )}
 
@@ -368,6 +385,7 @@ const PlanNewWeek: React.FC = () => {
                               presentValue={speechPointStSC}
                               task="speechPointStSC"
                               setChoose={setSpeechPointStSC}
+                              action={action}
                             />
                           )}
                         </div>

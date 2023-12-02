@@ -14,6 +14,8 @@ interface ListOfCandidatesProps {
   presentValue: string
   task: string
   //dateOfMeet: string
+  //action: plan, confirm, update
+  action: string
 }
 
 const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
@@ -21,6 +23,7 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
   presentValue,
   task,
   setChoose,
+  action,
 }) => {
   const [students, setStudents] = useState([
     { _id: '0', lastFirstName: 'Didnt choose yet' },
@@ -47,7 +50,7 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
     getUsersLatest()
   }, [])
 
-  const makeChoose = async (studentName: string) => {
+  const makePlan = async (studentName: string) => {
     if (presentValue !== 'Didnt choose yet') {
       try {
         const updatePresent = {
@@ -86,14 +89,17 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
 
   return (
     <div className="listOfCand">
-      {students.map((student) => (
-        <div
-          key={student._id}
-          onClick={() => makeChoose(student.lastFirstName)}
-        >
-          {student.lastFirstName}
-        </div>
-      ))}
+      {students.map(
+        (student) =>
+          action === 'plan' && (
+            <div
+              key={student._id}
+              onClick={() => makePlan(student.lastFirstName)}
+            >
+              {student.lastFirstName}
+            </div>
+          )
+      )}
     </div>
   )
 }
