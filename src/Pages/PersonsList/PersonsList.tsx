@@ -1,5 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { IUserDB } from '../interfaces'
+import AddAndEditPerson from '../../Components/AddAndEditPerson/AddAndEditPerson'
+import {
+  IFemaleData,
+  IMaleData,
+} from '../../Components/AddAndEditPerson/interfaces'
+
+//добавить фильтры для поиска, например кто и когда выступал
+
+interface IEditMaleData extends IMaleData {
+  gender: string
+  lastFirstName: string
+  dontUse: boolean
+  comments: string
+  _id: string
+}
+interface IEditFemaleData extends IFemaleData {
+  gender: string
+  lastFirstName: string
+  dontUse: boolean
+  comments: string
+  _id: string
+}
 
 const PersonsList: React.FC = () => {
   const [allUsers, setAllUsers] = useState<Array<IUserDB>>([])
@@ -7,6 +29,9 @@ const PersonsList: React.FC = () => {
   const [deletingName, setDeletingName] = useState('')
   const [genCode, setGenCode] = useState('')
   const [inputCode, setInputCode] = useState('')
+  const [editablePerson, setEditablePerson] = useState<
+    IEditFemaleData | IEditMaleData | undefined
+  >()
 
   const readAllData = async () => {
     try {
@@ -24,7 +49,11 @@ const PersonsList: React.FC = () => {
 
   const editPerson = (searchLFName: string) => {
     const result = allUsers.find((item) => item.lastFirstName === searchLFName)
-    console.log(result)
+
+    if (result) {
+      const data = result as IEditMaleData | IEditFemaleData
+      setEditablePerson(data)
+    }
   }
 
   const deletePerson = async (searchLFName: string) => {
@@ -51,7 +80,7 @@ const PersonsList: React.FC = () => {
     setGenCode(str)
   }
 
-  const askConfirm = (name: string) => {
+  const askConfirmDel = (name: string) => {
     generateCode()
     setDeletingName(name)
     setShowConfirm(true)
@@ -67,60 +96,65 @@ const PersonsList: React.FC = () => {
   }
 
   return (
-    <div>
-      <h2>All users:</h2>
-      <ul>
-        {allUsers.map((user, index) => (
-          <li key={index}>
-            <div>
-              <div className="df g-2">
-                <div className="df g-1">
-                  <div>Name: </div>
-                  <div>{user.lastFirstName}</div>
-                </div>
-                <div className="df g-1">
-                  <div>Gender: </div>
-                  <div>{user.gender}</div>
-                </div>
-              </div>
-              <div className="df g-2">
-                <button onClick={() => editPerson(user.lastFirstName)}>
-                  Edit
-                </button>
-                {showConfirm && user.lastFirstName === deletingName ? (
+    <div className="df">
+      <div>
+        <h2>All users:</h2>
+        <ul>
+          {allUsers.map((user, index) => (
+            <li key={index}>
+              <div>
+                <div className="df g-2">
                   <div className="df g-1">
-                    <div>
-                      Inter '{genCode}' for delete user '{user.lastFirstName}'
-                      from DB
+                    <div>Name: </div>
+                    <div>{user.lastFirstName}</div>
+                  </div>
+                  <div className="df g-1">
+                    <div>Gender: </div>
+                    <div>{user.gender}</div>
+                  </div>
+                </div>
+                <div className="df g-2">
+                  <button onClick={() => editPerson(user.lastFirstName)}>
+                    Edit
+                  </button>
+                  {showConfirm && user.lastFirstName === deletingName ? (
+                    <div className="df g-1">
+                      <div>
+                        Inter '{genCode}' for delete user '{user.lastFirstName}'
+                        from DB
+                      </div>
+                      <input
+                        className="w-1-5"
+                        placeholder="-/-/-"
+                        type="text"
+                        maxLength={3}
+                        value={inputCode}
+                        onChange={(e) => setInputCode(e.target.value)}
+                      />
+                      <button
+                        onClick={() =>
+                          confirmation(inputCode, user.lastFirstName)
+                        }
+                      >
+                        Confirm
+                      </button>
                     </div>
-                    <input
-                      className="w-1-5"
-                      placeholder="-/-/-"
-                      type="text"
-                      maxLength={3}
-                      value={inputCode}
-                      onChange={(e) => setInputCode(e.target.value)}
-                    />
-                    <button
-                      onClick={() =>
-                        confirmation(inputCode, user.lastFirstName)
-                      }
-                    >
-                      Confirm
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <button onClick={() => askConfirm(user.lastFirstName)}>
-                      Delite
-                    </button>
-                  </div>
-                )}
+                  ) : (
+                    <div>
+                      <button onClick={() => askConfirmDel(user.lastFirstName)}>
+                        Delite
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="">
+        <AddAndEditPerson PropPerson={editablePerson} />
+      </div>
     </div>
   )
 }

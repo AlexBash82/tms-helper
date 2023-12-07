@@ -1,14 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import InputMale from './InputMale'
 import InputFemale from './InputFemale'
-import { IUserDB } from '../interfaces'
+import { IUserDB } from '../../Pages/interfaces'
+import { IFemaleData, IMaleData } from './interfaces'
 
 //исключить возможность добавления одноименных пользователей----------------
 //исключить возможность пробела в начале, в конце, и более одного между-----
 //отключить кнопку save если инпут пуст
+//редактирование: после введения информации искать по ID и изменять (id т.к. имя можно поменять)
+//добавить кнопку возврата в "добавление пользователя"
+//setIdEditPropPerson('') сбрасывать при возврате
 
-const AddNewPerson: React.FC = () => {
-  const defaultMaleData = {
+export interface IPropMaleData extends IMaleData {
+  gender: string
+  lastFirstName: string
+  dontUse: boolean
+  comments: string
+  _id: string
+}
+export interface IPropFemaleData extends IFemaleData {
+  gender: string
+  lastFirstName: string
+  dontUse: boolean
+  comments: string
+  _id: string
+}
+
+interface IProps {
+  PropPerson?: IPropMaleData | IPropFemaleData
+}
+
+const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
+  let defaultMaleData = {
     chairman: false,
     secondChairM: false,
     firstSpeach: false,
@@ -18,8 +41,7 @@ const AddNewPerson: React.FC = () => {
     studyBReader: false,
     endPray: false,
   }
-
-  const defaultFemaleData = {
+  let defaultFemaleData = {
     portnerOnly: false,
     secondClassOnly: false,
     notBibleStudy: false,
@@ -31,7 +53,49 @@ const AddNewPerson: React.FC = () => {
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
-  const [found, setFound] = useState([''])
+  const [foundArrName, setFoundArrName] = useState([''])
+  const [idEditPerson, setIdEditPerson] = useState('')
+  const [editPropPerson, setEditPropPerson] = useState<
+    IPropMaleData | IPropFemaleData
+  >()
+
+  useEffect(() => {
+    setEditPropPerson(PropPerson)
+  }, [PropPerson])
+
+  useEffect(() => {
+    if (editPropPerson) {
+      searchByLetter(editPropPerson.lastFirstName)
+      setGender(editPropPerson.gender)
+      setDontUse(editPropPerson.dontUse)
+      setComments(editPropPerson.comments)
+      setIdEditPerson(editPropPerson._id)
+
+      if (editPropPerson.gender === 'male') {
+        const editP = editPropPerson as IMaleData
+        const maleData = {
+          chairman: editP.chairman,
+          secondChairM: editP.secondChairM,
+          firstSpeach: editP.firstSpeach,
+          gems: editP.gems,
+          live: editP.live,
+          studyB: editP.studyB,
+          studyBReader: editP.studyBReader,
+          endPray: editP.endPray,
+        }
+        setMaleData(maleData)
+      } else if (editPropPerson.gender === 'famale') {
+        const editP = editPropPerson as IFemaleData
+        const femaleData = {
+          portnerOnly: editP.portnerOnly,
+          secondClassOnly: editP.secondClassOnly,
+          notBibleStudy: editP.notBibleStudy,
+        }
+
+        setFemaleData(femaleData)
+      }
+    }
+  }, [editPropPerson])
 
   const setClearState = () => {
     setInputLFName('')
@@ -48,19 +112,18 @@ const AddNewPerson: React.FC = () => {
         .then((filteredUsers) => {
           // Обработка отфильтрованных пользователей
           result = filteredUsers.map((item) => item.lastFirstName)
-          //console.log(result)
+          //console.log('array filtered students', result)
         })
         .catch((error) => {
           console.error('Error searching users by lastname:', error)
         })
     }
     setInputLFName(inputLatters)
-    setFound(result)
+    setFoundArrName(result)
   }
 
-  let personData: IUserDB
-
-  const handleSubmit = async () => {
+  const addPerson = async () => {
+    let personData: IUserDB
     try {
       if (gender === 'Male' && inputLFName !== '') {
         personData = {
@@ -98,16 +161,31 @@ const AddNewPerson: React.FC = () => {
     }
   }
 
+  const editPerson = async () => {
+    console.log('id edit person', idEditPerson)
+  }
+
+  const findToEdit = async (LFName: string) => {
+    await window.api
+      .getOneUserByLFName(LFName)
+      .then((filteredUser) => {
+        setEditPropPerson(filteredUser)
+        //console.log('find to edit', filteredUser)
+      })
+      .catch((error) => {
+        console.error('Error searching users by lastname:', error)
+      })
+  }
+
   return (
     <div>
-      <p>Add new person</p>
+      {editPropPerson ? <h1>Edit person</h1> : <h1>Add new person</h1>}
       <input
         placeholder="Last name and first name"
         type="text"
         value={inputLFName}
         onChange={(e) => searchByLetter(e.target.value)}
       />
-      {found.map((item, index) => item && <p key={index}>I found: {item}</p>)}
       <input
         type="checkbox"
         value="Male"
@@ -143,11 +221,28 @@ const AddNewPerson: React.FC = () => {
             value={comments}
             onChange={(e) => setComments(e.target.value)}
           />
-          <button onClick={() => handleSubmit()}>Save</button>
+          {editPropPerson ? (
+            <button onClick={() => editPerson()}>Edit person</button>
+          ) : (
+            <button onClick={() => addPerson()}>Save person</button>
+          )}
         </div>
+      )}
+      {foundArrName.length >= 1 && (
+        <>
+          <div>I found: </div>
+          {foundArrName.map(
+            (item, index) =>
+              item && (
+                <div onClick={() => findToEdit(item)} key={index}>
+                  {item}
+                </div>
+              )
+          )}
+        </>
       )}
     </div>
   )
 }
 
-export default AddNewPerson
+export default AddAndEditPropPerson

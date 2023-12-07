@@ -227,7 +227,7 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
   }
 })
 
-ipcMain.handle('get-sortet-users-by-lastname', async (event, searchTerm) => {
+ipcMain.handle('get-sorted-users-by-lastname', async (event, searchTerm) => {
   try {
     const filteredUsers = await new Promise((resolve, reject) => {
       usersDB.find(
@@ -246,6 +246,25 @@ ipcMain.handle('get-sortet-users-by-lastname', async (event, searchTerm) => {
   } catch (error) {
     console.error('Error searching users by lastname:', error)
     return []
+  }
+})
+
+ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
+  try {
+    const foundUser = await new Promise((resolve, reject) => {
+      usersDB.findOne({ lastFirstName: LFName }, (err, docs) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(docs)
+        }
+      })
+    })
+
+    return foundUser
+  } catch (error) {
+    console.error('Error searching user by lastname:', error)
+    return {}
   }
 })
 
@@ -274,7 +293,7 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
   }
 })
 
-ipcMain.handle('get-sortet-users-by-latest', async (event, addParam) => {
+ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
   try {
     const filteredUsers = new Promise((resolve, reject) => {
       usersDB

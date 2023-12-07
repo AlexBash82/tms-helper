@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
-interface IMaleData {
-  chairman: boolean
-  secondChairM: boolean
-  firstSpeach: boolean
-  gems: boolean
-  live: boolean
-  studyB: boolean
-  studyBReader: boolean
-  endPray: boolean
-}
+import { IMaleData } from './interfaces'
 
 interface IInputMaleProps {
   setMaleData: (arg0: IMaleData) => void
@@ -45,6 +35,7 @@ const InputMale: React.FC<IInputMaleProps> = ({ setMaleData }) => {
     studyB,
     studyBReader,
     endPray,
+    setMaleData,
   ])
 
   return (

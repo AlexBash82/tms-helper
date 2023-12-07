@@ -5,6 +5,10 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
+import {
+  IPropFemaleData,
+  IPropMaleData,
+} from './Components/AddAndEditPerson/AddAndEditPerson'
 
 interface IunitDB {
   lastFirstName: string
@@ -40,6 +44,9 @@ declare global {
       getAllUsers: () => Promise<Array<IunitDB>>
       getUsersByLastname: (lastFirstName: string) => Promise<Array<IunitDB>>
       getUsersByLatest: (addParam: object) => Promise<Array<IunitDB>>
+      getOneUserByLFName: (
+        lastFirstName: string
+      ) => Promise<IPropMaleData | IPropFemaleData>
       updateOneUser: (data: object) => Promise<void>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
     }

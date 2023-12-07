@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
-interface IFemaleData {
-  portnerOnly: boolean
-  secondClassOnly: boolean
-  notBibleStudy: boolean
-}
+import { IFemaleData } from './interfaces'
 
 interface IInputFemaleProps {
   setFemaleData: (arg0: IFemaleData) => void
@@ -21,7 +16,7 @@ const InputFemale: React.FC<IInputFemaleProps> = ({ setFemaleData }) => {
       secondClassOnly: secondClassOnly,
       notBibleStudy: notBibleStudy,
     })
-  })
+  }, [portnerOnly, secondClassOnly, notBibleStudy, setFemaleData])
 
   return (
     <div>
