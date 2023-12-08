@@ -1,33 +1,10 @@
 // src/index.tsx
-
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
-import {
-  IPropFemaleData,
-  IPropMaleData,
-} from './Components/AddAndEditPerson/AddAndEditPerson'
-
-interface IunitDB {
-  lastFirstName: string
-  gender: string
-  chairman?: boolean
-  secondChairM?: boolean
-  firstSpeach?: boolean
-  gems?: boolean
-  live?: boolean
-  studyB?: boolean
-  studyBReader?: boolean
-  endPray?: boolean
-  portnerOnly?: boolean
-  secondClassOnly?: boolean
-  notBibleStudy?: boolean
-  dontUse: boolean
-  comments: string
-  _id: string
-}
+import { IFemaleDB, IMaleDB } from './interfaces'
 
 type Result = {
   success: boolean
@@ -40,13 +17,17 @@ declare global {
       send: (channel: string, data?: any) => void
       receive: (channel: string, func: (...args: any[]) => void) => void
 
-      writeOneUser: (data: object) => Promise<void>
-      getAllUsers: () => Promise<Array<IunitDB>>
-      getUsersByLastname: (lastFirstName: string) => Promise<Array<IunitDB>>
-      getUsersByLatest: (addParam: object) => Promise<Array<IunitDB>>
+      writeOneUser: (data: object) => Promise<Result>
+      getAllUsers: () => Promise<Array<IMaleDB | IFemaleDB>>
+      getUsersByLastname: (
+        lastFirstName: string
+      ) => Promise<Array<IMaleDB | IFemaleDB>>
+      getUsersByLatest: (
+        addParam: object
+      ) => Promise<Array<IMaleDB | IFemaleDB>>
       getOneUserByLFName: (
         lastFirstName: string
-      ) => Promise<IPropMaleData | IPropFemaleData>
+      ) => Promise<IMaleDB | IFemaleDB>
       updateOneUser: (data: object) => Promise<void>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
     }

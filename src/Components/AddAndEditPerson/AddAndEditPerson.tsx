@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import InputMale from './InputMale'
 import InputFemale from './InputFemale'
-import { IUserDB } from '../../Pages/interfaces'
-import { IFemaleData, IMaleData } from './interfaces'
+import { IFemaleDB, IFemaleData, IMaleDB, IMaleData } from '../../interfaces'
 
 //исключить возможность добавления одноименных пользователей----------------
 //исключить возможность пробела в начале, в конце, и более одного между-----
@@ -11,53 +10,36 @@ import { IFemaleData, IMaleData } from './interfaces'
 //добавить кнопку возврата в "добавление пользователя"
 //setIdEditPropPerson('') сбрасывать при возврате
 
-export interface IPropMaleData extends IMaleData {
-  gender: string
-  lastFirstName: string
-  dontUse: boolean
-  comments: string
-  _id: string
-}
-export interface IPropFemaleData extends IFemaleData {
-  gender: string
-  lastFirstName: string
-  dontUse: boolean
-  comments: string
-  _id: string
-}
-
 interface IProps {
-  PropPerson?: IPropMaleData | IPropFemaleData
+  PropPerson?: IMaleDB | IFemaleDB
 }
 
 const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
-  let defaultMaleData = {
-    chairman: false,
-    secondChairM: false,
-    firstSpeach: false,
-    gems: false,
-    live: false,
-    studyB: false,
-    studyBReader: false,
-    endPray: false,
+  const defaultMaleData = {
+    isChairman: false,
+    isSecondChairm: false,
+    isFirstSpeach: false,
+    isGems: false,
+    isLiveAndServ: false,
+    isStudyBibleIn: false,
+    isStudyBibleInReader: false,
+    isEndPrayer: false,
   }
-  let defaultFemaleData = {
-    portnerOnly: false,
-    secondClassOnly: false,
-    notBibleStudy: false,
+  const defaultFemaleData = {
+    isPortnerOnly: false,
+    isSecondClassOnly: false,
+    isNotBibleStudy: false,
   }
 
-  const [maleData, setMaleData] = useState(defaultMaleData)
-  const [femaleData, setFemaleData] = useState(defaultFemaleData)
+  const [maleData, setMaleData] = useState<IMaleData>(defaultMaleData)
+  const [femaleData, setFemaleData] = useState<IFemaleData>(defaultFemaleData)
   const [inputLFName, setInputLFName] = useState('')
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
   const [foundArrName, setFoundArrName] = useState([''])
   const [idEditPerson, setIdEditPerson] = useState('')
-  const [editPropPerson, setEditPropPerson] = useState<
-    IPropMaleData | IPropFemaleData
-  >()
+  const [editPropPerson, setEditPropPerson] = useState<IMaleDB | IFemaleDB>()
 
   useEffect(() => {
     setEditPropPerson(PropPerson)
@@ -72,24 +54,25 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
       setIdEditPerson(editPropPerson._id)
 
       if (editPropPerson.gender === 'male') {
-        const editP = editPropPerson as IMaleData
+        const editP = editPropPerson as IMaleDB
         const maleData = {
-          chairman: editP.chairman,
-          secondChairM: editP.secondChairM,
-          firstSpeach: editP.firstSpeach,
-          gems: editP.gems,
-          live: editP.live,
-          studyB: editP.studyB,
-          studyBReader: editP.studyBReader,
-          endPray: editP.endPray,
+          isChairman: editP.isChairman,
+          isSecondChairm: editP.isSecondChairm,
+          isFirstSpeach: editP.isFirstSpeach,
+          isGems: editP.isGems,
+          isLiveAndServ: editP.isLiveAndServ,
+          isStudyBibleIn: editP.isStudyBibleIn,
+          isStudyBibleInReader: editP.isStudyBibleInReader,
+          isEndPrayer: editP.isEndPrayer,
         }
-        setMaleData(maleData)
+        const result = Object.assign(editPropPerson, maleData)
+        setMaleData(result as IMaleDB)
       } else if (editPropPerson.gender === 'famale') {
-        const editP = editPropPerson as IFemaleData
+        const editP = editPropPerson as IFemaleDB
         const femaleData = {
-          portnerOnly: editP.portnerOnly,
-          secondClassOnly: editP.secondClassOnly,
-          notBibleStudy: editP.notBibleStudy,
+          isPortnerOnly: editP.isPortnerOnly,
+          isSecondClassOnly: editP.isSecondClassOnly,
+          isNotBibleStudy: editP.isNotBibleStudy,
         }
 
         setFemaleData(femaleData)
@@ -105,14 +88,14 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
   }
 
   const searchByLetter = async (inputLatters: string) => {
-    let result = ['']
+    let result: Array<string> = []
     if (inputLatters) {
       await window.api
         .getUsersByLastname(inputLatters)
         .then((filteredUsers) => {
           // Обработка отфильтрованных пользователей
           result = filteredUsers.map((item) => item.lastFirstName)
-          //console.log('array filtered students', result)
+          console.log('array filtered students', result)
         })
         .catch((error) => {
           console.error('Error searching users by lastname:', error)
@@ -123,22 +106,51 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
   }
 
   const addPerson = async () => {
-    let personData: IUserDB
+    const defoltStamp = 1685000178013
+    let personData: IMaleDB | IFemaleDB
     try {
       if (gender === 'Male' && inputLFName !== '') {
         personData = {
           lastFirstName: inputLFName,
           gender: gender,
-          chairman: maleData.chairman,
-          secondChairM: maleData.secondChairM,
-          firstSpeach: maleData.firstSpeach,
-          gems: maleData.gems,
-          live: maleData.live,
-          studyB: maleData.studyB,
-          studyBReader: maleData.studyBReader,
-          endPray: maleData.endPray,
+          isChairman: maleData.isChairman,
+          isSecondChairm: maleData.isSecondChairm,
+          isFirstSpeach: maleData.isFirstSpeach,
+          isGems: maleData.isGems,
+          isLiveAndServ: maleData.isLiveAndServ,
+          isStudyBibleIn: maleData.isStudyBibleIn,
+          isStudyBibleInReader: maleData.isStudyBibleInReader,
+          isEndPrayer: maleData.isEndPrayer,
           dontUse: dontUse,
           comments: comments,
+
+          plan: false,
+          chairman: defoltStamp,
+          secondChairm: defoltStamp,
+          firstSpeach: defoltStamp,
+          gems: defoltStamp,
+          mainRead: defoltStamp,
+          smallRead: defoltStamp,
+          mainStarting: defoltStamp,
+          smallStarting: defoltStamp,
+          mainFollowing: defoltStamp,
+          smallFollowing: defoltStamp,
+          mainMaking: defoltStamp,
+          smallMaking: defoltStamp,
+          mainExplaining: defoltStamp,
+          smallExplaining: defoltStamp,
+          mainSpeech: defoltStamp,
+          smallSpeech: defoltStamp,
+          mainSlave: defoltStamp,
+          smallSlave: defoltStamp,
+          portners: [],
+          liveAndServ: defoltStamp,
+          studyBibleIn: defoltStamp,
+          studyBibleInReader: defoltStamp,
+          endPrayer: defoltStamp,
+          latest: defoltStamp,
+
+          _id: '',
         }
         await window.api.writeOneUser(personData)
       }
@@ -147,11 +159,27 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
         personData = {
           lastFirstName: inputLFName,
           gender: gender,
-          portnerOnly: femaleData.portnerOnly,
-          secondClassOnly: femaleData.secondClassOnly,
-          notBibleStudy: femaleData.notBibleStudy,
+          isPortnerOnly: femaleData.isPortnerOnly,
+          isSecondClassOnly: femaleData.isSecondClassOnly,
+          isNotBibleStudy: femaleData.isNotBibleStudy,
           dontUse: dontUse,
           comments: comments,
+
+          plan: false,
+          mainStarting: defoltStamp,
+          smallStarting: defoltStamp,
+          mainFollowing: defoltStamp,
+          smallFollowing: defoltStamp,
+          mainMaking: defoltStamp,
+          smallMaking: defoltStamp,
+          mainExplaining: defoltStamp,
+          smallExplaining: defoltStamp,
+          mainSlave: defoltStamp,
+          smallSlave: defoltStamp,
+          portners: [],
+          latest: defoltStamp,
+
+          _id: '',
         }
         await window.api.writeOneUser(personData)
       }
@@ -160,6 +188,10 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
       console.log('Error writing to database:', error)
     }
   }
+
+  // const addPerson = async () => {
+  //   const result = await writeOneUserToDB(gender, inputLFName, maleData, dontUse, comments, femaleData)
+  // }
 
   const editPerson = async () => {
     console.log('id edit person', idEditPerson)
@@ -228,7 +260,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
           )}
         </div>
       )}
-      {foundArrName.length >= 1 && (
+      {foundArrName.length !== 0 && (
         <>
           <div>I found: </div>
           {foundArrName.map(

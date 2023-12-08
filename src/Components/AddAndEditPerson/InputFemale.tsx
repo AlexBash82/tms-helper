@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from 'react'
-import { IFemaleData } from './interfaces'
+import { IFemaleData } from '../../interfaces'
 
 interface IInputFemaleProps {
   setFemaleData: (arg0: IFemaleData) => void
 }
 
 const InputFemale: React.FC<IInputFemaleProps> = ({ setFemaleData }) => {
-  const [portnerOnly, setPortnerOnly] = useState(false)
-  const [secondClassOnly, setSecondClassOnly] = useState(false)
-  const [notBibleStudy, setNotBibleStudy] = useState(false)
+  const [isPortnerOnly, setIsPortnerOnly] = useState(false)
+  const [isSecondClassOnly, setIsSecondClassOnly] = useState(false)
+  const [isNotBibleStudy, setIsNotBibleStudy] = useState(false)
 
   useEffect(() => {
     setFemaleData({
-      portnerOnly: portnerOnly,
-      secondClassOnly: secondClassOnly,
-      notBibleStudy: notBibleStudy,
+      isPortnerOnly: isPortnerOnly,
+      isSecondClassOnly: isSecondClassOnly,
+      isNotBibleStudy: isNotBibleStudy,
     })
-  }, [portnerOnly, secondClassOnly, notBibleStudy, setFemaleData])
+  }, [isPortnerOnly, isSecondClassOnly, isNotBibleStudy, setFemaleData])
 
   return (
     <div>
       <input
         type="checkbox"
-        checked={portnerOnly}
-        onChange={(e) => setPortnerOnly(!portnerOnly)}
+        checked={isPortnerOnly}
+        onChange={(e) => setIsPortnerOnly(!isPortnerOnly)}
       />
       -Portner only
       <input
         type="checkbox"
-        checked={secondClassOnly}
-        onChange={(e) => setSecondClassOnly(!secondClassOnly)}
+        checked={isSecondClassOnly}
+        onChange={(e) => setIsSecondClassOnly(!isSecondClassOnly)}
       />
       -Second class only
       <input
         type="checkbox"
-        checked={notBibleStudy}
-        onChange={(e) => setNotBibleStudy(!notBibleStudy)}
+        checked={isNotBibleStudy}
+        onChange={(e) => setIsNotBibleStudy(!isNotBibleStudy)}
       />
       -Not a Bible study
     </div>

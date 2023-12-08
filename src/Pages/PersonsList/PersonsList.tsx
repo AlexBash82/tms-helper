@@ -1,36 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { IUserDB } from '../interfaces'
 import AddAndEditPerson from '../../Components/AddAndEditPerson/AddAndEditPerson'
-import {
-  IFemaleData,
-  IMaleData,
-} from '../../Components/AddAndEditPerson/interfaces'
+import { IFemaleDB, IMaleDB } from '../../interfaces'
 
 //добавить фильтры для поиска, например кто и когда выступал
 
-interface IEditMaleData extends IMaleData {
-  gender: string
-  lastFirstName: string
-  dontUse: boolean
-  comments: string
-  _id: string
-}
-interface IEditFemaleData extends IFemaleData {
-  gender: string
-  lastFirstName: string
-  dontUse: boolean
-  comments: string
-  _id: string
-}
-
 const PersonsList: React.FC = () => {
-  const [allUsers, setAllUsers] = useState<Array<IUserDB>>([])
+  const [allUsers, setAllUsers] = useState<Array<IMaleDB | IFemaleDB>>([])
   const [showConfirm, setShowConfirm] = useState(false)
   const [deletingName, setDeletingName] = useState('')
   const [genCode, setGenCode] = useState('')
   const [inputCode, setInputCode] = useState('')
   const [editablePerson, setEditablePerson] = useState<
-    IEditFemaleData | IEditMaleData | undefined
+    IMaleDB | IFemaleDB | undefined
   >()
 
   const readAllData = async () => {
@@ -51,8 +32,7 @@ const PersonsList: React.FC = () => {
     const result = allUsers.find((item) => item.lastFirstName === searchLFName)
 
     if (result) {
-      const data = result as IEditMaleData | IEditFemaleData
-      setEditablePerson(data)
+      setEditablePerson(result)
     }
   }
 

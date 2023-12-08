@@ -95,66 +95,13 @@ ipcMain.on('navigate', (event, page) => {
 })
 
 ipcMain.handle('write-one-user', (event, personData) => {
-  const defoltStamp = 1685000178013
-  let schema = {}
-
-  if (personData.gender === 'Male') {
-    schema = {
-      //основные данные введенные вручную
-      ...personData,
-      // Дополнительные поля добавляемые автоматически
-      plan: false,
-      chairMan: defoltStamp,
-      secondChair: defoltStamp,
-      firstSpeach: defoltStamp,
-      gems: defoltStamp,
-      mainRead: defoltStamp,
-      smallRead: defoltStamp,
-      mainStarting: defoltStamp,
-      smallStarting: defoltStamp,
-      mainFollowing: defoltStamp,
-      smallFollowing: defoltStamp,
-      mainMaking: defoltStamp,
-      smallMaking: defoltStamp,
-      mainExplaining: defoltStamp,
-      smallExplaining: defoltStamp,
-      mainSpeech: defoltStamp,
-      smallSpeech: defoltStamp,
-      mainSlave: defoltStamp,
-      smallSlave: defoltStamp,
-      portners: [],
-      live: defoltStamp,
-      study: defoltStamp,
-      studyReader: defoltStamp,
-      pray: defoltStamp,
-      latest: defoltStamp,
-    }
-  } else if (personData.gender === 'Female') {
-    schema = {
-      //основные данные введенные вручную
-      ...personData,
-      // Дополнительные поля добавляемые автоматически
-      plan: false,
-      mainStarting: defoltStamp,
-      smallStarting: defoltStamp,
-      mainFollowing: defoltStamp,
-      smallFollowing: defoltStamp,
-      mainMaking: defoltStamp,
-      smallMaking: defoltStamp,
-      mainExplaining: defoltStamp,
-      smallExplaining: defoltStamp,
-      mainSlave: defoltStamp,
-      smallSlave: defoltStamp,
-      portners: [],
-      latest: defoltStamp,
-    }
-  }
-
-  usersDB.insert(schema, (err, newDoc) => {
+  usersDB.insert(personData, (err, newDoc) => {
     if (err) {
       console.error('Error inserting data into NeDB:', err)
+      return { success: false, message: 'Write is faild' }
     } else {
       //console.log('Data inserted into NeDB:', newDoc)
+      return { success: true, message: 'Write is comlete successfully' }
     }
   })
 })

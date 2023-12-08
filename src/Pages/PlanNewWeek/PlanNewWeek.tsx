@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { IUserDB } from '../interfaces'
+import { IUserDB } from '../../interfaces'
 import './PlanNewWeek.css'
 import ListOfCandidates from '../../Components/ListOfCandidates/ListOfCandidates'
 import CoupleInput from '../../Components/CoupleInput/CoupleInput'

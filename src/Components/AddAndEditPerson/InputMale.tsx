@@ -1,40 +1,40 @@
 import React, { useState, useEffect } from 'react'
-import { IMaleData } from './interfaces'
+import { IMaleData } from '../../interfaces'
 
 interface IInputMaleProps {
   setMaleData: (arg0: IMaleData) => void
 }
 
 const InputMale: React.FC<IInputMaleProps> = ({ setMaleData }) => {
-  const [chairman, setChairman] = useState(false)
-  const [secondChairM, setSecondChairM] = useState(false)
-  const [firstSpeach, setFirstSpeach] = useState(false)
-  const [gems, setGems] = useState(false)
-  const [live, setLive] = useState(false)
-  const [studyB, setStudyB] = useState(false)
-  const [studyBReader, setStudyBReader] = useState(false)
-  const [endPray, setEndPray] = useState(false)
+  const [isChairman, setIsChairman] = useState(false)
+  const [isSecondChairm, setIsSecondChairm] = useState(false)
+  const [isFirstSpeach, setIsFirstSpeach] = useState(false)
+  const [isGems, setIsGems] = useState(false)
+  const [isLiveAndServ, setIsLiveAndServ] = useState(false)
+  const [isStudyBibleIn, setIsStudyBibleIn] = useState(false)
+  const [isStudyBibleInReader, setIsStudyBibleInReader] = useState(false)
+  const [isEndPrayer, setIsEndPrayer] = useState(false)
 
   useEffect(() => {
     setMaleData({
-      chairman: chairman,
-      secondChairM: secondChairM,
-      firstSpeach: firstSpeach,
-      gems: gems,
-      live: live,
-      studyB: studyB,
-      studyBReader: studyBReader,
-      endPray: endPray,
+      isChairman: isChairman,
+      isSecondChairm: isSecondChairm,
+      isFirstSpeach: isFirstSpeach,
+      isGems: isGems,
+      isLiveAndServ: isLiveAndServ,
+      isStudyBibleIn: isStudyBibleIn,
+      isStudyBibleInReader: isStudyBibleInReader,
+      isEndPrayer: isEndPrayer,
     })
   }, [
-    chairman,
-    secondChairM,
-    firstSpeach,
-    gems,
-    live,
-    studyB,
-    studyBReader,
-    endPray,
+    isChairman,
+    isSecondChairm,
+    isFirstSpeach,
+    isGems,
+    isLiveAndServ,
+    isStudyBibleIn,
+    isStudyBibleInReader,
+    isEndPrayer,
     setMaleData,
   ])
 
@@ -42,44 +42,52 @@ const InputMale: React.FC<IInputMaleProps> = ({ setMaleData }) => {
     <div>
       <input
         type="checkbox"
-        checked={endPray}
-        onChange={(e) => setEndPray(!endPray)}
+        checked={isEndPrayer}
+        onChange={(e) => setIsEndPrayer(!isEndPrayer)}
       />
       -Prayer in the end
       <input
         type="checkbox"
-        checked={studyBReader}
-        onChange={(e) => setStudyBReader(!studyBReader)}
+        checked={isStudyBibleInReader}
+        onChange={(e) => setIsStudyBibleInReader(!isStudyBibleInReader)}
       />
       -Study Bible reader
-      <input type="checkbox" checked={gems} onChange={(e) => setGems(!gems)} />
-      -Spiritual Gems
       <input
         type="checkbox"
-        checked={firstSpeach}
-        onChange={(e) => setFirstSpeach(!firstSpeach)}
+        checked={isGems}
+        onChange={(e) => setIsGems(!isGems)}
+      />
+      -Spiritual isGems
+      <input
+        type="checkbox"
+        checked={isFirstSpeach}
+        onChange={(e) => setIsFirstSpeach(!isFirstSpeach)}
       />
       -First speach
-      <input type="checkbox" checked={live} onChange={(e) => setLive(!live)} />
-      -Live and service
       <input
         type="checkbox"
-        checked={studyB}
-        onChange={(e) => setStudyB(!studyB)}
+        checked={isLiveAndServ}
+        onChange={(e) => setIsLiveAndServ(!isLiveAndServ)}
+      />
+      -isLiveAndServ and service
+      <input
+        type="checkbox"
+        checked={isStudyBibleIn}
+        onChange={(e) => setIsStudyBibleIn(!isStudyBibleIn)}
       />
       -Study Bible
       <input
         type="checkbox"
-        checked={secondChairM}
-        onChange={(e) => setSecondChairM(!secondChairM)}
+        checked={isSecondChairm}
+        onChange={(e) => setIsSecondChairm(!isSecondChairm)}
       />
-      -Chairman in second
+      -isChairman in second
       <input
         type="checkbox"
-        checked={chairman}
-        onChange={(e) => setChairman(!chairman)}
+        checked={isChairman}
+        onChange={(e) => setIsChairman(!isChairman)}
       />
-      -Chairman in main
+      -isChairman in main
     </div>
   )
 }

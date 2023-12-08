@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { IUserDB } from '../interfaces'
+import { IUserDB } from '../../interfaces'
 
 const AddInfoByWeek: React.FC = () => {
   const [dateOfMeet, setDateOfMeet] = useState('')
