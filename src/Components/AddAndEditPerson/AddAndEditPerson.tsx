@@ -3,12 +3,10 @@ import InputMale from './InputMale'
 import InputFemale from './InputFemale'
 import { IFemaleDB, IFemaleData, IMaleDB, IMaleData } from '../../interfaces'
 
-//исключить возможность добавления одноименных пользователей----------------
+//исключить возможность добавления одноименных пользователей--ok--------------
 //исключить возможность пробела в начале, в конце, и более одного между-----
 //отключить кнопку save если инпут пуст
 //редактирование: после введения информации искать по ID и изменять (id т.к. имя можно поменять)
-//добавить кнопку возврата в "добавление пользователя"
-//setIdEditPropPerson('') сбрасывать при возврате
 
 interface IProps {
   PropPerson?: IMaleDB | IFemaleDB
@@ -37,7 +35,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
-  const [foundArrName, setFoundArrName] = useState([''])
+  const [foundArrName, setFoundArrName] = useState<Array<string>>([])
   const [idEditPerson, setIdEditPerson] = useState('')
   const [editPropPerson, setEditPropPerson] = useState<IMaleDB | IFemaleDB>()
 
@@ -85,6 +83,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
     setGender('')
     setDontUse(false)
     setComments('')
+    setFoundArrName([])
   }
 
   const searchByLetter = async (inputLatters: string) => {
@@ -95,7 +94,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
         .then((filteredUsers) => {
           // Обработка отфильтрованных пользователей
           result = filteredUsers.map((item) => item.lastFirstName)
-          console.log('array filtered students', result)
+          //console.log('array filtered students', result)
         })
         .catch((error) => {
           console.error('Error searching users by lastname:', error)
@@ -209,6 +208,11 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
       })
   }
 
+  const backToAddPerson = () => {
+    setClearState()
+    setEditPropPerson(undefined)
+  }
+
   return (
     <div>
       {editPropPerson ? <h1>Edit person</h1> : <h1>Add new person</h1>}
@@ -255,6 +259,8 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
           />
           {editPropPerson ? (
             <button onClick={() => editPerson()}>Edit person</button>
+          ) : inputLFName === foundArrName[0] ? (
+            <div>That person is already exist</div>
           ) : (
             <button onClick={() => addPerson()}>Save person</button>
           )}
@@ -262,17 +268,19 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
       )}
       {foundArrName.length !== 0 && (
         <>
-          <div>I found: </div>
+          <div>I found in DB: </div>
           {foundArrName.map(
             (item, index) =>
               item && (
-                <div onClick={() => findToEdit(item)} key={index}>
-                  {item}
+                <div key={index}>
+                  <div>{item}</div>
+                  <div onClick={() => findToEdit(item)}>Edit</div>
                 </div>
               )
           )}
         </>
       )}
+      <div onClick={() => backToAddPerson()}>Back to add person</div>
     </div>
   )
 }
