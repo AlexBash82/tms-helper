@@ -174,6 +174,49 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
   }
 })
 
+ipcMain.handle('edit-one-user', async (event, updatedItem) => {
+  try {
+    //нужно получать id для поиска и новые значения - объект
+    const { idPerson, newValue } = updatedItem
+
+    // Получаем оригинальный объект из базы данных
+    const originalItem = await new Promise((resolve, reject) => {
+      usersDB.findOne({ _id: idPerson }, (err, doc) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(doc)
+        }
+      })
+    })
+
+    if (!originalItem) {
+      return { success: false, message: 'Item not found' }
+    }
+
+    // Создаем обновленный объект с новым значением
+    const updatedObject = Object.assign(originalItem, newValue)
+    console.log('original item', originalItem)
+    console.log('newvalue', newValue)
+    console.log('updated obj', updatedObject)
+
+    // Обновляем объект в базе данных
+    usersDB.update({ _id: idPerson }, updatedObject, {}, (err, numReplaced) => {
+      if (err) {
+        console.error('Error updating item in NeDB:', err)
+      } else {
+        console.log('Number of items updated:', numReplaced)
+      }
+    })
+
+    // Возвращаем обновленные данные (по вашему усмотрению)
+    return { success: true, message: 'Item updated successfully' }
+  } catch (error) {
+    console.error('Error updating item in NeDB:', error)
+    return { success: false, message: 'Error updating item' }
+  }
+})
+
 ipcMain.handle('get-sorted-users-by-lastname', async (event, searchTerm) => {
   try {
     const filteredUsers = await new Promise((resolve, reject) => {

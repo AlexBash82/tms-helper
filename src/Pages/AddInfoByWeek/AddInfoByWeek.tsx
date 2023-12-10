@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { IUserDB } from '../../interfaces'
+import { IFemaleDB, IMaleDB } from '../../interfaces'
 
 const AddInfoByWeek: React.FC = () => {
   const [dateOfMeet, setDateOfMeet] = useState('')
   //const [inputSName, setInputSName] = useState('')
   const [inputSearch, setInputSearch] = useState('')
   const [inputNewName, setInputNewName] = useState('')
-  const [allFileContent, setAllFileContent] = useState<Array<IUserDB>>([])
+  const [allFileContent, setAllFileContent] = useState<
+    Array<IMaleDB | IFemaleDB>
+  >([])
 
   const handleReadAll = async () => {
     try {

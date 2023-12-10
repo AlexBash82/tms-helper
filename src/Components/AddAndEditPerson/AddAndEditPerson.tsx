@@ -31,12 +31,12 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
 
   const [maleData, setMaleData] = useState<IMaleData>(defaultMaleData)
   const [femaleData, setFemaleData] = useState<IFemaleData>(defaultFemaleData)
+  //добавить maleData & femaleData в пропсы для InputMale.tsx для обновления данных
   const [inputLFName, setInputLFName] = useState('')
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
   const [foundArrName, setFoundArrName] = useState<Array<string>>([])
-  const [idEditPerson, setIdEditPerson] = useState('')
   const [editPropPerson, setEditPropPerson] = useState<IMaleDB | IFemaleDB>()
 
   useEffect(() => {
@@ -49,9 +49,8 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
       setGender(editPropPerson.gender)
       setDontUse(editPropPerson.dontUse)
       setComments(editPropPerson.comments)
-      setIdEditPerson(editPropPerson._id)
 
-      if (editPropPerson.gender === 'male') {
+      if (editPropPerson.gender === 'Male') {
         const editP = editPropPerson as IMaleDB
         const maleData = {
           isChairman: editP.isChairman,
@@ -64,16 +63,16 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
           isEndPrayer: editP.isEndPrayer,
         }
         const result = Object.assign(editPropPerson, maleData)
-        setMaleData(result as IMaleDB)
-      } else if (editPropPerson.gender === 'famale') {
+        setMaleData(result)
+      } else if (editPropPerson.gender === 'Female') {
         const editP = editPropPerson as IFemaleDB
         const femaleData = {
           isPortnerOnly: editP.isPortnerOnly,
           isSecondClassOnly: editP.isSecondClassOnly,
           isNotBibleStudy: editP.isNotBibleStudy,
         }
-
-        setFemaleData(femaleData)
+        const result = Object.assign(editPropPerson, femaleData)
+        setFemaleData(result)
       }
     }
   }, [editPropPerson])
@@ -149,7 +148,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
           endPrayer: defoltStamp,
           latest: defoltStamp,
 
-          _id: '',
+          _id: undefined,
         }
         await window.api.writeOneUser(personData)
       }
@@ -178,9 +177,10 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
           portners: [],
           latest: defoltStamp,
 
-          _id: '',
+          _id: undefined,
         }
-        await window.api.writeOneUser(personData)
+        const result = await window.api.writeOneUser(personData)
+        console.log('result of write one user', result)
       }
       setClearState()
     } catch (error) {
@@ -193,7 +193,38 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
   // }
 
   const editPerson = async () => {
-    console.log('id edit person', idEditPerson)
+    //получить новые даные, старые из базы и обновить
+    if (editPropPerson) {
+      const idPerson = editPropPerson._id
+      let newValue
+      if (editPropPerson.gender === 'Male') {
+        newValue = {
+          ...maleData,
+          lastFirstName: inputLFName,
+          gender,
+          dontUse,
+          comments,
+        }
+      } else if (editPropPerson.gender === 'Female') {
+        newValue = {
+          ...femaleData,
+          lastFirstName: inputLFName,
+          gender,
+          dontUse,
+          comments,
+        }
+      }
+
+      await window.api
+        .editOneUser({ idPerson, newValue })
+        .then((result) => {
+          console.log('result of edit', result)
+          //нужно вывести алерт об успешном обновлении и сбросить стейт
+        })
+        .catch((error) => {
+          console.error('Error edit user by id:', error)
+        })
+    }
   }
 
   const findToEdit = async (LFName: string) => {
@@ -280,7 +311,9 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
           )}
         </>
       )}
-      <div onClick={() => backToAddPerson()}>Back to add person</div>
+      {editPropPerson && (
+        <div onClick={() => backToAddPerson()}>Back to add person</div>
+      )}
     </div>
   )
 }

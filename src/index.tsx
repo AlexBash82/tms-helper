@@ -28,7 +28,8 @@ declare global {
       getOneUserByLFName: (
         lastFirstName: string
       ) => Promise<IMaleDB | IFemaleDB>
-      updateOneUser: (data: object) => Promise<void>
+      updateOneUser: (data: object) => Promise<Result>
+      editOneUser: (data: object) => Promise<Result>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
     }
   }

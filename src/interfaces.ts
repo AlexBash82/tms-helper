@@ -42,7 +42,7 @@ export interface IPersonDB {
   mainExplaining: number
   smallExplaining: number
   smallSlave: number
-  portners: []
+  portners: Array<string>
   latest: number
 
   _id: string
@@ -81,14 +81,14 @@ export interface IMaleDB {
   smallSpeech: number
   mainSlave: number
   smallSlave: number
-  portners: []
+  portners: Array<string>
   liveAndServ: number
   studyBibleIn: number
   studyBibleInReader: number
   endPrayer: number
   latest: number
 
-  _id: string
+  _id: string | undefined
 }
 
 export interface IFemaleDB {
@@ -114,7 +114,7 @@ export interface IFemaleDB {
   portners: Array<string>
   latest: number
 
-  _id: string
+  _id: string | undefined
 }
 export interface IMaleData {
   isChairman: boolean

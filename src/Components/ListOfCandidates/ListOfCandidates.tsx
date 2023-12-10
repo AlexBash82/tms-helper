@@ -26,7 +26,7 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
   action,
 }) => {
   const [students, setStudents] = useState([
-    { _id: '0', lastFirstName: 'Didnt choose yet' },
+    { lastFirstName: 'Didnt choose yet' },
   ])
 
   const addSearchParams = () => {
@@ -93,7 +93,7 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
         (student) =>
           action === 'plan' && (
             <div
-              key={student._id}
+              key={student.lastFirstName}
               onClick={() => makePlan(student.lastFirstName)}
             >
               {student.lastFirstName}

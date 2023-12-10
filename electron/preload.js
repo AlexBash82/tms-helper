@@ -17,6 +17,7 @@ contextBridge.exposeInMainWorld('api', {
   getOneUserByLFName: async (LFName) =>
     ipcRenderer.invoke('get-one-user-by-lfname', LFName),
   updateOneUser: async (data) => ipcRenderer.invoke('update-one-user', data),
+  editOneUser: async (data) => ipcRenderer.invoke('edit-one-user', data),
   deleteOneUser: async (lastFirstName) =>
     ipcRenderer.invoke('delete-one-user', lastFirstName),
 })
