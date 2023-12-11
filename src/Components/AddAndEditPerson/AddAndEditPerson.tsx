@@ -10,9 +10,13 @@ import { IFemaleDB, IFemaleData, IMaleDB, IMaleData } from '../../interfaces'
 
 interface IProps {
   PropPerson?: IMaleDB | IFemaleDB
+  readAllData: () => void
 }
 
-const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
+const AddAndEditPropPerson: React.FC<IProps> = ({
+  PropPerson,
+  readAllData,
+}) => {
   const defaultMaleData = {
     isChairman: false,
     isSecondChairm: false,
@@ -31,7 +35,6 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
 
   const [maleData, setMaleData] = useState<IMaleData>(defaultMaleData)
   const [femaleData, setFemaleData] = useState<IFemaleData>(defaultFemaleData)
-  //добавить maleData & femaleData в пропсы для InputMale.tsx для обновления данных
   const [inputLFName, setInputLFName] = useState('')
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
@@ -74,6 +77,8 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
         const result = Object.assign(editPropPerson, femaleData)
         setFemaleData(result)
       }
+    } else {
+      setClearState()
     }
   }, [editPropPerson])
 
@@ -183,6 +188,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
         console.log('result of write one user', result)
       }
       setClearState()
+      readAllData() //заново читаем весь список
     } catch (error) {
       console.log('Error writing to database:', error)
     }
@@ -219,6 +225,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
         .editOneUser({ idPerson, newValue })
         .then((result) => {
           console.log('result of edit', result)
+          readAllData() //обновляем список после внесения изменений.
           //нужно вывести алерт об успешном обновлении и сбросить стейт
         })
         .catch((error) => {
@@ -268,9 +275,9 @@ const AddAndEditPropPerson: React.FC<IProps> = ({ PropPerson }) => {
       />
       -Female
       {gender === 'Male' ? (
-        <InputMale setMaleData={setMaleData} />
+        <InputMale maleData={maleData} setMaleData={setMaleData} />
       ) : gender === 'Female' ? (
-        <InputFemale setFemaleData={setFemaleData} />
+        <InputFemale femaleData={femaleData} setFemaleData={setFemaleData} />
       ) : (
         <div>Input lastname, firstname and choose the gender</div>
       )}

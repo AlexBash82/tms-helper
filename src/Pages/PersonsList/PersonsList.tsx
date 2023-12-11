@@ -41,8 +41,9 @@ const PersonsList: React.FC = () => {
       .deleteOneUser(searchLFName)
       .then((result) => {
         if (result.success) {
-          // Пользователь успешно удален
-          console.log(result.message)
+          // добавить алерт об успешном результате
+          setEditablePerson(undefined)
+          readAllData() //заново читаем весь список
         } else {
           // Пользователь не найден
           console.error(result.message)
@@ -51,7 +52,6 @@ const PersonsList: React.FC = () => {
       .catch((error) => {
         console.log('Error deleting user by lastFirstName:', error)
       })
-    readAllData()
   }
 
   const generateCode = () => {
@@ -133,7 +133,10 @@ const PersonsList: React.FC = () => {
         </ul>
       </div>
       <div className="">
-        <AddAndEditPerson PropPerson={editablePerson} />
+        <AddAndEditPerson
+          PropPerson={editablePerson}
+          readAllData={readAllData}
+        />
       </div>
     </div>
   )

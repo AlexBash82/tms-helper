@@ -1,32 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { IMaleData } from '../../interfaces'
 
-interface IInputMaleProps {
+interface IProps {
   setMaleData: (arg0: IMaleData) => void
+  maleData: IMaleData
 }
 
-const InputMale: React.FC<IInputMaleProps> = ({ setMaleData }) => {
-  const [isChairman, setIsChairman] = useState(false)
-  const [isSecondChairm, setIsSecondChairm] = useState(false)
-  const [isFirstSpeach, setIsFirstSpeach] = useState(false)
-  const [isGems, setIsGems] = useState(false)
-  const [isLiveAndServ, setIsLiveAndServ] = useState(false)
-  const [isStudyBibleIn, setIsStudyBibleIn] = useState(false)
-  const [isStudyBibleInReader, setIsStudyBibleInReader] = useState(false)
-  const [isEndPrayer, setIsEndPrayer] = useState(false)
-
-  useEffect(() => {
-    setMaleData({
-      isChairman: isChairman,
-      isSecondChairm: isSecondChairm,
-      isFirstSpeach: isFirstSpeach,
-      isGems: isGems,
-      isLiveAndServ: isLiveAndServ,
-      isStudyBibleIn: isStudyBibleIn,
-      isStudyBibleInReader: isStudyBibleInReader,
-      isEndPrayer: isEndPrayer,
-    })
-  }, [
+const InputMale: React.FC<IProps> = ({ maleData, setMaleData }) => {
+  const {
     isChairman,
     isSecondChairm,
     isFirstSpeach,
@@ -35,57 +16,73 @@ const InputMale: React.FC<IInputMaleProps> = ({ setMaleData }) => {
     isStudyBibleIn,
     isStudyBibleInReader,
     isEndPrayer,
-    setMaleData,
-  ])
+  } = maleData
 
   return (
     <div>
       <input
         type="checkbox"
         checked={isEndPrayer}
-        onChange={(e) => setIsEndPrayer(!isEndPrayer)}
+        onChange={(e) =>
+          setMaleData({ ...maleData, isEndPrayer: !isEndPrayer })
+        }
       />
       -Prayer in the end
       <input
         type="checkbox"
         checked={isStudyBibleInReader}
-        onChange={(e) => setIsStudyBibleInReader(!isStudyBibleInReader)}
+        onChange={(e) =>
+          setMaleData({
+            ...maleData,
+            isStudyBibleInReader: !isStudyBibleInReader,
+          })
+        }
       />
       -Study Bible reader
       <input
         type="checkbox"
         checked={isGems}
-        onChange={(e) => setIsGems(!isGems)}
+        onChange={(e) => setMaleData({ ...maleData, isGems: !isGems })}
       />
       -Spiritual isGems
       <input
         type="checkbox"
         checked={isFirstSpeach}
-        onChange={(e) => setIsFirstSpeach(!isFirstSpeach)}
+        onChange={(e) =>
+          setMaleData({ ...maleData, isFirstSpeach: !isFirstSpeach })
+        }
       />
       -First speach
       <input
         type="checkbox"
         checked={isLiveAndServ}
-        onChange={(e) => setIsLiveAndServ(!isLiveAndServ)}
+        onChange={(e) =>
+          setMaleData({ ...maleData, isLiveAndServ: !isLiveAndServ })
+        }
       />
       -isLiveAndServ and service
       <input
         type="checkbox"
         checked={isStudyBibleIn}
-        onChange={(e) => setIsStudyBibleIn(!isStudyBibleIn)}
+        onChange={(e) =>
+          setMaleData({ ...maleData, isLiveAndServ: !isStudyBibleIn })
+        }
       />
       -Study Bible
       <input
         type="checkbox"
         checked={isSecondChairm}
-        onChange={(e) => setIsSecondChairm(!isSecondChairm)}
+        onChange={(e) =>
+          setMaleData({ ...maleData, isLiveAndServ: !isSecondChairm })
+        }
       />
       -isChairman in second
       <input
         type="checkbox"
         checked={isChairman}
-        onChange={(e) => setIsChairman(!isChairman)}
+        onChange={(e) =>
+          setMaleData({ ...maleData, isLiveAndServ: !isChairman })
+        }
       />
       -isChairman in main
     </div>
