@@ -94,17 +94,26 @@ ipcMain.on('navigate', (event, page) => {
   mainWindow.webContents.send('navigate', page)
 })
 
-ipcMain.handle('write-one-user', (event, personData) => {
-  usersDB.insert(personData, (err, newDoc) => {
-    if (err) {
-      console.error('Error inserting data into NeDB:', err)
-      return { success: false, message: 'Write is faild' }
-    } else {
-      //console.log('Data inserted into NeDB:', newDoc)
-      return { success: true, message: 'Write is comlete successfully' }
-    }
-  })
+//------------------------WRITE-ONE-USER---------------------------------------------
+//хорошо бы проверить есть ли такой в базе данных
+ipcMain.handle('write-one-user', async (event, personData) => {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      usersDB.insert(personData, (err, newDoc) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(newDoc)
+        }
+      })
+    })
+    return { success: true, message: 'Write new user is successfully' }
+  } catch (error) {
+    return { success: false, message: 'Write new user is faild' }
+  }
 })
+
+//------------------------READ-ALL-USERS---------------------------------------------
 
 ipcMain.handle('read-all-users', async (event) => {
   try {
@@ -128,8 +137,10 @@ ipcMain.handle('read-all-users', async (event) => {
   }
 })
 
+//------------------------UPDATE-ONE-USER---------------------------------------------
+
 ipcMain.handle('update-one-user', async (event, updatedItem) => {
-  console.log(updatedItem)
+  //console.log(updatedItem)
   try {
     //нужно получать имя для поиска, названия поля для обновления и новое значение
     const { studentName, keyName, newValue } = updatedItem
@@ -174,6 +185,8 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
   }
 })
 
+//------------------------EDIT-ONE-USER---------------------------------------------
+
 ipcMain.handle('edit-one-user', async (event, updatedItem) => {
   try {
     //нужно получать id для поиска и новые значения - объект
@@ -217,6 +230,8 @@ ipcMain.handle('edit-one-user', async (event, updatedItem) => {
   }
 })
 
+//---------------------GET-SORTED-USERS-BY-LASTNAME----------------------------------------
+
 ipcMain.handle('get-sorted-users-by-lastname', async (event, searchTerm) => {
   try {
     const filteredUsers = await new Promise((resolve, reject) => {
@@ -239,6 +254,8 @@ ipcMain.handle('get-sorted-users-by-lastname', async (event, searchTerm) => {
   }
 })
 
+//------------------------GET-ONE-USER-BY-LASTNAME-------------------------------------------
+
 ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
   try {
     const foundUser = await new Promise((resolve, reject) => {
@@ -257,6 +274,8 @@ ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
     return {}
   }
 })
+
+//------------------------DELITE-ONE-USER--------------------------------------------
 
 ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
   try {
@@ -283,6 +302,8 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
   }
 })
 
+//------------------------GET-SORTED-USERS-BY-LATEST-------------------------------------------
+
 ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
   try {
     const filteredUsers = new Promise((resolve, reject) => {
@@ -304,3 +325,71 @@ ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
     return []
   }
 })
+
+//------------------------WRITE-NEW-WEEK---------------------------------------------
+
+ipcMain.handle('write-new-week', async (event, weekData) => {
+  try {
+    const allWees = await new Promise((resolve, reject) => {
+      weeksDB.find({}, (err, weeks) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(weeks)
+        }
+      })
+    })
+
+    isFound = allWees.find(
+      (week) => week.startWeekTSt === weekData.startWeekTSt
+    )
+
+    if (!isFound) {
+      const result = await new Promise((resolve, reject) => {
+        weeksDB.insert(weekData, (err, newDoc) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(newDoc)
+          }
+        })
+      })
+      return {
+        success: true,
+        message: 'Write new week is successfully',
+      }
+    } else {
+      return {
+        success: false,
+        message: 'The week is already exist',
+        date: isFound,
+      }
+    }
+  } catch (error) {
+    return { success: false, message: 'Write in weeksDB is faild' }
+  }
+})
+
+//------------------------READ-ALL-WEEKS---------------------------------------------
+
+// ipcMain.handle('read-all-weeks', async (event) => {
+//   try {
+//     const allDocs = await new Promise((resolve, reject) => {
+//       usersDB.find({}, (err, docs) => {
+//         if (err) {
+//           reject(err)
+//         } else {
+//           resolve(docs)
+//         }
+//       })
+//     })
+
+//     // Сбрасываем кэш базы данных
+//     usersDB.loadDatabase()
+
+//     return allDocs
+//   } catch (error) {
+//     console.error('Error reading all data from NeDB:', error)
+//     return []
+//   }
+// })

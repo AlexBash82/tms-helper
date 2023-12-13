@@ -14,7 +14,7 @@ interface ICoupleInputProps {
   firstSetChoose: (arg: string) => void
   secondSetChoose: (arg: string) => void
   //dateOfMeet:string
-  action: string
+  action: 'plan' | 'confirm' | 'update' | undefined
 }
 
 const CoupleInput: React.FC<ICoupleInputProps> = (props) => {

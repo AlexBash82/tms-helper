@@ -5,8 +5,6 @@ import { Route, Link, Routes, useNavigate } from 'react-router-dom'
 
 import PersonsList from './Pages/PersonsList/PersonsList'
 import AddInfoByWeek from './Pages/AddInfoByWeek/AddInfoByWeek'
-import MainPage from './Pages/MainPage/MainPage'
-import PlanNewWeek from './Pages/PlanNewWeek/PlanNewWeek'
 
 const App: React.FC = () => {
   //------нужно разобраться
@@ -26,25 +24,17 @@ const App: React.FC = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">Main Page</Link>
+            <Link to="/">AddInfoByWeek</Link>
           </li>
           <li>
             <Link to="/personsList">Persons List</Link>
-          </li>
-          <li>
-            <Link to="/addInfoByWeek">Add info by week</Link>
-          </li>
-          <li>
-            <Link to="/planNewWeek">Plan new week</Link>
           </li>
         </ul>
       </nav>
 
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<AddInfoByWeek />} />
         <Route path="/personsList" element={<PersonsList />} />
-        <Route path="/addInfoByWeek" element={<AddInfoByWeek />} />
-        <Route path="/planNewWeek" element={<PlanNewWeek />} />
       </Routes>
     </div>
   )

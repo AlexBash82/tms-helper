@@ -8,7 +8,8 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.on(channel, (event, ...args) => func(...args)),
   ipcRenderer,
 
-  writeOneUser: async (data) => ipcRenderer.invoke('write-one-user', data),
+  writeOneUser: async (personData) =>
+    ipcRenderer.invoke('write-one-user', personData),
   getAllUsers: async () => ipcRenderer.invoke('read-all-users'),
   getUsersByLastname: async (data) =>
     ipcRenderer.invoke('get-sorted-users-by-lastname', data),
@@ -20,4 +21,7 @@ contextBridge.exposeInMainWorld('api', {
   editOneUser: async (data) => ipcRenderer.invoke('edit-one-user', data),
   deleteOneUser: async (lastFirstName) =>
     ipcRenderer.invoke('delete-one-user', lastFirstName),
+
+  writeNewWeek: async (weekData) =>
+    ipcRenderer.invoke('write-new-week', weekData),
 })

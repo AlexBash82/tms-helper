@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './ListOfCandidates.css'
+import { IFemaleDB, IMaleDB } from '../../interfaces'
 
 //нужно передать сюда дату недели!!! для обновления поля недели при выборе юзера
 //повесить слушатель клика вне окошка на закрытие
@@ -8,26 +9,24 @@ import './ListOfCandidates.css'
 //а если нет,то в конец массива
 //а в самом массиве можно сделать среднее дефолтное значение - разделитель
 
-interface ListOfCandidatesProps {
+interface IProps {
   close: (arg: string) => void
   setChoose: (arg: string) => void
   presentValue: string
   task: string
   //dateOfMeet: string
-  //action: plan, confirm, update
-  action: string
+
+  action: 'plan' | 'confirm' | 'update' | undefined
 }
 
-const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
+const ListOfCandidates: React.FC<IProps> = ({
   close,
   presentValue,
   task,
   setChoose,
   action,
 }) => {
-  const [students, setStudents] = useState([
-    { lastFirstName: 'Didnt choose yet' },
-  ])
+  const [students, setStudents] = useState<Array<IMaleDB | IFemaleDB>>([])
 
   const addSearchParams = () => {
     if (task.includes('read') || task.includes('speech')) {
@@ -51,7 +50,8 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
   }, [])
 
   const makePlan = async (studentName: string) => {
-    if (presentValue !== 'Didnt choose yet') {
+    const presentUser = await window.api.getOneUserByLFName(presentValue)
+    if (presentUser?.plan) {
       try {
         const updatePresent = {
           studentName: presentValue,
@@ -72,17 +72,17 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
           keyName: 'plan',
           newValue: true,
         }
-        const newResult = await window.api.updateOneUser(updateNew)
+        const result = await window.api.updateOneUser(updateNew)
         //при внесении поля план-тру, нужно также сохранять это поле в неделе, чтобы при закрытии
         //страницы учащийся не выпадал из списка навсегда как запланированный
         //например: updateOneField в неделе
 
-        console.log('newResult', newResult)
+        console.log('result', result)
       } catch (error) {
         console.error('Error updating item:', error)
       }
     }
-
+    //в итоге нужно от этого setChoose избавиться, а данные пусть аддИнфо.. читает из обновления недели плана
     setChoose(studentName)
     close('')
   }
@@ -91,7 +91,7 @@ const ListOfCandidates: React.FC<ListOfCandidatesProps> = ({
     <div className="listOfCand">
       {students.map(
         (student) =>
-          action === 'plan' && (
+          action === ('plan' || 'confirm') && (
             <div
               key={student.lastFirstName}
               onClick={() => makePlan(student.lastFirstName)}

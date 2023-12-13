@@ -132,3 +132,39 @@ export interface IFemaleData {
   isSecondClassOnly: boolean
   isNotBibleStudy: boolean
 }
+
+export interface IWeek {
+  startWeekTSt: number
+  endWeekTSt: number
+  dateOfMeet: string
+
+  teaching: boolean
+  training: boolean
+  smallClass: boolean
+  startingPointChBx: boolean
+  followingPointChBx: boolean
+  makingPointChBx: boolean
+  explainingPointChBx: boolean
+  speechPointChBx: boolean
+
+  readPointStMC: string
+  startPointStMC: string
+  startPointAsMC: string
+  followPointStMC: string
+  followPointAsMC: string
+  makePointStMC: string
+  makePointAsMC: string
+  explainPointStMC: string
+  explainPointAsMC: string
+  speechPointStMC: string
+  readPointStSC: string
+  startPointStSC: string
+  startPointAsSC: string
+  followPointStSC: string
+  followPointAsSC: string
+  makePointStSC: string
+  makePointAsSC: string
+  explainPointStSC: string
+  explainPointAsSC: string
+  speechPointStSC: string
+}

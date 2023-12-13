@@ -4,11 +4,12 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
-import { IFemaleDB, IMaleDB } from './interfaces'
+import { IFemaleDB, IMaleDB, IWeek } from './interfaces'
 
 type Result = {
   success: boolean
   message: string
+  date?: object | IWeek
 }
 
 declare global {
@@ -17,7 +18,7 @@ declare global {
       send: (channel: string, data?: any) => void
       receive: (channel: string, func: (...args: any[]) => void) => void
 
-      writeOneUser: (data: object) => Promise<Result>
+      writeOneUser: (personData: object) => Promise<Result>
       getAllUsers: () => Promise<Array<IMaleDB | IFemaleDB>>
       getUsersByLastname: (
         lastFirstName: string
@@ -31,6 +32,8 @@ declare global {
       updateOneUser: (data: object) => Promise<Result>
       editOneUser: (data: object) => Promise<Result>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
+
+      writeNewWeek: (weekData: object) => Promise<Result>
     }
   }
 }

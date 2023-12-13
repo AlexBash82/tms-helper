@@ -14,7 +14,7 @@ export function getStartAndEndWeek(year: number, month: number, day: number) {
   weekEnd.setHours(23, 59, 59, 999) // Установка времени на конец дня
 
   return {
-    weekStartTimestamp: weekStart.getTime(),
-    weekEndTimestamp: weekEnd.getTime(),
+    startWeekTSt: weekStart.getTime(),
+    endWeekTSt: weekEnd.getTime(),
   }
 }

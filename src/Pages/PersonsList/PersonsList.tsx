@@ -28,14 +28,6 @@ const PersonsList: React.FC = () => {
     readAllData()
   }, [])
 
-  const editPerson = (searchLFName: string) => {
-    const result = allUsers.find((item) => item.lastFirstName === searchLFName)
-
-    if (result) {
-      setEditablePerson(result)
-    }
-  }
-
   const deletePerson = async (searchLFName: string) => {
     await window.api
       .deleteOneUser(searchLFName)
@@ -94,9 +86,7 @@ const PersonsList: React.FC = () => {
                   </div>
                 </div>
                 <div className="df g-2">
-                  <button onClick={() => editPerson(user.lastFirstName)}>
-                    Edit
-                  </button>
+                  <button onClick={() => setEditablePerson(user)}>Edit</button>
                   {showConfirm && user.lastFirstName === deletingName ? (
                     <div className="df g-1">
                       <div>
