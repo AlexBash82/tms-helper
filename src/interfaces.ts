@@ -135,12 +135,11 @@ export interface IFemaleData {
 
 export interface IWeek {
   startWeekTSt: number
-  endWeekTSt: number
   dateOfMeet: string
 
-  teaching: boolean
-  training: boolean
-  smallClass: boolean
+  teachingChBx: boolean
+  trainingChBx: boolean
+  smallClassChBx: boolean
   startingPointChBx: boolean
   followingPointChBx: boolean
   makingPointChBx: boolean

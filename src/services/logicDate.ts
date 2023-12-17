@@ -15,6 +15,5 @@ export function getStartAndEndWeek(year: number, month: number, day: number) {
 
   return {
     startWeekTSt: weekStart.getTime(),
-    endWeekTSt: weekEnd.getTime(),
   }
 }

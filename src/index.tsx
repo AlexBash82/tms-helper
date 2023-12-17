@@ -9,7 +9,11 @@ import { IFemaleDB, IMaleDB, IWeek } from './interfaces'
 type Result = {
   success: boolean
   message: string
-  date?: object | IWeek
+}
+type ResultWithNewWeek = {
+  success: boolean
+  message: string
+  data?: IWeek
 }
 
 declare global {
@@ -33,7 +37,9 @@ declare global {
       editOneUser: (data: object) => Promise<Result>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
 
-      writeNewWeek: (weekData: object) => Promise<Result>
+      writeNewWeek: (weekData: object) => Promise<ResultWithNewWeek>
+      getOneWeek: (dataOfMeet: string) => Promise<ResultWithNewWeek>
+      updateOneWeek: (weekData: object) => Promise<Result>
     }
   }
 }

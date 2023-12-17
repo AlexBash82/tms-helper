@@ -66,11 +66,28 @@ function initializeDatabase() {
   // Используем NeDB для создания базы данных в папке приложения
   usersDB = new Datastore({
     filename: path.join(app.getAppPath(), '../data/users.db'),
-    autoload: true,
+    //autoload: true,
   })
+  usersDB.loadDatabase((err) => {
+    if (err) {
+      console.error('Error loading users database:', err)
+      // Обработка ошибок, если требуется
+    } else {
+      console.log('usersDB has connected')
+    }
+  })
+
   weeksDB = new Datastore({
     filename: path.join(app.getAppPath(), '../data/weeks.db'),
-    autoload: true,
+    //autoload: true,
+  })
+  weeksDB.loadDatabase((err) => {
+    if (err) {
+      console.error('Error loading weeks database:', err)
+      // Обработка ошибок, если требуется
+    } else {
+      console.log('weeksDB has connected')
+    }
   })
 
   createWindow()
@@ -132,17 +149,15 @@ ipcMain.handle('read-all-users', async (event) => {
 
     return allDocs
   } catch (error) {
-    console.error('Error reading all data from NeDB:', error)
+    console.error('read-all-users error', error)
     return []
   }
 })
 
-//------------------------UPDATE-ONE-USER---------------------------------------------
+//------------------------UPDATE-ONE-USER------update one field---------------------------
 
 ipcMain.handle('update-one-user', async (event, updatedItem) => {
-  //console.log(updatedItem)
   try {
-    //нужно получать имя для поиска, названия поля для обновления и новое значение
     const { studentName, keyName, newValue } = updatedItem
 
     // Получаем оригинальный объект из базы данных
@@ -157,40 +172,47 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
     })
 
     if (!originalItem) {
-      return { success: false, message: 'Item not found' }
+      return { success: false, message: 'User not found' }
     }
 
     // Создаем обновленный объект с новым значением
     const updatedObject = { ...originalItem, [keyName]: newValue }
 
     // Обновляем объект в базе данных
-    usersDB.update(
-      { lastFirstName: studentName },
-      updatedObject,
-      {},
-      (err, numReplaced) => {
-        if (err) {
-          console.error('Error updating item in NeDB:', err)
-        } else {
-          console.log('Number of items updated:', numReplaced)
+    const numUpdated = await new Promise((resolve, reject) => {
+      usersDB.update(
+        { lastFirstName: studentName },
+        updatedObject,
+        {},
+        (err, numReplaced) => {
+          if (err) {
+            console.error('update-one-user error update', err)
+            reject(err)
+          } else {
+            //console.log('update-one-user number', numReplaced)
+            resolve(numReplaced)
+          }
         }
-      }
-    )
+      )
+    })
 
     // Возвращаем обновленные данные (по вашему усмотрению)
-    return { success: true, message: 'Item updated successfully' }
+    return {
+      success: true,
+      message: `${studentName} updated field ${keyName} to ${newValue}`,
+    }
   } catch (error) {
-    console.error('Error updating item in NeDB:', error)
+    console.error('update-one-user error', error)
     return { success: false, message: 'Error updating item' }
   }
 })
 
 //------------------------EDIT-ONE-USER---------------------------------------------
 
-ipcMain.handle('edit-one-user', async (event, updatedItem) => {
+ipcMain.handle('edit-one-user', async (event, editItem) => {
   try {
     //нужно получать id для поиска и новые значения - объект
-    const { idPerson, newValue } = updatedItem
+    const { idPerson, newValue } = editItem
 
     // Получаем оригинальный объект из базы данных
     const originalItem = await new Promise((resolve, reject) => {
@@ -209,23 +231,20 @@ ipcMain.handle('edit-one-user', async (event, updatedItem) => {
 
     // Создаем обновленный объект с новым значением
     const updatedObject = Object.assign(originalItem, newValue)
-    console.log('original item', originalItem)
-    console.log('newvalue', newValue)
-    console.log('updated obj', updatedObject)
 
     // Обновляем объект в базе данных
     usersDB.update({ _id: idPerson }, updatedObject, {}, (err, numReplaced) => {
       if (err) {
-        console.error('Error updating item in NeDB:', err)
+        console.error('edit-one-user error update', err)
       } else {
-        console.log('Number of items updated:', numReplaced)
+        //console.log('edit-one-user update number', numReplaced)
       }
     })
-
+    usersDB.persistence.compactDatafile()
     // Возвращаем обновленные данные (по вашему усмотрению)
     return { success: true, message: 'Item updated successfully' }
   } catch (error) {
-    console.error('Error updating item in NeDB:', error)
+    console.error('edit-one-user error', error)
     return { success: false, message: 'Error updating item' }
   }
 })
@@ -249,7 +268,7 @@ ipcMain.handle('get-sorted-users-by-lastname', async (event, searchTerm) => {
 
     return filteredUsers
   } catch (error) {
-    console.error('Error searching users by lastname:', error)
+    console.error('get-sorted-users-by-lastname error', error)
     return []
   }
 })
@@ -270,7 +289,7 @@ ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
 
     return foundUser
   } catch (error) {
-    console.error('Error searching user by lastname:', error)
+    console.error('get-one-user-by-lfname error', error)
     return {}
   }
 })
@@ -280,24 +299,20 @@ ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
 ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
   try {
     const result = await new Promise((resolve, reject) => {
-      usersDB.remove(
-        { lastFirstName: lastFirstName },
-        {},
-        (err, numRemoved) => {
-          if (err) {
-            reject(err)
-          } else if (numRemoved > 0) {
-            resolve({ success: true, message: 'User deleted successfully' })
-          } else {
-            resolve({ success: false, message: 'User not found' })
-          }
+      usersDB.remove({ lastFirstName }, {}, (err, numRemoved) => {
+        if (err) {
+          reject(err)
+        } else if (numRemoved > 0) {
+          resolve({ success: true, message: 'User deleted successfully' })
+        } else {
+          resolve({ success: false, message: 'User not found' })
         }
-      )
+      })
     })
-
+    usersDB.persistence.compactDatafile()
     return result
   } catch (error) {
-    console.error('Error deleting user by lastFirstName:', error)
+    console.error('delete-one-user error', error)
     return { success: false, message: 'Error deleting user' }
   }
 })
@@ -321,52 +336,58 @@ ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
     })
     return filteredUsers
   } catch (error) {
-    console.error('Error searching users by latest:', error)
+    console.error('get-sorted-users-by-latest error', error)
     return []
   }
 })
+//-----------------------------------------------------------------------------------
 
 //------------------------WRITE-NEW-WEEK---------------------------------------------
-
 ipcMain.handle('write-new-week', async (event, weekData) => {
   try {
-    const allWees = await new Promise((resolve, reject) => {
-      weeksDB.find({}, (err, weeks) => {
+    const { startWeekTSt } = weekData
+
+    const foundWeek = await new Promise((resolve, reject) => {
+      weeksDB.findOne({ startWeekTSt }, (err, week) => {
         if (err) {
+          console.log('write-new-week error findOne', err)
           reject(err)
         } else {
-          resolve(weeks)
+          resolve(week)
         }
       })
     })
 
-    isFound = allWees.find(
-      (week) => week.startWeekTSt === weekData.startWeekTSt
-    )
-
-    if (!isFound) {
-      const result = await new Promise((resolve, reject) => {
-        weeksDB.insert(weekData, (err, newDoc) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(newDoc)
-          }
-        })
-      })
-      return {
-        success: true,
-        message: 'Write new week is successfully',
-      }
-    } else {
+    if (foundWeek) {
+      //console.log('write-new-week findOne found', foundWeek)
       return {
         success: false,
         message: 'The week is already exist',
-        date: isFound,
+        data: foundWeek,
       }
     }
+    weeksDB.insert(weekData, (err, newDoc) => {
+      if (err) {
+        console.log('write-new-week error insert', err)
+        return {
+          success: false,
+          message: 'Write week in weeksDB is failed',
+        }
+      } else {
+        console.log('write-new-week insert', newDoc)
+        return {
+          success: true,
+          message: 'Write new week is successful',
+        }
+      }
+    })
+    return {
+      success: true,
+      message: 'week has created',
+    }
   } catch (error) {
-    return { success: false, message: 'Write in weeksDB is faild' }
+    console.error('write-new-week error', error)
+    return { success: false, message: 'Error creating new week' }
   }
 })
 
@@ -375,7 +396,7 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
 // ipcMain.handle('read-all-weeks', async (event) => {
 //   try {
 //     const allDocs = await new Promise((resolve, reject) => {
-//       usersDB.find({}, (err, docs) => {
+//       weeksDB.find({}, (err, docs) => {
 //         if (err) {
 //           reject(err)
 //         } else {
@@ -393,3 +414,75 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
 //     return []
 //   }
 // })
+
+//-------------------------GET-ONE-WEEK---------------------------------------------
+
+ipcMain.handle('get-one-week', async (event, dateOfMeet) => {
+  try {
+    const foundWeek = await new Promise((resolve, reject) => {
+      weeksDB.findOne({ dateOfMeet }, (err, oneWeek) => {
+        if (err) {
+          console.error('get-one-week error findOne', err)
+          reject(err)
+        } else {
+          resolve(oneWeek)
+        }
+      })
+    })
+    return {
+      success: true,
+      message: 'The week has found',
+      data: foundWeek,
+    }
+  } catch (error) {
+    return { success: false, message: 'Error finding week in weeksDB' }
+  }
+})
+
+//-------------------------UPDATE-ONE-WEEK---------------------------------------------
+
+ipcMain.handle('update-one-week', async (event, weekData) => {
+  try {
+    const { dateOfMeet, keyName, newValue } = weekData
+
+    const originalWeek = await new Promise((resolve, reject) => {
+      weeksDB.findOne({ dateOfMeet }, (err, foundWeek) => {
+        if (err) {
+          console.error('update-one-week error findOne', err)
+          reject(err)
+        } else {
+          resolve(foundWeek)
+        }
+      })
+    })
+
+    if (!originalWeek) {
+      return { success: false, message: 'The week not found' }
+    }
+
+    const updatingWeek = { ...originalWeek, [keyName]: newValue }
+
+    const updatedWeek = await new Promise((resolve, reject) => {
+      weeksDB.update({ dateOfMeet }, updatingWeek, {}, (err, numUpdated) => {
+        if (err) {
+          console.error('update-one-week error update', err)
+          reject(err)
+        } else {
+          //console.log('update-one-week number', numUpdated)
+          resolve(numUpdated)
+        }
+      })
+    })
+
+    weeksDB.persistence.compactDatafile()
+
+    return {
+      success: true,
+      message: 'Week updated successfully',
+      data: updatingWeek,
+    }
+  } catch (error) {
+    console.error('update-one-week error', error)
+    return { success: false, message: 'Error updating week' }
+  }
+})

@@ -11,9 +11,8 @@ interface ICoupleInputProps {
   firstInputStr: string
   secondInput: string
   secondInputStr: string
-  firstSetChoose: (arg: string) => void
-  secondSetChoose: (arg: string) => void
-  //dateOfMeet:string
+  getCurrentWeek: () => void
+  dateOfMeet: string
   action: 'plan' | 'confirm' | 'update' | undefined
 }
 
@@ -27,8 +26,8 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
     firstInputStr,
     secondInput,
     secondInputStr,
-    firstSetChoose,
-    secondSetChoose,
+    getCurrentWeek,
+    dateOfMeet,
     action,
   } = props
   return (
@@ -43,8 +42,9 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
             close={close}
             presentValue={firstInput}
             task={firstInputStr}
-            setChoose={firstSetChoose}
+            getCurrentWeek={getCurrentWeek}
             action={action}
+            dateOfMeet={dateOfMeet}
           />
         )}
       </div>
@@ -60,8 +60,9 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
             close={close}
             presentValue={secondInput}
             task={secondInputStr}
-            setChoose={secondSetChoose}
+            getCurrentWeek={getCurrentWeek}
             action={action}
+            dateOfMeet={dateOfMeet}
           />
         )}
       </div>

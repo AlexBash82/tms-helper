@@ -2,28 +2,29 @@ import React, { useEffect, useState } from 'react'
 import './ListOfCandidates.css'
 import { IFemaleDB, IMaleDB } from '../../interfaces'
 
-//нужно передать сюда дату недели!!! для обновления поля недели при выборе юзера
 //повесить слушатель клика вне окошка на закрытие
 //добавить фильтрацию по колонкам: перый разговор, повтор, главный зал...
 //можно в виде перебора массива и если поле с таском самое старое то в начало массива
 //а если нет,то в конец массива
 //а в самом массиве можно сделать среднее дефолтное значение - разделитель
+//при наведении на кандидата открывать еще одно окно с доп инф
 
 interface IProps {
   close: (arg: string) => void
-  setChoose: (arg: string) => void
+  getCurrentWeek: () => void
   presentValue: string
   task: string
-  //dateOfMeet: string
+  dateOfMeet: string
 
   action: 'plan' | 'confirm' | 'update' | undefined
 }
 
 const ListOfCandidates: React.FC<IProps> = ({
   close,
+  getCurrentWeek,
   presentValue,
   task,
-  setChoose,
+  dateOfMeet,
   action,
 }) => {
   const [students, setStudents] = useState<Array<IMaleDB | IFemaleDB>>([])
@@ -67,23 +68,30 @@ const ListOfCandidates: React.FC<IProps> = ({
     }
     if (presentValue !== studentName) {
       try {
-        const updateNew = {
+        const updateUser = {
           studentName: studentName,
           keyName: 'plan',
           newValue: true,
         }
-        const result = await window.api.updateOneUser(updateNew)
-        //при внесении поля план-тру, нужно также сохранять это поле в неделе, чтобы при закрытии
-        //страницы учащийся не выпадал из списка навсегда как запланированный
-        //например: updateOneField в неделе
+        const resultUser = await window.api.updateOneUser(updateUser)
+        //console.log('resultUser', resultUser)
 
-        console.log('result', result)
+        if (resultUser.success) {
+          const updateWeek = {
+            dateOfMeet,
+            keyName: task,
+            newValue: studentName,
+          }
+          const resultWeek = await window.api.updateOneWeek(updateWeek)
+          //console.log('resultWeek', resultWeek)
+          if (resultWeek.success) {
+            getCurrentWeek()
+          }
+        }
       } catch (error) {
         console.error('Error updating item:', error)
       }
     }
-    //в итоге нужно от этого setChoose избавиться, а данные пусть аддИнфо.. читает из обновления недели плана
-    setChoose(studentName)
     close('')
   }
 
