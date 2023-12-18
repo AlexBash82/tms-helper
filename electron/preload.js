@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.invoke('write-new-week', weekData),
   getOneWeek: async (dateOfMeet) =>
     ipcRenderer.invoke('get-one-week', dateOfMeet),
+  getAllWeeks: async () => ipcRenderer.invoke('get-all-weeks'),
   updateOneWeek: async (weekData) =>
     ipcRenderer.invoke('update-one-week', weekData),
 })

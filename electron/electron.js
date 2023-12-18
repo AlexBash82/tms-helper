@@ -391,29 +391,36 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
   }
 })
 
-//------------------------READ-ALL-WEEKS---------------------------------------------
+//------------------------GET-ALL-WEEKS---------------------------------------------
 
-// ipcMain.handle('read-all-weeks', async (event) => {
-//   try {
-//     const allDocs = await new Promise((resolve, reject) => {
-//       weeksDB.find({}, (err, docs) => {
-//         if (err) {
-//           reject(err)
-//         } else {
-//           resolve(docs)
-//         }
-//       })
-//     })
+ipcMain.handle('get-all-weeks', async (event) => {
+  try {
+    const allWeeks = await new Promise((resolve, reject) => {
+      weeksDB
+        .find({})
+        .sort({ startWeekTSt: 1 })
+        .exec((err, docs) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(docs)
+          }
+        })
+    })
 
-//     // Сбрасываем кэш базы данных
-//     usersDB.loadDatabase()
-
-//     return allDocs
-//   } catch (error) {
-//     console.error('Error reading all data from NeDB:', error)
-//     return []
-//   }
-// })
+    return {
+      success: true,
+      message: 'Weeks has found',
+      data: allWeeks,
+    }
+  } catch (error) {
+    console.error('get-all-weeks error', error)
+    return {
+      success: false,
+      message: 'Weeks has notfound',
+    }
+  }
+})
 
 //-------------------------GET-ONE-WEEK---------------------------------------------
 

@@ -10,10 +10,8 @@ interface IStateWeek extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet'> {
   dateOfMeet?: string
 }
 
-//функцию получения запланированых недель
 //выводить календарь - какие недели запланированы и какие нуждаются в подтверждении
 //кнопку формирования бланка
-//кнопку сохранения недели??
 
 const AddInfoByWeek: React.FC = () => {
   const [dateOfMeet, setDateOfMeet] = useState<string | undefined>()
@@ -95,16 +93,12 @@ const AddInfoByWeek: React.FC = () => {
     const [hour, minute] = timeEndOfMeet.split(':').map(Number)
 
     const { startWeekTSt } = getStartAndEndWeek(year, month, day)
-    //console.log('Начало недели:', new Date(startWeekTSt))
-
-    //console.log('dateOfMeet', dateOfMeet)
-    // Месяцы в JavaScript начинаются с 0, поэтому вычитаем 1
     const dateObject = new Date(year, month - 1, day, hour, minute)
-    // Получаем метку времени
-    const timestamp = dateObject.getTime()
+    // Получаем метку времени календаря и сейчас
+    const timestampCal = dateObject.getTime()
     const timestampNow = Date.now()
 
-    if (timestamp > timestampNow) {
+    if (timestampCal > timestampNow) {
       //пытаемся записать неделю с дефолтными полями
       const result = await writeWeekToDB(dateOfMeet, startWeekTSt)
       //если уже есть такая неделя, то заполняем ей поля, если нет, то - чистим форму
@@ -116,7 +110,7 @@ const AddInfoByWeek: React.FC = () => {
       setAction('plan')
     }
 
-    if (timestamp < timestampNow) {
+    if (timestampCal < timestampNow) {
       //если есть неделя для подтверждения то______________________________
       setAction('confirm')
       //после подтверждения - неделю из базы удалить
@@ -282,7 +276,7 @@ const AddInfoByWeek: React.FC = () => {
 
   return (
     <div>
-      <Weeks />
+      <Weeks calendarDateOfMeet={dateOfMeet} />
       <input
         placeholder="Date of meeting"
         type="date"

@@ -15,6 +15,11 @@ type ResultWithNewWeek = {
   message: string
   data?: IWeek
 }
+type ResultWithAllWeeks = {
+  success: boolean
+  message: string
+  data?: Array<IWeek>
+}
 
 declare global {
   interface Window {
@@ -39,6 +44,7 @@ declare global {
 
       writeNewWeek: (weekData: object) => Promise<ResultWithNewWeek>
       getOneWeek: (dataOfMeet: string) => Promise<ResultWithNewWeek>
+      getAllWeeks: () => Promise<ResultWithAllWeeks>
       updateOneWeek: (weekData: object) => Promise<Result>
     }
   }
