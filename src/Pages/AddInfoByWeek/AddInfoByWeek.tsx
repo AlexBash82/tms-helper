@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './AddInfoByWeek.css'
 import ListOfCandidates from '../../Components/ListOfCandidates/ListOfCandidates'
 import CoupleInput from '../../Components/CoupleInput/CoupleInput'
@@ -48,6 +48,7 @@ const AddInfoByWeek: React.FC = () => {
   const [action, setAction] = useState<
     'plan' | 'confirm' | 'update' | undefined
   >()
+  const timeEndOfMeet = '21:45'
 
   const defaultState = {
     dateOfMeet: undefined,
@@ -87,9 +88,8 @@ const AddInfoByWeek: React.FC = () => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
   }
 
-  const planOfMeet = async (dateOfMeet: string) => {
-    const timeEndOfMeet = '21:45'
-    const [year, month, day] = dateOfMeet.split('-').map(Number)
+  const makeAMeet = async (inpDateOfMeet: string) => {
+    const [year, month, day] = inpDateOfMeet.split('-').map(Number)
     const [hour, minute] = timeEndOfMeet.split(':').map(Number)
 
     const { startWeekTSt } = getStartAndEndWeek(year, month, day)
@@ -100,12 +100,10 @@ const AddInfoByWeek: React.FC = () => {
 
     if (timestampCal > timestampNow) {
       //пытаемся записать неделю с дефолтными полями
-      const result = await writeWeekToDB(dateOfMeet, startWeekTSt)
-      //если уже есть такая неделя, то заполняем ей поля, если нет, то - чистим форму
+      const result = await writeWeekToDB(inpDateOfMeet, startWeekTSt)
+      //если успех то заполняем ей поля
       if (result.data) {
         setState(result.data)
-      } else {
-        setState(defaultState)
       }
       setAction('plan')
     }
@@ -276,12 +274,17 @@ const AddInfoByWeek: React.FC = () => {
 
   return (
     <div>
-      <Weeks calendarDateOfMeet={dateOfMeet} />
+      <Weeks
+        calendarDateOfMeet={dateOfMeet}
+        timeEndOfMeet={timeEndOfMeet}
+        makeAMeet={makeAMeet}
+        activeDate={dateOfMeet}
+      />
       <input
         placeholder="Date of meeting"
         type="date"
         value={dateOfMeet ? dateOfMeet : ''}
-        onChange={(e) => planOfMeet(e.target.value)}
+        onChange={(e) => makeAMeet(e.target.value)}
       />
       {!dateOfMeet ? (
         <div>For creating new week just choose the date</div>

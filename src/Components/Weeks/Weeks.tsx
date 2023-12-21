@@ -12,16 +12,66 @@ import { IWeek } from '../../interfaces'
 
 interface IProps {
   calendarDateOfMeet?: string
+  timeEndOfMeet: string
+  makeAMeet: (dateOfMeet: string) => void
+  activeDate: string | undefined
 }
 
-const Weeks: React.FC<IProps> = ({ calendarDateOfMeet }) => {
-  const [allWeeks, setAllWeeks] = useState<Array<IWeek> | undefined>()
+interface IEmptyWeek extends Pick<IWeek, 'dateOfMeet' | 'startWeekTSt'> {}
+
+const Weeks: React.FC<IProps> = ({
+  calendarDateOfMeet,
+  timeEndOfMeet,
+  makeAMeet,
+  activeDate,
+}) => {
+  const [previousWeeks, setPreviousWeeks] = useState<Array<IWeek> | undefined>()
+  const [currentWeek, setCurrentWeek] = useState<
+    IWeek | IEmptyWeek | undefined
+  >()
+  const [currWeekPerf, setCurrWeekPerf] = useState(false)
+  const [futureWeeks, setFututureWeeks] = useState<
+    Array<IWeek | IEmptyWeek> | undefined
+  >()
+
   useEffect(() => {
     getAllWeeks()
-  }, [])
+  }, [calendarDateOfMeet])
+
+  const compareDates = () => {
+    console.log('working')
+    if (currentWeek) {
+      const [year, month, day] = currentWeek.dateOfMeet.split('-').map(Number)
+      const [hour, minute] = timeEndOfMeet.split(':').map(Number)
+      const dateObject = new Date(year, month - 1, day, hour, minute)
+      const curWeekEndofMeetTSt = dateObject.getTime()
+      const currentMoment = Date.now()
+      if (curWeekEndofMeetTSt >= currentMoment) {
+        console.log('not yet')
+        return curWeekEndofMeetTSt - currentMoment
+      }
+      console.log('yeaaah!')
+    }
+    return 86400000
+  }
+
+  useEffect(() => {
+    if (currentWeek) {
+      const nextCheck = compareDates()
+      console.log('ill be back in ', nextCheck)
+      const timerId = setInterval(() => {
+        compareDates()
+      }, nextCheck)
+
+      return () => {
+        clearInterval(timerId)
+      }
+    }
+  }, [compareDates, currentWeek])
 
   const getAllWeeks = async () => {
     const weeksFromBD = await window.api.getAllWeeks()
+    console.log('allWeeks', weeksFromBD.data)
     if (weeksFromBD.data) {
       // Функция для получения таймстемпа начала понедельника для конкретной недели
       function getMondayTimestamp(date: Date) {
@@ -32,7 +82,7 @@ const Weeks: React.FC<IProps> = ({ calendarDateOfMeet }) => {
         return monday.getTime() // Возвращаем таймстемп
       }
 
-      // Функция для получения таймстемпов начала понедельников будущих  и прошлых 10 недель
+      // Функция для получения таймстемпов начала понедельников будущих и прошлых 10 недель
       function getMondayTimestamps() {
         const now = new Date()
         const currentMonday = getMondayTimestamp(now)
@@ -60,24 +110,114 @@ const Weeks: React.FC<IProps> = ({ calendarDateOfMeet }) => {
       }
 
       const timestamps = getMondayTimestamps()
-      console.log('Текущий момент:', timestamps.currentMoment)
-      console.log('Текущий понедельник:', timestamps.currentMonday)
-      console.log('Прошлые 10 понедельников:', timestamps.pastMondays)
-      console.log('Будущие 10 понедельников:', timestamps.futureMondays)
+      // console.log('Текущий момент:', timestamps.currentMoment)
+      // console.log('Текущий понедельник:', timestamps.currentMonday)
+      // console.log('Прошлые 10 понедельников:', timestamps.pastMondays)
+      // console.log('Будущие 10 понедельников:', timestamps.futureMondays)
 
-      setAllWeeks(weeksFromBD.data)
-      console.log('allWeeks', weeksFromBD.data)
+      const curWeek = weeksFromBD.data.find(
+        (week) => week.startWeekTSt === timestamps.currentMonday
+      )
+
+      if (curWeek) {
+        setCurrentWeek(curWeek)
+      } else {
+        setCurrentWeek({
+          dateOfMeet: 'empty',
+          startWeekTSt: timestamps.currentMonday,
+        })
+      }
+
+      let prevWeeks: Array<IWeek> = []
+      let futWeeks: Array<IWeek> = []
+
+      weeksFromBD.data.forEach((week) => {
+        if (week.startWeekTSt < timestamps.currentMonday) {
+          prevWeeks.push(week)
+        }
+        if (week.startWeekTSt > timestamps.currentMonday) {
+          futWeeks.push(week)
+        }
+      })
+
+      let futureWeeks: Array<IWeek | IEmptyWeek> = []
+
+      timestamps.futureMondays.forEach((futureMondaysTSt) => {
+        const result = futWeeks.find(
+          (week) => week.startWeekTSt === futureMondaysTSt
+        )
+        if (result) {
+          futureWeeks.push(result)
+        } else {
+          futureWeeks.push({
+            dateOfMeet: 'empty',
+            startWeekTSt: futureMondaysTSt,
+          })
+        }
+      })
+
+      if (prevWeeks.length) {
+        setPreviousWeeks(prevWeeks)
+      }
+      if (futureWeeks.length) {
+        setFututureWeeks(futureWeeks)
+      }
     }
   }
 
   return (
-    <div>
-      {allWeeks && (
+    <div className="allWeeks">
+      {previousWeeks && (
         <div>
-          <div>I have found in DB</div>
-          {allWeeks.map((week) => (
-            <div key={week.dateOfMeet}>{week.dateOfMeet}</div>
-          ))}
+          <div>past</div>
+          <div className="weeks">
+            {previousWeeks.map((week) => (
+              <div
+                className={`oneWeek orange ${
+                  activeDate === week.dateOfMeet ? 'active' : ''
+                }`}
+                key={week.startWeekTSt}
+                onClick={() => makeAMeet(week.dateOfMeet)}
+              >
+                {week.dateOfMeet}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {currentWeek && (
+        <div>
+          <div>current</div>
+          <div className="weeks">
+            <div
+              className={`oneWeek ${
+                currentWeek.dateOfMeet === 'empty' ? 'gray' : ''
+              } ${currWeekPerf ? 'orange' : ''}
+                 ${activeDate === currentWeek.dateOfMeet ? 'active' : ''}`}
+              onClick={() => makeAMeet(currentWeek.dateOfMeet)}
+            >
+              {currentWeek.dateOfMeet}
+            </div>
+          </div>
+        </div>
+      )}
+      {futureWeeks && (
+        <div>
+          <div>future</div>
+          <div className="weeks">
+            {futureWeeks.map((week) => (
+              <div
+                className={`oneWeek ${
+                  week.dateOfMeet === 'empty' ? 'gray' : ''
+                } ${currWeekPerf ? 'orange' : ''}
+                   ${activeDate === week.dateOfMeet ? 'active' : ''}`}
+                key={week.startWeekTSt}
+                onClick={() => makeAMeet(week.dateOfMeet)}
+              >
+                {week.dateOfMeet}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

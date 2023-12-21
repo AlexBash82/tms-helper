@@ -1,0 +1,34 @@
+.allWeeks {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.weeks {
+  display: flex;
+  gap: 5px;
+}
+
+.oneWeek {
+  width: 80px;
+  height: 80px;
+  border: 1px solid blue;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.gray {
+  border: 1px solid gray;
+  color: gray;
+  background-color: rgba(128, 128, 128, 0.274);
+  cursor: auto;
+}
+
+.orange {
+  border: 1px solid orangered;
+  color: orangered;
+}
+
+.active {
+  border-width: 2px;
+}

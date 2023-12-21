@@ -384,6 +384,7 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
     return {
       success: true,
       message: 'week has created',
+      data: weekData,
     }
   } catch (error) {
     console.error('write-new-week error', error)
