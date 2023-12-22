@@ -95,19 +95,48 @@ const ListOfCandidates: React.FC<IProps> = ({
     close('')
   }
 
+  const makeUpdate = async (studentName: string) => {
+    const presentUser = await window.api.getOneUserByLFName(presentValue)
+
+    if (presentUser) {
+      try {
+        const updateWeek = {
+          dateOfMeet,
+          keyName: task,
+          newValue: studentName,
+        }
+        const resultWeek = await window.api.updateOneWeek(updateWeek)
+        //console.log('resultWeek', resultWeek)
+        if (resultWeek.success) {
+          getCurrentWeek()
+        }
+      } catch (error) {
+        console.error('Error updating item:', error)
+      }
+    }
+    close('')
+  }
+
   return (
     <div className="listOfCand">
-      {students.map(
-        (student) =>
-          action === ('plan' || 'confirm') && (
+      {action === ('plan' || 'confirm')
+        ? students.map((student) => (
             <div
               key={student.lastFirstName}
               onClick={() => makePlan(student.lastFirstName)}
             >
-              {student.lastFirstName}
+              1{student.lastFirstName}
             </div>
-          )
-      )}
+          ))
+        : action === 'update' &&
+          students.map((student) => (
+            <div
+              key={student.lastFirstName}
+              onClick={() => makeUpdate(student.lastFirstName)}
+            >
+              2{student.lastFirstName}
+            </div>
+          ))}
     </div>
   )
 }

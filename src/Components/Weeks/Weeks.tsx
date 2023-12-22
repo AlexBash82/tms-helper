@@ -39,16 +39,15 @@ const Weeks: React.FC<IProps> = ({
   }, [calendarDateOfMeet])
 
   const compareDates = () => {
-    console.log('working')
     if (currentWeek) {
       const [year, month, day] = currentWeek.dateOfMeet.split('-').map(Number)
       const [hour, minute] = timeEndOfMeet.split(':').map(Number)
       const dateObject = new Date(year, month - 1, day, hour, minute)
-      const curWeekEndofMeetTSt = dateObject.getTime()
+      const curWeekEndOfMeetTSt = dateObject.getTime()
       const currentMoment = Date.now()
-      if (curWeekEndofMeetTSt >= currentMoment) {
+      if (curWeekEndOfMeetTSt >= currentMoment) {
         console.log('not yet')
-        return curWeekEndofMeetTSt - currentMoment
+        return curWeekEndOfMeetTSt - currentMoment
       }
       console.log('yeaaah!')
     }
@@ -56,18 +55,16 @@ const Weeks: React.FC<IProps> = ({
   }
 
   useEffect(() => {
-    if (currentWeek) {
-      const nextCheck = compareDates()
-      console.log('ill be back in ', nextCheck)
-      const timerId = setInterval(() => {
-        compareDates()
-      }, nextCheck)
+    const nextCheck = compareDates()
+    console.log('ill be back in ', nextCheck)
+    const timerId = setInterval(() => {
+      compareDates()
+    }, nextCheck)
 
-      return () => {
-        clearInterval(timerId)
-      }
+    return () => {
+      clearInterval(timerId)
     }
-  }, [compareDates, currentWeek])
+  }, [])
 
   const getAllWeeks = async () => {
     const weeksFromBD = await window.api.getAllWeeks()

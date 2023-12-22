@@ -10,10 +10,14 @@ type Result = {
   success: boolean
   message: string
 }
-type ResultWithNewWeek = {
-  success: boolean
+type SuccecWithNewWeek = {
+  success: true
   message: string
-  data?: IWeek
+  data: IWeek
+}
+type UnSuccecWithNewWeek = {
+  success: false
+  message: string
 }
 type ResultWithAllWeeks = {
   success: boolean
@@ -31,7 +35,7 @@ declare global {
       getAllUsers: () => Promise<Array<IMaleDB | IFemaleDB>>
       getUsersByLastname: (
         lastFirstName: string
-      ) => Promise<Array<IMaleDB | IFemaleDB>>
+      ) => Promise<Array<IMaleDB | IFemaleDB | undefined>>
       getUsersByLatest: (
         addParam: object
       ) => Promise<Array<IMaleDB | IFemaleDB>>
@@ -42,14 +46,18 @@ declare global {
       editOneUser: (data: object) => Promise<Result>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
 
-      writeNewWeek: (weekData: object) => Promise<ResultWithNewWeek>
-      getOneWeek: (dataOfMeet: string) => Promise<ResultWithNewWeek>
+      writeNewWeek: (
+        weekData: object
+      ) => Promise<SuccecWithNewWeek | UnSuccecWithNewWeek>
+      getOneWeek: (
+        dataOfMeet: string
+      ) => Promise<SuccecWithNewWeek | UnSuccecWithNewWeek>
       getAllWeeks: () => Promise<ResultWithAllWeeks>
       updateOneWeek: (weekData: object) => Promise<Result>
     }
   }
 }
-
+//все функции перепроверить и установить возврат в виде обьекта с полями успех, дата
 const root = document.getElementById('root')
 
 if (root) {

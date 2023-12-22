@@ -10,7 +10,6 @@ interface IStateWeek extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet'> {
   dateOfMeet?: string
 }
 
-//выводить календарь - какие недели запланированы и какие нуждаются в подтверждении
 //кнопку формирования бланка
 
 const AddInfoByWeek: React.FC = () => {
@@ -99,27 +98,37 @@ const AddInfoByWeek: React.FC = () => {
     const timestampNow = Date.now()
 
     if (timestampCal > timestampNow) {
-      //пытаемся записать неделю с дефолтными полями
-      const result = await writeWeekToDB(inpDateOfMeet, startWeekTSt)
-      //если успех то заполняем ей поля
-      if (result.data) {
+      const result = await writeDefaultWeekToDB(inpDateOfMeet, startWeekTSt)
+      console.log('future result', result)
+      if (result.success) {
         setState(result.data)
       }
       setAction('plan')
     }
 
     if (timestampCal < timestampNow) {
-      //если есть неделя для подтверждения то______________________________
-      setAction('confirm')
-      //после подтверждения - неделю из базы удалить
-      //если нет для подтверждения, то
-      setAction('update')
-    }
+      const isWeekExist = await window.api.getOneWeek(inpDateOfMeet)
 
-    //setDateOfMeet(dateOfMeet)
+      if (isWeekExist.success) {
+        console.log('past get - confirm', isWeekExist)
+        setState(isWeekExist.data)
+        setAction('confirm')
+      } else {
+        console.log('not success')
+        const result = await writeDefaultWeekToDB(inpDateOfMeet, startWeekTSt)
+        if (result.success) {
+          console.log('past insert - update', result)
+          setState(result.data)
+          setAction('update')
+        } //а сли не успех
+      }
+    }
   }
 
-  const writeWeekToDB = async (dateOfMeet: string, startWeekTSt: number) => {
+  const writeDefaultWeekToDB = async (
+    dateOfMeet: string,
+    startWeekTSt: number
+  ) => {
     const newWeek: IWeek = {
       startWeekTSt,
       dateOfMeet,
@@ -266,10 +275,18 @@ const AddInfoByWeek: React.FC = () => {
   const getCurrentWeek = async () => {
     if (dateOfMeet) {
       const weekFromBD = await window.api.getOneWeek(dateOfMeet)
-      if (weekFromBD.data) {
+      if (weekFromBD.success) {
         setState(weekFromBD.data)
       }
     }
+  }
+
+  const confirmWeek = async () => {
+    console.log('test confirm')
+  }
+
+  const updateWeek = async () => {
+    console.log('test update')
   }
 
   return (
@@ -615,8 +632,10 @@ const AddInfoByWeek: React.FC = () => {
         <div onClick={() => setState(defaultState)}>Close the window</div>
       )}
       {/* close week - setdate-und */}
-      {action === 'confirm' && <div>Confirm change</div>}
-      {action === 'update' && <div>Update student info</div>}
+      {action === 'confirm' && <div onClick={confirmWeek}>Confirm change</div>}
+      {action === 'update' && (
+        <div onClick={updateWeek}>Update student info</div>
+      )}
     </div>
   )
 }

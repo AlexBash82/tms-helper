@@ -195,7 +195,7 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
         }
       )
     })
-
+    usersDB.persistence.compactDatafile()
     // Возвращаем обновленные данные (по вашему усмотрению)
     return {
       success: true,
@@ -290,7 +290,7 @@ ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
     return foundUser
   } catch (error) {
     console.error('get-one-user-by-lfname error', error)
-    return {}
+    return undefined
   }
 })
 
@@ -357,34 +357,30 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
         }
       })
     })
-
     if (foundWeek) {
-      //console.log('write-new-week findOne found', foundWeek)
       return {
-        success: false,
+        success: true,
         message: 'The week is already exist',
         data: foundWeek,
       }
     }
-    weeksDB.insert(weekData, (err, newDoc) => {
-      if (err) {
-        console.log('write-new-week error insert', err)
-        return {
-          success: false,
-          message: 'Write week in weeksDB is failed',
+    const insertWeek = await new Promise((resolve, reject) => {
+      weeksDB.insert(weekData, (err, newDoc) => {
+        if (err) {
+          console.log('write-new-week error insert', err)
+          reject(err)
+        } else {
+          console.log('write-new-week insert', newDoc)
+          resolve(newDoc)
         }
-      } else {
-        console.log('write-new-week insert', newDoc)
-        return {
-          success: true,
-          message: 'Write new week is successful',
-        }
-      }
+      })
     })
-    return {
-      success: true,
-      message: 'week has created',
-      data: weekData,
+    if (insertWeek) {
+      return {
+        success: true,
+        message: 'The week has succesfully inserted',
+        data: insertWeek,
+      }
     }
   } catch (error) {
     console.error('write-new-week error', error)
@@ -437,10 +433,17 @@ ipcMain.handle('get-one-week', async (event, dateOfMeet) => {
         }
       })
     })
-    return {
-      success: true,
-      message: 'The week has found',
-      data: foundWeek,
+    if (foundWeek) {
+      return {
+        success: true,
+        message: 'The week has found',
+        data: foundWeek,
+      }
+    } else {
+      return {
+        success: false,
+        message: 'The week has notfound',
+      }
     }
   } catch (error) {
     return { success: false, message: 'Error finding week in weeksDB' }
