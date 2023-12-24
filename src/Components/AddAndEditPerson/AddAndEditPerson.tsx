@@ -40,7 +40,9 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
-  const [foundArrName, setFoundArrName] = useState<Array<string>>([])
+  const [foundArrName, setFoundArrName] = useState<Array<IMaleDB | IFemaleDB>>(
+    []
+  )
   const [editPropPerson, setEditPropPerson] = useState<IMaleDB | IFemaleDB>()
 
   useEffect(() => {
@@ -92,21 +94,15 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   }
 
   const searchByLetter = async (inputLatters: string) => {
-    let result: Array<string> = []
     if (inputLatters) {
-      await window.api
-        .getUsersByLastname(inputLatters)
-        .then((filteredUsers) => {
-          // Обработка отфильтрованных пользователей
-          result = filteredUsers.map((item) => item.lastFirstName)
-          //console.log('array filtered students', result)
-        })
-        .catch((error) => {
-          console.error('Error searching users by lastname:', error)
-        })
+      const students = await window.api.getUsersByLastname(inputLatters)
+      if (students.success) {
+        setFoundArrName(students.data)
+      } else {
+        console.error('Error searching users by lastname:', students.message)
+      }
     }
     setInputLFName(inputLatters)
-    setFoundArrName(result)
   }
 
   const addPerson = async () => {
@@ -195,10 +191,6 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     }
   }
 
-  // const addPerson = async () => {
-  //   const result = await writeOneUserToDB(gender, inputLFName, maleData, dontUse, comments, femaleData)
-  // }
-
   const editPerson = async () => {
     //получить новые даные, старые из базы и обновить
     if (editPropPerson) {
@@ -236,15 +228,13 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   }
 
   const findToEdit = async (LFName: string) => {
-    await window.api
-      .getOneUserByLFName(LFName)
-      .then((filteredUser) => {
-        setEditPropPerson(filteredUser)
-        //console.log('find to edit', filteredUser)
-      })
-      .catch((error) => {
-        console.error('Error searching users by lastname:', error)
-      })
+    const result = await window.api.getOneUserByLFName(LFName)
+    if (result.success) {
+      setEditPropPerson(result.data)
+      //console.log('find to edit', filteredUser)
+    } else {
+      console.error('Error searching users by lastname:', result.message)
+    }
   }
 
   const backToAddPerson = () => {
@@ -298,7 +288,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           />
           {editPropPerson ? (
             <button onClick={() => editPerson()}>Edit person</button>
-          ) : inputLFName === foundArrName[0] ? (
+          ) : inputLFName === foundArrName[0]?.lastFirstName ? (
             <div>That person is already exist</div>
           ) : (
             <button onClick={() => addPerson()}>Save person</button>
@@ -306,18 +296,20 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
         </div>
       )}
       {foundArrName.length !== 0 && (
-        <>
+        <div>
           <div>I found in DB: </div>
           {foundArrName.map(
-            (item, index) =>
-              item && (
+            (student, index) =>
+              student && (
                 <div key={index}>
-                  <div>{item}</div>
-                  <div onClick={() => findToEdit(item)}>Edit</div>
+                  <div>{student.lastFirstName}</div>
+                  <div onClick={() => findToEdit(student.lastFirstName)}>
+                    Edit
+                  </div>
                 </div>
               )
           )}
-        </>
+        </div>
       )}
       {editPropPerson && (
         <div onClick={() => backToAddPerson()}>Back to add person</div>

@@ -24,6 +24,20 @@ type ResultWithAllWeeks = {
   message: string
   data?: Array<IWeek>
 }
+type ResultMaleOrFemale = {
+  success: boolean
+  message: string
+  data?: IMaleDB | IFemaleDB
+}
+type SuccessMalesOrFemales = {
+  success: true
+  message: string
+  data: Array<IMaleDB | IFemaleDB>
+}
+type UnSuccessMalesOrFemales = {
+  success: false
+  message: string
+}
 
 declare global {
   interface Window {
@@ -35,13 +49,11 @@ declare global {
       getAllUsers: () => Promise<Array<IMaleDB | IFemaleDB>>
       getUsersByLastname: (
         lastFirstName: string
-      ) => Promise<Array<IMaleDB | IFemaleDB | undefined>>
+      ) => Promise<SuccessMalesOrFemales | UnSuccessMalesOrFemales>
       getUsersByLatest: (
         addParam: object
       ) => Promise<Array<IMaleDB | IFemaleDB>>
-      getOneUserByLFName: (
-        lastFirstName: string
-      ) => Promise<IMaleDB | IFemaleDB>
+      getOneUserByLFName: (lastFirstName: string) => Promise<ResultMaleOrFemale>
       updateOneUser: (data: object) => Promise<Result>
       editOneUser: (data: object) => Promise<Result>
       deleteOneUser: (lastFirstName: string) => Promise<Result>

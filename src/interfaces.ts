@@ -136,6 +136,7 @@ export interface IFemaleData {
 export interface IWeek {
   startWeekTSt: number
   dateOfMeet: string
+  isPlanned: boolean
 
   teachingChBx: boolean
   trainingChBx: boolean

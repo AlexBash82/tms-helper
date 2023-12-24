@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import './AddInfoByWeek.css'
 import ListOfCandidates from '../../Components/ListOfCandidates/ListOfCandidates'
 import CoupleInput from '../../Components/CoupleInput/CoupleInput'
-import { IWeek } from '../../interfaces'
+import { IFemaleDB, IMaleDB, IWeek } from '../../interfaces'
 import { getStartAndEndWeek } from '../../services/logicDate'
 import Weeks from '../../Components/Weeks/Weeks'
 
-interface IStateWeek extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet'> {
+interface IStateWeek
+  extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet' | 'isPlanned'> {
   dateOfMeet?: string
 }
 
@@ -47,6 +48,22 @@ const AddInfoByWeek: React.FC = () => {
   const [action, setAction] = useState<
     'plan' | 'confirm' | 'update' | undefined
   >()
+  const [foundByLettReadStMC, setFoundByLettReadStMC] = useState<
+    Array<IMaleDB | IFemaleDB>
+  >([])
+  const [foundByLettReadStSC, setFoundByLettReadStSC] = useState<
+    Array<IMaleDB | IFemaleDB>
+  >([])
+  const [foundByLettSpeechStMC, setFoundByLettSpeechStMC] = useState<
+    Array<IMaleDB | IFemaleDB>
+  >([])
+  const [foundByLettSpeechStSC, setFoundByLettSpeechStSC] = useState<
+    Array<IMaleDB | IFemaleDB>
+  >([])
+  const [inputReadStMC, setInputReadStMC] = useState('')
+  const [inputReadStSC, setInputReadStSC] = useState('')
+  const [inputSpeechStMC, setInputSpeechStMC] = useState('')
+  const [inputSpeechStSC, setInputSpeechStSC] = useState('')
   const timeEndOfMeet = '21:45'
 
   const defaultState = {
@@ -87,6 +104,54 @@ const AddInfoByWeek: React.FC = () => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
   }
 
+  const searchByLettReadStMC = async (inputLatters: string) => {
+    if (inputLatters) {
+      const students = await window.api.getUsersByLastname(inputLatters)
+      if (students.success) {
+        setFoundByLettReadStMC(students.data)
+      } else {
+        console.error('Error searching users by lastname:', students.message)
+      }
+    }
+    setInputReadStMC(inputLatters)
+  }
+
+  const searchByLettReadStSC = async (inputLatters: string) => {
+    if (inputLatters) {
+      const students = await window.api.getUsersByLastname(inputLatters)
+      if (students.success) {
+        setFoundByLettReadStSC(students.data)
+      } else {
+        console.error('Error searching users by lastname:', students.message)
+      }
+    }
+    setInputReadStSC(inputLatters)
+  }
+
+  const searchByLettSpeechStMC = async (inputLatters: string) => {
+    if (inputLatters) {
+      const students = await window.api.getUsersByLastname(inputLatters)
+      if (students.success) {
+        setFoundByLettSpeechStMC(students.data)
+      } else {
+        console.error('Error searching users by lastname:', students.message)
+      }
+    }
+    setInputSpeechStMC(inputLatters)
+  }
+
+  const searchByLettSpeechStSC = async (inputLatters: string) => {
+    if (inputLatters) {
+      const students = await window.api.getUsersByLastname(inputLatters)
+      if (students.success) {
+        setFoundByLettSpeechStSC(students.data)
+      } else {
+        console.error('Error searching users by lastname:', students.message)
+      }
+    }
+    setInputSpeechStSC(inputLatters)
+  }
+
   const makeAMeet = async (inpDateOfMeet: string) => {
     const [year, month, day] = inpDateOfMeet.split('-').map(Number)
     const [hour, minute] = timeEndOfMeet.split(':').map(Number)
@@ -98,7 +163,12 @@ const AddInfoByWeek: React.FC = () => {
     const timestampNow = Date.now()
 
     if (timestampCal > timestampNow) {
-      const result = await writeDefaultWeekToDB(inpDateOfMeet, startWeekTSt)
+      const isPlanned = true
+      const result = await writeDefaultWeekToDB(
+        inpDateOfMeet,
+        startWeekTSt,
+        isPlanned
+      )
       console.log('future result', result)
       if (result.success) {
         setState(result.data)
@@ -112,10 +182,18 @@ const AddInfoByWeek: React.FC = () => {
       if (isWeekExist.success) {
         console.log('past get - confirm', isWeekExist)
         setState(isWeekExist.data)
-        setAction('confirm')
+        if (isWeekExist.data.isPlanned) {
+          setAction('confirm')
+        } else {
+          setAction('update')
+        }
       } else {
-        console.log('not success')
-        const result = await writeDefaultWeekToDB(inpDateOfMeet, startWeekTSt)
+        const isPlanned = false
+        const result = await writeDefaultWeekToDB(
+          inpDateOfMeet,
+          startWeekTSt,
+          isPlanned
+        )
         if (result.success) {
           console.log('past insert - update', result)
           setState(result.data)
@@ -123,15 +201,30 @@ const AddInfoByWeek: React.FC = () => {
         } //а сли не успех
       }
     }
+    openAndChoose('')
+    clearInputAndArr()
+  }
+
+  const clearInputAndArr = () => {
+    setFoundByLettReadStMC([])
+    setFoundByLettReadStSC([])
+    setFoundByLettSpeechStMC([])
+    setFoundByLettSpeechStSC([])
+    setInputReadStMC('')
+    setInputReadStSC('')
+    setInputSpeechStMC('')
+    setInputSpeechStSC('')
   }
 
   const writeDefaultWeekToDB = async (
     dateOfMeet: string,
-    startWeekTSt: number
+    startWeekTSt: number,
+    isPlanned: boolean
   ) => {
     const newWeek: IWeek = {
       startWeekTSt,
       dateOfMeet,
+      isPlanned,
 
       teachingChBx: false,
       trainingChBx: false,
@@ -391,20 +484,32 @@ const AddInfoByWeek: React.FC = () => {
                 <div className="df">
                   <div>Bible Reading - </div>
                   <div className="">
-                    <div
-                      className="input-box"
-                      onClick={() => openAndChoose('readPointStMc')}
-                    >
-                      {readPointStMC}
-                    </div>
-                    {openedList === 'readPointStMc' && (
+                    {action === 'plan' ? (
+                      <div
+                        className="input-box"
+                        onClick={() => openAndChoose('readPointStMC')}
+                      >
+                        {readPointStMC}
+                      </div>
+                    ) : (
+                      <input
+                        placeholder="Start print Lastname"
+                        type="text"
+                        value={inputReadStMC}
+                        onChange={(e) => searchByLettReadStMC(e.target.value)}
+                        onFocus={() => openAndChoose('readPointStMC')}
+                        onBlur={() => openAndChoose('')}
+                      />
+                    )}
+                    {openedList === 'readPointStMC' && (
                       <ListOfCandidates
-                        close={setOpenedList}
+                        openAndChoose={openAndChoose}
                         presentValue={readPointStMC}
                         task="readPointStMc"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
                         dateOfMeet={dateOfMeet}
+                        suitsStudents={foundByLettReadStMC}
                       />
                     )}
                   </div>
@@ -478,20 +583,34 @@ const AddInfoByWeek: React.FC = () => {
                   <div className="df">
                     <div>Talk - </div>
                     <div className="">
-                      <div
-                        className="input-box"
-                        onClick={() => openAndChoose('speechPointStMC')}
-                      >
-                        {speechPointStMC}
-                      </div>
+                      {action === 'plan' ? (
+                        <div
+                          className="input-box"
+                          onClick={() => openAndChoose('speechPointStMC')}
+                        >
+                          {speechPointStMC}
+                        </div>
+                      ) : (
+                        <input
+                          placeholder="Start print Lastname"
+                          type="text"
+                          value={inputSpeechStMC}
+                          onChange={(e) =>
+                            searchByLettSpeechStMC(e.target.value)
+                          }
+                          onFocus={() => openAndChoose('speechPointStMC')}
+                          onBlur={() => openAndChoose('')}
+                        />
+                      )}
                       {openedList === 'speechPointStMC' && (
                         <ListOfCandidates
-                          close={setOpenedList}
+                          openAndChoose={openAndChoose}
                           presentValue={speechPointStMC}
                           task="speechPointStMC"
                           getCurrentWeek={getCurrentWeek}
                           action={action}
                           dateOfMeet={dateOfMeet}
+                          suitsStudents={foundByLettSpeechStMC}
                         />
                       )}
                     </div>
@@ -515,20 +634,34 @@ const AddInfoByWeek: React.FC = () => {
                     <div className="df">
                       <div>Bible Reading - </div>
                       <div className="">
-                        <div
-                          className="input-box"
-                          onClick={() => openAndChoose('readPointStSC')}
-                        >
-                          {readPointStSC}
-                        </div>
+                        {action === 'plan' ? (
+                          <div
+                            className="input-box"
+                            onClick={() => openAndChoose('readPointStSC')}
+                          >
+                            {readPointStSC}
+                          </div>
+                        ) : (
+                          <input
+                            placeholder="Start print Lastname"
+                            type="text"
+                            value={inputReadStSC}
+                            onChange={(e) =>
+                              searchByLettReadStSC(e.target.value)
+                            }
+                            onFocus={() => openAndChoose('readPointStSC')}
+                            onBlur={() => openAndChoose('')}
+                          />
+                        )}
                         {openedList === 'readPointStSC' && (
                           <ListOfCandidates
-                            close={setOpenedList}
+                            openAndChoose={openAndChoose}
                             presentValue={readPointStSC}
                             task="readPointStSC"
                             getCurrentWeek={getCurrentWeek}
                             action={action}
                             dateOfMeet={dateOfMeet}
+                            suitsStudents={foundByLettReadStSC}
                           />
                         )}
                       </div>
@@ -602,20 +735,34 @@ const AddInfoByWeek: React.FC = () => {
                       <div className="df">
                         <div>Talk - </div>
                         <div className="">
-                          <div
-                            className="input-box"
-                            onClick={() => openAndChoose('speechPointStSC')}
-                          >
-                            {speechPointStSC}
-                          </div>
+                          {action === 'plan' ? (
+                            <div
+                              className="input-box"
+                              onClick={() => openAndChoose('speechPointStSC')}
+                            >
+                              {speechPointStSC}
+                            </div>
+                          ) : (
+                            <input
+                              placeholder="Start print Lastname"
+                              type="text"
+                              value={inputSpeechStSC}
+                              onChange={(e) =>
+                                searchByLettSpeechStSC(e.target.value)
+                              }
+                              onFocus={() => openAndChoose('speechPointStSC')}
+                              onBlur={() => openAndChoose('')}
+                            />
+                          )}
                           {openedList === 'speechPointStSC' && (
                             <ListOfCandidates
-                              close={setOpenedList}
+                              openAndChoose={openAndChoose}
                               presentValue={speechPointStSC}
                               task="speechPointStSC"
                               getCurrentWeek={getCurrentWeek}
                               action={action}
                               dateOfMeet={dateOfMeet}
+                              suitsStudents={foundByLettSpeechStSC}
                             />
                           )}
                         </div>

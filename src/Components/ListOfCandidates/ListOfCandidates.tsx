@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './ListOfCandidates.css'
 import { IFemaleDB, IMaleDB } from '../../interfaces'
 
@@ -10,22 +10,24 @@ import { IFemaleDB, IMaleDB } from '../../interfaces'
 //при наведении на кандидата открывать еще одно окно с доп инф
 
 interface IProps {
-  close: (arg: string) => void
+  openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
   presentValue: string
   task: string
   dateOfMeet: string
+  suitsStudents: Array<IMaleDB | IFemaleDB>
 
   action: 'plan' | 'confirm' | 'update' | undefined
 }
 
 const ListOfCandidates: React.FC<IProps> = ({
-  close,
+  openAndChoose,
   getCurrentWeek,
   presentValue,
   task,
   dateOfMeet,
   action,
+  suitsStudents,
 }) => {
   const [students, setStudents] = useState<Array<IMaleDB | IFemaleDB>>([])
 
@@ -52,7 +54,7 @@ const ListOfCandidates: React.FC<IProps> = ({
 
   const makePlan = async (studentName: string) => {
     const presentUser = await window.api.getOneUserByLFName(presentValue)
-    if (presentUser?.plan) {
+    if (presentUser.data?.plan) {
       try {
         const updatePresent = {
           studentName: presentValue,
@@ -92,13 +94,13 @@ const ListOfCandidates: React.FC<IProps> = ({
         console.error('Error updating item:', error)
       }
     }
-    close('')
+    openAndChoose('')
   }
 
   const makeUpdate = async (studentName: string) => {
-    const presentUser = await window.api.getOneUserByLFName(presentValue)
-
-    if (presentUser) {
+    const student = await window.api.getOneUserByLFName(studentName)
+    //console.log('update. user', studentName)
+    if (student.success) {
       try {
         const updateWeek = {
           dateOfMeet,
@@ -114,12 +116,13 @@ const ListOfCandidates: React.FC<IProps> = ({
         console.error('Error updating item:', error)
       }
     }
-    close('')
+    openAndChoose('')
   }
 
   return (
     <div className="listOfCand">
-      {action === ('plan' || 'confirm')
+      <div>{action}</div>
+      {action === 'plan'
         ? students.map((student) => (
             <div
               key={student.lastFirstName}
@@ -128,13 +131,22 @@ const ListOfCandidates: React.FC<IProps> = ({
               1{student.lastFirstName}
             </div>
           ))
+        : action === 'confirm'
+        ? suitsStudents.map((student) => (
+            <div
+              key={student.lastFirstName}
+              onClick={() => makePlan(student.lastFirstName)}
+            >
+              2{student.lastFirstName}
+            </div>
+          ))
         : action === 'update' &&
-          students.map((student) => (
+          suitsStudents.map((student) => (
             <div
               key={student.lastFirstName}
               onClick={() => makeUpdate(student.lastFirstName)}
             >
-              2{student.lastFirstName}
+              3{student.lastFirstName}
             </div>
           ))}
     </div>

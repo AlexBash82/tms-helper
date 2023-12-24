@@ -256,20 +256,20 @@ ipcMain.handle('get-sorted-users-by-lastname', async (event, searchTerm) => {
     const filteredUsers = await new Promise((resolve, reject) => {
       usersDB.find(
         { lastFirstName: { $regex: new RegExp(`^${searchTerm}`, 'i') } },
-        (err, docs) => {
+        (err, users) => {
           if (err) {
             reject(err)
           } else {
-            resolve(docs)
+            resolve(users)
           }
         }
       )
     })
 
-    return filteredUsers
+    return { success: true, message: 'I have found users', data: filteredUsers }
   } catch (error) {
     console.error('get-sorted-users-by-lastname error', error)
-    return []
+    return { success: true, message: 'I have found users' }
   }
 })
 
@@ -278,19 +278,20 @@ ipcMain.handle('get-sorted-users-by-lastname', async (event, searchTerm) => {
 ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
   try {
     const foundUser = await new Promise((resolve, reject) => {
-      usersDB.findOne({ lastFirstName: LFName }, (err, docs) => {
+      usersDB.findOne({ lastFirstName: LFName }, (err, user) => {
         if (err) {
           reject(err)
         } else {
-          resolve(docs)
+          console.log('get one user, found', user)
+          resolve(user)
         }
       })
     })
 
-    return foundUser
+    return { success: true, message: 'I have found one user', data: foundUser }
   } catch (error) {
     console.error('get-one-user-by-lfname error', error)
-    return undefined
+    return { success: false, message: 'I have notfound' }
   }
 })
 
@@ -370,7 +371,7 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
           console.log('write-new-week error insert', err)
           reject(err)
         } else {
-          console.log('write-new-week insert', newDoc)
+          //console.log('write-new-week insert', newDoc)
           resolve(newDoc)
         }
       })
