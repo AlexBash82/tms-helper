@@ -29,47 +29,55 @@ const Weeks: React.FC<IProps> = ({
   const [currentWeek, setCurrentWeek] = useState<
     IWeek | IEmptyWeek | undefined
   >()
-  const [currWeekPerf, setCurrWeekPerf] = useState(false)
+  const [currWeekPerf, setCurrWeekPerf] = useState(false) //-------------------------------
   const [futureWeeks, setFututureWeeks] = useState<
     Array<IWeek | IEmptyWeek> | undefined
   >()
 
   useEffect(() => {
-    getAllWeeks()
+    getWeeks()
   }, [calendarDateOfMeet])
 
-  const compareDates = () => {
-    if (currentWeek) {
-      const [year, month, day] = currentWeek.dateOfMeet.split('-').map(Number)
-      const [hour, minute] = timeEndOfMeet.split(':').map(Number)
-      const dateObject = new Date(year, month - 1, day, hour, minute)
-      const curWeekEndOfMeetTSt = dateObject.getTime()
-      const currentMoment = Date.now()
-      if (curWeekEndOfMeetTSt >= currentMoment) {
-        console.log('not yet')
-        return curWeekEndOfMeetTSt - currentMoment
-      }
-      console.log('yeaaah!')
-    }
-    return 86400000
-  }
-
   useEffect(() => {
+    const compareDates = () => {
+      if (currentWeek) {
+        const [year, month, day] = currentWeek.dateOfMeet.split('-').map(Number)
+        const [hour, minute] = timeEndOfMeet.split(':').map(Number)
+        const dateObject = new Date(year, month - 1, day, hour, minute)
+        const curWeekEndOfMeetTSt = dateObject.getTime()
+        const currentMoment = Date.now()
+        if (curWeekEndOfMeetTSt >= currentMoment) {
+          console.log('not yet')
+          const period = curWeekEndOfMeetTSt - currentMoment
+          return { period, result: false }
+        } else {
+          return { period: 86400000, result: true }
+        }
+      }
+      return { period: 86400000, result: false }
+    }
     const nextCheck = compareDates()
-    console.log('ill be back in ', nextCheck)
-    const timerId = setInterval(() => {
-      compareDates()
-    }, nextCheck)
+    if (nextCheck.result) {
+      setCurrWeekPerf(true)
+    } else {
+      console.log('ill check current meet in ', nextCheck.period)
 
-    return () => {
-      clearInterval(timerId)
+      const timerId = setInterval(() => {
+        if (nextCheck.result) {
+          setCurrWeekPerf(true)
+        }
+      }, nextCheck.period)
+
+      return () => {
+        clearInterval(timerId)
+      }
     }
   }, [])
 
-  const getAllWeeks = async () => {
+  const getWeeks = async () => {
     const weeksFromBD = await window.api.getAllWeeks()
-    console.log('allWeeks', weeksFromBD.data)
-    if (weeksFromBD.data) {
+    //console.log('allWeeks', weeksFromBD.data)
+    if (weeksFromBD.success) {
       // Функция для получения таймстемпа начала понедельника для конкретной недели
       function getMondayTimestamp(date: Date) {
         const dayOfWeek = date.getDay() // Получаем день недели (0 - воскресенье, 1 - понедельник, и так далее)
@@ -204,9 +212,7 @@ const Weeks: React.FC<IProps> = ({
           <div className="weeks">
             {futureWeeks.map((week) => (
               <div
-                className={`oneWeek ${
-                  week.dateOfMeet === 'empty' ? 'gray' : ''
-                } ${currWeekPerf ? 'orange' : ''}
+                className={`oneWeek ${week.dateOfMeet === 'empty' ? 'gray' : ''}
                    ${activeDate === week.dateOfMeet ? 'active' : ''}`}
                 key={week.startWeekTSt}
                 onClick={() => makeAMeet(week.dateOfMeet)}

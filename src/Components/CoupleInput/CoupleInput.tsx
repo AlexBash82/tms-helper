@@ -71,67 +71,74 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
 
   return (
     <div className="df">
-      <div>{title}</div>
-      <div className="">
-        {action === 'plan' ? (
-          <div
-            className="input-box"
-            onClick={() => openAndChoose(firstInputStr)}
-          >
-            {firstInput}
-          </div>
-        ) : (
-          <input
-            placeholder="Start print Lastname"
-            type="text"
-            value={inputLFName1}
-            onChange={(e) => searchByLetter1(e.target.value)}
-            onFocus={() => openAndChoose(firstInputStr)}
-            onBlur={() => openAndChoose('')}
-          />
-        )}
+      <div className="pr">
+        <div className="inpTitle">{title}</div>
+        <div className="inpBx">
+          {action === 'plan' ? (
+            <div
+              className="input-box"
+              onClick={() => openAndChoose(firstInputStr)}
+            >
+              {firstInput}
+            </div>
+          ) : (
+            <input
+              className="inp"
+              placeholder="Start print Lastname"
+              type="text"
+              value={inputLFName1}
+              onChange={(e) => searchByLetter1(e.target.value)}
+              onFocus={() => openAndChoose(firstInputStr)}
+              //onBlur={() => openAndChoose('')}
+            />
+          )}
 
-        {openedList === firstInputStr && (
-          <ListOfCandidates
-            openAndChoose={openAndChoose}
-            presentValue={firstInput}
-            task={firstInputStr}
-            getCurrentWeek={getCurrentWeek}
-            action={action}
-            dateOfMeet={dateOfMeet}
-            suitsStudents={foundArrName1}
-          />
-        )}
+          {openedList === firstInputStr && (
+            <ListOfCandidates
+              openAndChoose={openAndChoose}
+              presentValue={firstInput}
+              task={firstInputStr}
+              getCurrentWeek={getCurrentWeek}
+              action={action}
+              dateOfMeet={dateOfMeet}
+              suitsStudents={foundArrName1}
+            />
+          )}
+        </div>
       </div>
-      <div className="">
-        {action === 'plan' ? (
-          <div
-            className="input-box"
-            onClick={() => openAndChoose(secondInputStr)}
-          >
-            {secondInput}
-          </div>
-        ) : (
-          <input
-            placeholder="Start print Lastname"
-            type="text"
-            value={inputLFName2}
-            onChange={(e) => searchByLetter2(e.target.value)}
-            onFocus={() => openAndChoose(secondInputStr)}
-            onBlur={() => openAndChoose('')}
-          />
-        )}
-        {openedList === secondInputStr && (
-          <ListOfCandidates
-            openAndChoose={openAndChoose}
-            presentValue={secondInput}
-            task={secondInputStr}
-            getCurrentWeek={getCurrentWeek}
-            action={action}
-            dateOfMeet={dateOfMeet}
-            suitsStudents={foundArrName2}
-          />
-        )}
+      <div className="pr">
+        <div className="inpTitle">Assisstant</div>
+        <div className="inpBx">
+          {action === 'plan' ? (
+            <div
+              className="input-box"
+              onClick={() => openAndChoose(secondInputStr)}
+            >
+              {secondInput}
+            </div>
+          ) : (
+            <input
+              className="inp"
+              placeholder="Start print Lastname"
+              type="text"
+              value={inputLFName2}
+              onChange={(e) => searchByLetter2(e.target.value)}
+              onFocus={() => openAndChoose(secondInputStr)}
+              //onBlur={() => openAndChoose('')}
+            />
+          )}
+          {openedList === secondInputStr && (
+            <ListOfCandidates
+              openAndChoose={openAndChoose}
+              presentValue={secondInput}
+              task={secondInputStr}
+              getCurrentWeek={getCurrentWeek}
+              action={action}
+              dateOfMeet={dateOfMeet}
+              suitsStudents={foundArrName2}
+            />
+          )}
+        </div>
       </div>
     </div>
   )

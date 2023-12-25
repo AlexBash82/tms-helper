@@ -180,7 +180,7 @@ const AddInfoByWeek: React.FC = () => {
       const isWeekExist = await window.api.getOneWeek(inpDateOfMeet)
 
       if (isWeekExist.success) {
-        console.log('past get - confirm', isWeekExist)
+        //console.log('past get - confirm', isWeekExist)
         setState(isWeekExist.data)
         if (isWeekExist.data.isPlanned) {
           setAction('confirm')
@@ -390,6 +390,15 @@ const AddInfoByWeek: React.FC = () => {
         makeAMeet={makeAMeet}
         activeDate={dateOfMeet}
       />
+      {action === 'plan' ? (
+        <div>Plan the week</div>
+      ) : action === 'confirm' ? (
+        <div>Confirm the week</div>
+      ) : action === 'update' ? (
+        <div>Update the week</div>
+      ) : (
+        <></>
+      )}
       <input
         placeholder="Date of meeting"
         type="date"

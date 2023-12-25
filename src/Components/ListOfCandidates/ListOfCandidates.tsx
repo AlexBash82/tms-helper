@@ -99,7 +99,7 @@ const ListOfCandidates: React.FC<IProps> = ({
 
   const makeUpdate = async (studentName: string) => {
     const student = await window.api.getOneUserByLFName(studentName)
-    //console.log('update. user', studentName)
+    console.log('update. user', studentName)
     if (student.success) {
       try {
         const updateWeek = {
@@ -108,7 +108,7 @@ const ListOfCandidates: React.FC<IProps> = ({
           newValue: studentName,
         }
         const resultWeek = await window.api.updateOneWeek(updateWeek)
-        //console.log('resultWeek', resultWeek)
+        console.log('resultWeek', resultWeek)
         if (resultWeek.success) {
           getCurrentWeek()
         }
@@ -146,7 +146,7 @@ const ListOfCandidates: React.FC<IProps> = ({
               key={student.lastFirstName}
               onClick={() => makeUpdate(student.lastFirstName)}
             >
-              3{student.lastFirstName}
+              5{student.lastFirstName}
             </div>
           ))}
     </div>

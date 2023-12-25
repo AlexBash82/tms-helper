@@ -15,14 +15,18 @@ type SuccecWithNewWeek = {
   message: string
   data: IWeek
 }
-type UnSuccecWithNewWeek = {
+type UnSuccessWithNewWeek = {
   success: false
   message: string
 }
-type ResultWithAllWeeks = {
-  success: boolean
+type SuccesResultAllWeeks = {
+  success: true
   message: string
-  data?: Array<IWeek>
+  data: Array<IWeek>
+}
+type UnSuccessResultAllWeeks = {
+  success: false
+  message: string
 }
 type ResultMaleOrFemale = {
   success: boolean
@@ -60,11 +64,11 @@ declare global {
 
       writeNewWeek: (
         weekData: object
-      ) => Promise<SuccecWithNewWeek | UnSuccecWithNewWeek>
+      ) => Promise<SuccecWithNewWeek | UnSuccessWithNewWeek>
       getOneWeek: (
         dataOfMeet: string
-      ) => Promise<SuccecWithNewWeek | UnSuccecWithNewWeek>
-      getAllWeeks: () => Promise<ResultWithAllWeeks>
+      ) => Promise<SuccecWithNewWeek | UnSuccessWithNewWeek>
+      getAllWeeks: () => Promise<SuccesResultAllWeeks | UnSuccessResultAllWeeks>
       updateOneWeek: (weekData: object) => Promise<Result>
     }
   }

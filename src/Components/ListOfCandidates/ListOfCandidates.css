@@ -1,4 +1,5 @@
 .listOfCand {
   position: absolute;
   background-color: #eecb0e;
+  z-index: 20;
 }
