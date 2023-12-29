@@ -49,22 +49,7 @@ const AddInfoByWeek: React.FC = () => {
   const [action, setAction] = useState<
     'plan' | 'confirm' | 'update' | undefined
   >()
-  // const [foundByLettReadStMC, setFoundByLettReadStMC] = useState<
-  //   Array<IMaleDB | IFemaleDB>
-  // >([])
-  const [foundByLettReadStSC, setFoundByLettReadStSC] = useState<
-    Array<IMaleDB | IFemaleDB>
-  >([])
-  const [foundByLettSpeechStMC, setFoundByLettSpeechStMC] = useState<
-    Array<IMaleDB | IFemaleDB>
-  >([])
-  const [foundByLettSpeechStSC, setFoundByLettSpeechStSC] = useState<
-    Array<IMaleDB | IFemaleDB>
-  >([])
-  //const [inputReadStMC, setInputReadStMC] = useState('')
-  const [inputReadStSC, setInputReadStSC] = useState('')
-  const [inputSpeechStMC, setInputSpeechStMC] = useState('')
-  const [inputSpeechStSC, setInputSpeechStSC] = useState('')
+
   const timeEndOfMeet = '21:45'
 
   const defaultState = {
@@ -103,54 +88,6 @@ const AddInfoByWeek: React.FC = () => {
 
   const openAndChoose = (task: string) => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
-  }
-
-  // const searchByLettReadStMC = async (inputLatters: string) => {
-  //   if (inputLatters) {
-  //     const students = await window.api.getUsersByLastname(inputLatters)
-  //     if (students.success) {
-  //       setFoundByLettReadStMC(students.data)
-  //     } else {
-  //       console.error('Error searching users by lastname:', students.message)
-  //     }
-  //   }
-  //   setInputReadStMC(inputLatters)
-  // }
-
-  const searchByLettReadStSC = async (inputLatters: string) => {
-    if (inputLatters) {
-      const students = await window.api.getUsersByLastname(inputLatters)
-      if (students.success) {
-        setFoundByLettReadStSC(students.data)
-      } else {
-        console.error('Error searching users by lastname:', students.message)
-      }
-    }
-    setInputReadStSC(inputLatters)
-  }
-
-  const searchByLettSpeechStMC = async (inputLatters: string) => {
-    if (inputLatters) {
-      const students = await window.api.getUsersByLastname(inputLatters)
-      if (students.success) {
-        setFoundByLettSpeechStMC(students.data)
-      } else {
-        console.error('Error searching users by lastname:', students.message)
-      }
-    }
-    setInputSpeechStMC(inputLatters)
-  }
-
-  const searchByLettSpeechStSC = async (inputLatters: string) => {
-    if (inputLatters) {
-      const students = await window.api.getUsersByLastname(inputLatters)
-      if (students.success) {
-        setFoundByLettSpeechStSC(students.data)
-      } else {
-        console.error('Error searching users by lastname:', students.message)
-      }
-    }
-    setInputSpeechStSC(inputLatters)
   }
 
   const makeAMeet = async (inpDateOfMeet: string) => {
@@ -203,19 +140,7 @@ const AddInfoByWeek: React.FC = () => {
       }
     }
     openAndChoose('')
-    //clearInputAndArr()
   }
-
-  // const clearInputAndArr = () => {
-  //   setFoundByLettReadStMC([])
-  //   setFoundByLettReadStSC([])
-  //   setFoundByLettSpeechStMC([])
-  //   setFoundByLettSpeechStSC([])
-  //   setInputReadStMC('')
-  //   setInputReadStSC('')
-  //   setInputSpeechStMC('')
-  //   setInputSpeechStSC('')
-  // }
 
   const writeDefaultWeekToDB = async (
     dateOfMeet: string,
