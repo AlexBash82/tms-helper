@@ -16,7 +16,7 @@ interface IProps {
   task: string
   dateOfMeet: string
   suitsStudents: Array<IMaleDB | IFemaleDB>
-
+  inputIs: string
   action: 'plan' | 'confirm' | 'update' | undefined
 }
 
@@ -28,8 +28,29 @@ const ListOfCandidates: React.FC<IProps> = ({
   dateOfMeet,
   action,
   suitsStudents,
+  inputIs,
 }) => {
   const [students, setStudents] = useState<Array<IMaleDB | IFemaleDB>>([])
+  const listRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (
+        listRef.current &&
+        !listRef.current.contains(event.target as Node) &&
+        inputIs === 'blur'
+      ) {
+        console.log('out and blur')
+        openAndChoose('')
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+
+    return () => {
+      document.removeEventListener('click', handleClick)
+    }
+  }, [inputIs])
 
   const addSearchParams = () => {
     if (task.includes('read') || task.includes('speech')) {
@@ -120,7 +141,7 @@ const ListOfCandidates: React.FC<IProps> = ({
   }
 
   return (
-    <div className="listOfCand">
+    <div ref={listRef} className="listOfCand">
       <div>{action}</div>
       {action === 'plan'
         ? students.map((student) => (

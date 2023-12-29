@@ -1,0 +1,29 @@
+/* .pr {
+  position: relative;
+}
+
+.pa {
+  position: absolute;
+}
+
+.inpBx {
+  box-sizing: border-box;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 200px;
+  height: 40px;
+}
+
+.inpTitle {
+  position: absolute;
+  top: -5px;
+  left: 15px;
+  background-color: inherit;
+  opacity: 1;
+  z-index: 10;
+}
+
+.inp {
+  margin: 5px;
+} */

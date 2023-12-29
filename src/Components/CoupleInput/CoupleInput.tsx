@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import './CoupleInput.css'
 import ListOfCandidates from '../ListOfCandidates/ListOfCandidates'
 import { IFemaleDB, IMaleDB } from '../../interfaces'
 
-interface ICoupleInputProps {
+interface IProps {
   title: string
   openAndChoose: (arg: string) => void
   openedList: string
-  close: (arg: string) => void
+  //close: (arg: string) => void
   firstInput: string
   firstInputStr: string
   secondInput: string
@@ -17,12 +17,11 @@ interface ICoupleInputProps {
   action: 'plan' | 'confirm' | 'update' | undefined
 }
 
-const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
+const CoupleInput: React.FC<IProps> = (props) => {
   const {
     title,
     openAndChoose,
     openedList,
-    close,
     firstInput,
     firstInputStr,
     secondInput,
@@ -40,6 +39,7 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
   const [foundArrName2, setFoundArrName2] = useState<
     Array<IMaleDB | IFemaleDB>
   >([])
+  const [inputIs, setInputIs] = useState('blur')
 
   const searchByLetter1 = async (inputLatters: string) => {
     if (inputLatters) {
@@ -69,76 +69,78 @@ const CoupleInput: React.FC<ICoupleInputProps> = (props) => {
     setInputLFName2(inputLatters)
   }
 
+  const focusOrBlur = (act: string, name: string) => {
+    if (act === 'focus') {
+      setInputIs(act)
+      openAndChoose(name)
+    }
+    if (act === 'blur') {
+      setInputIs(act)
+    }
+  }
+
   return (
     <div className="df">
-      <div className="pr">
+      <div className="inpDiv">
         <div className="inpTitle">{title}</div>
-        <div className="inpBx">
-          {action === 'plan' ? (
-            <div
-              className="input-box"
-              onClick={() => openAndChoose(firstInputStr)}
-            >
-              {firstInput}
-            </div>
-          ) : (
-            <input
-              className="inp"
-              placeholder="Start print Lastname"
-              type="text"
-              value={inputLFName1}
-              onChange={(e) => searchByLetter1(e.target.value)}
-              onFocus={() => openAndChoose(firstInputStr)}
-              //onBlur={() => openAndChoose('')}
-            />
-          )}
+        {action === 'plan' ? (
+          <div className="" onClick={() => openAndChoose(firstInputStr)}>
+            {firstInput}
+          </div>
+        ) : (
+          <input
+            className="inp"
+            placeholder="Start print Lastname"
+            type="text"
+            value={inputLFName1}
+            onChange={(e) => searchByLetter1(e.target.value)}
+            onFocus={() => focusOrBlur('focus', firstInputStr)}
+            onBlur={() => focusOrBlur('blur', '')}
+          />
+        )}
 
-          {openedList === firstInputStr && (
-            <ListOfCandidates
-              openAndChoose={openAndChoose}
-              presentValue={firstInput}
-              task={firstInputStr}
-              getCurrentWeek={getCurrentWeek}
-              action={action}
-              dateOfMeet={dateOfMeet}
-              suitsStudents={foundArrName1}
-            />
-          )}
-        </div>
+        {openedList === firstInputStr && (
+          <ListOfCandidates
+            openAndChoose={openAndChoose}
+            presentValue={firstInput}
+            task={firstInputStr}
+            getCurrentWeek={getCurrentWeek}
+            action={action}
+            dateOfMeet={dateOfMeet}
+            suitsStudents={foundArrName1}
+            inputIs={inputIs}
+          />
+        )}
       </div>
-      <div className="pr">
+      <div className="inpDiv">
         <div className="inpTitle">Assisstant</div>
-        <div className="inpBx">
-          {action === 'plan' ? (
-            <div
-              className="input-box"
-              onClick={() => openAndChoose(secondInputStr)}
-            >
-              {secondInput}
-            </div>
-          ) : (
-            <input
-              className="inp"
-              placeholder="Start print Lastname"
-              type="text"
-              value={inputLFName2}
-              onChange={(e) => searchByLetter2(e.target.value)}
-              onFocus={() => openAndChoose(secondInputStr)}
-              //onBlur={() => openAndChoose('')}
-            />
-          )}
-          {openedList === secondInputStr && (
-            <ListOfCandidates
-              openAndChoose={openAndChoose}
-              presentValue={secondInput}
-              task={secondInputStr}
-              getCurrentWeek={getCurrentWeek}
-              action={action}
-              dateOfMeet={dateOfMeet}
-              suitsStudents={foundArrName2}
-            />
-          )}
-        </div>
+        {action === 'plan' ? (
+          <div className="" onClick={() => openAndChoose(secondInputStr)}>
+            {secondInput}
+          </div>
+        ) : (
+          <input
+            className="inp"
+            placeholder="Start print Lastname"
+            type="text"
+            value={inputLFName2}
+            onChange={(e) => searchByLetter2(e.target.value)}
+            onFocus={() => focusOrBlur('focus', secondInputStr)}
+            onBlur={() => focusOrBlur('blur', '')}
+          />
+        )}
+        {openedList === secondInputStr && (
+          <ListOfCandidates
+            openAndChoose={openAndChoose}
+            presentValue={secondInput}
+            task={secondInputStr}
+            getCurrentWeek={getCurrentWeek}
+            action={action}
+            dateOfMeet={dateOfMeet}
+            suitsStudents={foundArrName2}
+            inputIs={inputIs}
+          />
+        )}
       </div>
     </div>
   )
