@@ -38,9 +38,9 @@ const ListOfCandidates: React.FC<IProps> = ({
       if (
         listRef.current &&
         !listRef.current.contains(event.target as Node) &&
-        inputIs === 'blur'
+        inputIs === 'blur' &&
+        action !== 'plan'
       ) {
-        console.log('out and blur')
         openAndChoose('')
       }
     }
@@ -149,7 +149,7 @@ const ListOfCandidates: React.FC<IProps> = ({
               key={student.lastFirstName}
               onClick={() => makePlan(student.lastFirstName)}
             >
-              1{student.lastFirstName}
+              {student.lastFirstName}
             </div>
           ))
         : action === 'confirm'
@@ -158,7 +158,7 @@ const ListOfCandidates: React.FC<IProps> = ({
               key={student.lastFirstName}
               onClick={() => makePlan(student.lastFirstName)}
             >
-              2{student.lastFirstName}
+              {student.lastFirstName}
             </div>
           ))
         : action === 'update' &&
@@ -167,7 +167,7 @@ const ListOfCandidates: React.FC<IProps> = ({
               key={student.lastFirstName}
               onClick={() => makeUpdate(student.lastFirstName)}
             >
-              5{student.lastFirstName}
+              {student.lastFirstName}
             </div>
           ))}
     </div>

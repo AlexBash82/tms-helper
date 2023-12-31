@@ -1,5 +1,12 @@
 .listOfCand {
   position: absolute;
-  background-color: #eecb0e;
+  left: -1px;
+  top: 40px;
+  background-color: white;
   z-index: 20;
+  box-sizing: border-box;
+  width: 210px;
+  padding: 10px;
+  border: 1px solid blue;
+  border-radius: 5px;
 }

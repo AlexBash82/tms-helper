@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './SingleInput.css'
 import { IFemaleDB, IMaleDB } from '../../interfaces'
 import ListOfCandidates from '../ListOfCandidates/ListOfCandidates'
@@ -26,11 +26,17 @@ const SingleInput: React.FC<IProps> = (props) => {
     action,
   } = props
 
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(firstInput)
   const [foundByLetter, setFoundByLetter] = useState<
     Array<IMaleDB | IFemaleDB>
   >([])
   const [inputIs, setInputIs] = useState('blur')
+
+  useEffect(() => {
+    if (firstInput !== inputValue) {
+      setInputValue(firstInput)
+    }
+  }, [firstInput])
 
   const searchByLetter = async (inputLatters: string) => {
     if (inputLatters) {
@@ -58,7 +64,7 @@ const SingleInput: React.FC<IProps> = (props) => {
     <div className="inpDiv">
       <div className="inpTitle">{title}</div>
       {action === 'plan' ? (
-        <div className="" onClick={() => openAndChoose('readPointStMC')}>
+        <div className="inp" onClick={() => openAndChoose(firstInputStr)}>
           {firstInput}
         </div>
       ) : (

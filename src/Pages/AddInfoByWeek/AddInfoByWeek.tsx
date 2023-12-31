@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import './AddInfoByWeek.css'
-import ListOfCandidates from '../../Components/ListOfCandidates/ListOfCandidates'
-import CoupleInput from '../../Components/CoupleInput/CoupleInput'
-import { IFemaleDB, IMaleDB, IWeek } from '../../interfaces'
+import { IWeek } from '../../interfaces'
 import { getStartAndEndWeek } from '../../services/logicDate'
 import Weeks from '../../Components/Weeks/Weeks'
 import SingleInput from '../../Components/SingleInput/SingleInput'
+import CoupleInputs from '../../Components/CoupleInput/CoupleInputs'
 
 interface IStateWeek
   extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet' | 'isPlanned'> {
@@ -25,26 +24,26 @@ const AddInfoByWeek: React.FC = () => {
   const [makingPointChBx, setMakingPointChBx] = useState(false)
   const [explainingPointChBx, setExplainingPointChBx] = useState(false)
   const [speechPointChBx, setSpeechPointChBx] = useState(false)
-  const [readPointStMC, setReadPointStMC] = useState('Didnt choose yet')
-  const [startPointStMC, setStartPointStMC] = useState('Didnt choose yet')
-  const [startPointAsMC, setStartPointASMC] = useState('Didnt choose yet')
-  const [followPointStMC, setFollowPointStMC] = useState('Didnt choose yet')
-  const [followPointAsMC, setFollowPointAsMC] = useState('Didnt choose yet')
-  const [makePointStMC, setMakePointStMC] = useState('Didnt choose yet')
-  const [makePointAsMC, setMakePointAsMC] = useState('Didnt choose yet')
-  const [explainPointStMC, setExplainPointStMC] = useState('Didnt choose yet')
-  const [explainPointAsMC, setExplainPointAsMC] = useState('Didnt choose yet')
-  const [speechPointStMC, setSpeechPointStMC] = useState('Didnt choose yet')
-  const [readPointStSC, setReadPointStSC] = useState('Didnt choose yet')
-  const [startPointStSC, setStartPointStSC] = useState('Didnt choose yet')
-  const [startPointAsSC, setStartPointAsSC] = useState('Didnt choose yet')
-  const [followPointStSC, setFollowPointStSC] = useState('Didnt choose yet')
-  const [followPointAsSC, setFollowPointAsSC] = useState('Didnt choose yet')
-  const [makePointStSC, setMakePointStSC] = useState('Didnt choose yet')
-  const [makePointAsSC, setMakePointAsSC] = useState('Didnt choose yet')
-  const [explainPointStSC, setExplainPointStSC] = useState('Didnt choose yet')
-  const [explainPointAsSC, setExplainPointAsSC] = useState('Didnt choose yet')
-  const [speechPointStSC, setSpeechPointStSC] = useState('Didnt choose yet')
+  const [readPointStMC, setReadPointStMC] = useState('')
+  const [startPointStMC, setStartPointStMC] = useState('')
+  const [startPointAsMC, setStartPointASMC] = useState('')
+  const [followPointStMC, setFollowPointStMC] = useState('')
+  const [followPointAsMC, setFollowPointAsMC] = useState('')
+  const [makePointStMC, setMakePointStMC] = useState('')
+  const [makePointAsMC, setMakePointAsMC] = useState('')
+  const [explainPointStMC, setExplainPointStMC] = useState('')
+  const [explainPointAsMC, setExplainPointAsMC] = useState('')
+  const [speechPointStMC, setSpeechPointStMC] = useState('')
+  const [readPointStSC, setReadPointStSC] = useState('')
+  const [startPointStSC, setStartPointStSC] = useState('')
+  const [startPointAsSC, setStartPointAsSC] = useState('')
+  const [followPointStSC, setFollowPointStSC] = useState('')
+  const [followPointAsSC, setFollowPointAsSC] = useState('')
+  const [makePointStSC, setMakePointStSC] = useState('')
+  const [makePointAsSC, setMakePointAsSC] = useState('')
+  const [explainPointStSC, setExplainPointStSC] = useState('')
+  const [explainPointAsSC, setExplainPointAsSC] = useState('')
+  const [speechPointStSC, setSpeechPointStSC] = useState('')
   const [openedList, setOpenedList] = useState('')
   const [action, setAction] = useState<
     'plan' | 'confirm' | 'update' | undefined
@@ -64,26 +63,26 @@ const AddInfoByWeek: React.FC = () => {
     explainingPointChBx: false,
     speechPointChBx: false,
 
-    readPointStMC: 'Didnt choose yet',
-    startPointStMC: 'Didnt choose yet',
-    startPointAsMC: 'Didnt choose yet',
-    followPointStMC: 'Didnt choose yet',
-    followPointAsMC: 'Didnt choose yet',
-    makePointStMC: 'Didnt choose yet',
-    makePointAsMC: 'Didnt choose yet',
-    explainPointStMC: 'Didnt choose yet',
-    explainPointAsMC: 'Didnt choose yet',
-    speechPointStMC: 'Didnt choose yet',
-    readPointStSC: 'Didnt choose yet',
-    startPointStSC: 'Didnt choose yet',
-    startPointAsSC: 'Didnt choose yet',
-    followPointStSC: 'Didnt choose yet',
-    followPointAsSC: 'Didnt choose yet',
-    makePointStSC: 'Didnt choose yet',
-    makePointAsSC: 'Didnt choose yet',
-    explainPointStSC: 'Didnt choose yet',
-    explainPointAsSC: 'Didnt choose yet',
-    speechPointStSC: 'Didnt choose yet',
+    readPointStMC: '',
+    startPointStMC: '',
+    startPointAsMC: '',
+    followPointStMC: '',
+    followPointAsMC: '',
+    makePointStMC: '',
+    makePointAsMC: '',
+    explainPointStMC: '',
+    explainPointAsMC: '',
+    speechPointStMC: '',
+    readPointStSC: '',
+    startPointStSC: '',
+    startPointAsSC: '',
+    followPointStSC: '',
+    followPointAsSC: '',
+    makePointStSC: '',
+    makePointAsSC: '',
+    explainPointStSC: '',
+    explainPointAsSC: '',
+    speechPointStSC: '',
   }
 
   const openAndChoose = (task: string) => {
@@ -161,26 +160,26 @@ const AddInfoByWeek: React.FC = () => {
       explainingPointChBx: false,
       speechPointChBx: false,
 
-      readPointStMC: 'Didnt choose yet',
-      startPointStMC: 'Didnt choose yet',
-      startPointAsMC: 'Didnt choose yet',
-      followPointStMC: 'Didnt choose yet',
-      followPointAsMC: 'Didnt choose yet',
-      makePointStMC: 'Didnt choose yet',
-      makePointAsMC: 'Didnt choose yet',
-      explainPointStMC: 'Didnt choose yet',
-      explainPointAsMC: 'Didnt choose yet',
-      speechPointStMC: 'Didnt choose yet',
-      readPointStSC: 'Didnt choose yet',
-      startPointStSC: 'Didnt choose yet',
-      startPointAsSC: 'Didnt choose yet',
-      followPointStSC: 'Didnt choose yet',
-      followPointAsSC: 'Didnt choose yet',
-      makePointStSC: 'Didnt choose yet',
-      makePointAsSC: 'Didnt choose yet',
-      explainPointStSC: 'Didnt choose yet',
-      explainPointAsSC: 'Didnt choose yet',
-      speechPointStSC: 'Didnt choose yet',
+      readPointStMC: '',
+      startPointStMC: '',
+      startPointAsMC: '',
+      followPointStMC: '',
+      followPointAsMC: '',
+      makePointStMC: '',
+      makePointAsMC: '',
+      explainPointStMC: '',
+      explainPointAsMC: '',
+      speechPointStMC: '',
+      readPointStSC: '',
+      startPointStSC: '',
+      startPointAsSC: '',
+      followPointStSC: '',
+      followPointAsSC: '',
+      makePointStSC: '',
+      makePointAsSC: '',
+      explainPointStSC: '',
+      explainPointAsSC: '',
+      speechPointStSC: '',
     }
 
     const result = await window.api.writeNewWeek(newWeek)
@@ -428,7 +427,7 @@ const AddInfoByWeek: React.FC = () => {
                 />
 
                 {startingPointChBx && (
-                  <CoupleInput
+                  <CoupleInputs
                     title={'Starting a Conversation'}
                     openAndChoose={openAndChoose}
                     openedList={openedList}
@@ -443,8 +442,8 @@ const AddInfoByWeek: React.FC = () => {
                 )}
 
                 {followingPointChBx && (
-                  <CoupleInput
-                    title="Following Up - "
+                  <CoupleInputs
+                    title="Following Up"
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={followPointStMC}
@@ -458,8 +457,8 @@ const AddInfoByWeek: React.FC = () => {
                 )}
 
                 {makingPointChBx && (
-                  <CoupleInput
-                    title="Making Disciples - "
+                  <CoupleInputs
+                    title="Making Disciples"
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={makePointStMC}
@@ -473,8 +472,8 @@ const AddInfoByWeek: React.FC = () => {
                 )}
 
                 {explainingPointChBx && (
-                  <CoupleInput
-                    title="Explaining Your Beliefs - "
+                  <CoupleInputs
+                    title="Explaining Your Beliefs"
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={explainPointStMC}
@@ -526,8 +525,8 @@ const AddInfoByWeek: React.FC = () => {
                     />
 
                     {startingPointChBx && (
-                      <CoupleInput
-                        title="Starting a Conversation - "
+                      <CoupleInputs
+                        title="Starting a Conversation"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={startPointStSC}
@@ -541,8 +540,8 @@ const AddInfoByWeek: React.FC = () => {
                     )}
 
                     {followingPointChBx && (
-                      <CoupleInput
-                        title="Following Up - "
+                      <CoupleInputs
+                        title="Following Up"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={followPointStSC}
@@ -556,8 +555,8 @@ const AddInfoByWeek: React.FC = () => {
                     )}
 
                     {makingPointChBx && (
-                      <CoupleInput
-                        title="Making Disciples - "
+                      <CoupleInputs
+                        title="Making Disciples"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={makePointStSC}
@@ -571,8 +570,8 @@ const AddInfoByWeek: React.FC = () => {
                     )}
 
                     {explainingPointChBx && (
-                      <CoupleInput
-                        title="Explaining Your Beliefs - "
+                      <CoupleInputs
+                        title="Explaining Your Beliefs"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={explainPointStSC}
@@ -587,7 +586,7 @@ const AddInfoByWeek: React.FC = () => {
 
                     {speechPointChBx && (
                       <SingleInput
-                        title={'Talk'}
+                        title="Talk"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={speechPointStSC}
@@ -610,7 +609,10 @@ const AddInfoByWeek: React.FC = () => {
       {/* close week - setdate-und */}
       {action === 'confirm' && <div onClick={confirmWeek}>Confirm change</div>}
       {action === 'update' && (
-        <div onClick={updateWeek}>Update student info</div>
+        <div>
+          <div onClick={updateWeek}>Update student info</div>
+          <div>Delete this week</div>
+        </div>
       )}
     </div>
   )
