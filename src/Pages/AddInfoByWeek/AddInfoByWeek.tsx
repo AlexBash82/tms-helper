@@ -4,7 +4,7 @@ import { IWeek } from '../../interfaces'
 import { getStartAndEndWeek } from '../../services/logicDate'
 import Weeks from '../../Components/Weeks/Weeks'
 import SingleInput from '../../Components/SingleInput/SingleInput'
-import CoupleInputs from '../../Components/CoupleInput/CoupleInputs'
+import CoupleInputs from '../../Components/CoupleInputs/CoupleInputs'
 
 interface IStateWeek
   extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet' | 'isPlanned'> {
