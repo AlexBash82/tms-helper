@@ -300,11 +300,17 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const confirmWeek = async () => {
+    //удалить план у всех и внести дату в соотв.графы
     console.log('test confirm')
   }
 
   const updateWeek = async () => {
+    //сравнить дату с графой в базе и если она свежее то обновить базу
     console.log('test update')
+  }
+
+  const deleteWeek = async () => {
+    console.log('delete')
   }
 
   return (
@@ -609,9 +615,13 @@ const AddInfoByWeek: React.FC = () => {
       {/* close week - setdate-und */}
       {action === 'confirm' && <div onClick={confirmWeek}>Confirm change</div>}
       {action === 'update' && (
-        <div>
-          <div onClick={updateWeek}>Update student info</div>
-          <div>Delete this week</div>
+        <div className="df">
+          <div className="myButton" onClick={updateWeek}>
+            Update info
+          </div>
+          <div className="myButton" onClick={deleteWeek}>
+            Delete week
+          </div>
         </div>
       )}
     </div>

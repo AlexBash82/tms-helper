@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import AddAndEditPerson from '../../Components/AddAndEditPerson/AddAndEditPerson'
 import { IFemaleDB, IMaleDB } from '../../interfaces'
+import './PersonsList.css'
 
-//добавить фильтры для поиска, например кто и когда выступал
+//добавить фильтры для поиска, например кто и когда выступал, м ж,
 
 const PersonsList: React.FC = () => {
   const [allUsers, setAllUsers] = useState<Array<IMaleDB | IFemaleDB>>([])
@@ -68,59 +69,66 @@ const PersonsList: React.FC = () => {
   }
 
   return (
-    <div className="df">
-      <div>
-        <h2>All users:</h2>
-        <ul>
+    <div className="df container">
+      <div className="allUsers">
+        <h1>All users:</h1>
+        <div className="overflow">
           {allUsers.map((user, index) => (
-            <li key={index}>
-              <div>
-                <div className="df g-2">
-                  <div className="df g-1">
-                    <div>Name: </div>
+            <div>
+              <div className="df" key={index}>
+                <div className="df g-2 firstNlast">
+                  <div className="df">
                     <div>{user.lastFirstName}</div>
                   </div>
-                  <div className="df g-1">
-                    <div>Gender: </div>
+                  <div className="df">
                     <div>{user.gender}</div>
                   </div>
                 </div>
                 <div className="df g-2">
-                  <button onClick={() => setEditablePerson(user)}>Edit</button>
-                  {showConfirm && user.lastFirstName === deletingName ? (
-                    <div className="df g-1">
-                      <div>
-                        Inter '{genCode}' for delete user '{user.lastFirstName}'
-                        from DB
-                      </div>
-                      <input
-                        className="w-1-5"
-                        placeholder="-/-/-"
-                        type="text"
-                        maxLength={3}
-                        value={inputCode}
-                        onChange={(e) => setInputCode(e.target.value)}
-                      />
-                      <button
-                        onClick={() =>
-                          confirmation(inputCode, user.lastFirstName)
-                        }
-                      >
-                        Confirm
-                      </button>
+                  <div
+                    className="myButton"
+                    onClick={() => setEditablePerson(user)}
+                  >
+                    Edit
+                  </div>
+
+                  <div>
+                    <div
+                      className="myButton"
+                      onClick={() => askConfirmDel(user.lastFirstName)}
+                    >
+                      Delite
                     </div>
-                  ) : (
-                    <div>
-                      <button onClick={() => askConfirmDel(user.lastFirstName)}>
-                        Delite
-                      </button>
-                    </div>
-                  )}
+                  </div>
                 </div>
               </div>
-            </li>
+              {showConfirm && user.lastFirstName === deletingName ? (
+                <div className="df g-1">
+                  <div>
+                    Inter '{genCode}' for delete user '{user.lastFirstName}'
+                    from DB
+                  </div>
+                  <input
+                    className="w-1-5"
+                    placeholder="-/-/-"
+                    type="text"
+                    maxLength={3}
+                    value={inputCode}
+                    onChange={(e) => setInputCode(e.target.value)}
+                  />
+                  <div
+                    className="myButton"
+                    onClick={() => confirmation(inputCode, user.lastFirstName)}
+                  >
+                    Confirm
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
       <div className="">
         <AddAndEditPerson

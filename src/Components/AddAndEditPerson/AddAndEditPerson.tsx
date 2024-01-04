@@ -9,6 +9,20 @@ import { IFemaleDB, IFemaleData, IMaleDB, IMaleData } from '../../interfaces'
 //редактирование: после введения информации искать по ID и изменять (id т.к. имя можно поменять)
 //исключить возможность редактирования если студент.план = тру
 
+interface studentWithDate {
+  mainStarting: string
+  smallStarting: string
+  mainFollowing: string
+  smallFollowing: string
+  mainMaking: string
+  smallMaking: string
+  mainExplaining: string
+  smallExplaining: string
+  mainSlave: string
+  smallSlave: string
+  latest: string
+}
+
 interface IProps {
   PropPerson?: IMaleDB | IFemaleDB
   readAllData: () => void
@@ -44,10 +58,53 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     []
   )
   const [editPropPerson, setEditPropPerson] = useState<IMaleDB | IFemaleDB>()
+  const [edPPDate, setEdPPDate] = useState<studentWithDate>()
 
   useEffect(() => {
     setEditPropPerson(PropPerson)
+    if (PropPerson?.gender === 'Male') {
+      const student = {}
+    }
+    if (PropPerson?.gender === 'Female') {
+      const student = {
+        mainStarting: stampToDate(PropPerson.mainStarting),
+        smallStarting: stampToDate(PropPerson.smallStarting),
+        mainFollowing: stampToDate(PropPerson.mainFollowing),
+        smallFollowing: stampToDate(PropPerson.smallFollowing),
+        mainMaking: stampToDate(PropPerson.mainMaking),
+        smallMaking: stampToDate(PropPerson.smallMaking),
+        mainExplaining: stampToDate(PropPerson.mainExplaining),
+        smallExplaining: stampToDate(PropPerson.smallExplaining),
+        mainSlave: stampToDate(PropPerson.mainSlave),
+        smallSlave: stampToDate(PropPerson.smallSlave),
+        latest: stampToDate(PropPerson.latest),
+      }
+      setEdPPDate(student)
+    }
   }, [PropPerson])
+
+  const stampToDate = (stamp: number) => {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ]
+    const date = new Date(stamp)
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const day = date.getDate()
+    const result = `${months[month]} ${day} ${year}`
+    return result
+  }
 
   useEffect(() => {
     if (editPropPerson) {
@@ -213,13 +270,12 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           comments,
         }
       }
-
+      //если в базе есть такое имя но id не совпадает, то не обновлять базу а сообщить об этом
       await window.api
         .editOneUser({ idPerson, newValue })
         .then((result) => {
-          console.log('result of edit', result)
           readAllData() //обновляем список после внесения изменений.
-          //нужно вывести алерт об успешном обновлении и сбросить стейт
+          alert(result.message)
         })
         .catch((error) => {
           console.error('Error edit user by id:', error)
@@ -251,20 +307,41 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
         value={inputLFName}
         onChange={(e) => searchByLetter(e.target.value)}
       />
-      <input
-        type="checkbox"
-        value="Male"
-        checked={gender === 'Male'}
-        onChange={(e) => setGender(e.target.value)}
-      />
-      -Male
-      <input
-        type="checkbox"
-        value="Female"
-        checked={gender === 'Female'}
-        onChange={(e) => setGender(e.target.value)}
-      />
-      -Female
+      {editPropPerson ? (
+        <>
+          <input
+            type="checkbox"
+            value="Male"
+            checked={gender === 'Male'}
+            readOnly
+          />
+          -Male
+          <input
+            type="checkbox"
+            value="Female"
+            checked={gender === 'Female'}
+            readOnly
+          />
+          -Female
+        </>
+      ) : (
+        <>
+          <input
+            type="checkbox"
+            value="Male"
+            checked={gender === 'Male'}
+            onChange={(e) => setGender(e.target.value)}
+          />
+          -Male
+          <input
+            type="checkbox"
+            value="Female"
+            checked={gender === 'Female'}
+            onChange={(e) => setGender(e.target.value)}
+          />
+          -Female
+        </>
+      )}
       {gender === 'Male' ? (
         <InputMale maleData={maleData} setMaleData={setMaleData} />
       ) : gender === 'Female' ? (
@@ -287,11 +364,15 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
             onChange={(e) => setComments(e.target.value)}
           />
           {editPropPerson ? (
-            <button onClick={() => editPerson()}>Edit person</button>
+            <div className="myButton" onClick={() => editPerson()}>
+              Edit person
+            </div>
           ) : inputLFName === foundArrName[0]?.lastFirstName ? (
             <div>That person is already exist</div>
           ) : (
-            <button onClick={() => addPerson()}>Save person</button>
+            <button className="myButton" onClick={() => addPerson()}>
+              Save person
+            </button>
           )}
         </div>
       )}
@@ -303,8 +384,11 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
               student && (
                 <div key={index}>
                   <div>{student.lastFirstName}</div>
-                  <div onClick={() => findToEdit(student.lastFirstName)}>
-                    Edit
+                  <div
+                    className="myButton"
+                    onClick={() => findToEdit(student.lastFirstName)}
+                  >
+                    Edit that
                   </div>
                 </div>
               )
@@ -312,7 +396,29 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
         </div>
       )}
       {editPropPerson && (
-        <div onClick={() => backToAddPerson()}>Back to add person</div>
+        <div>
+          <div className="myButton" onClick={() => backToAddPerson()}>
+            Back to add
+          </div>
+          <div>Another information about student</div>
+          <div>latest - {edPPDate?.latest}</div>
+          <div>mainStarting - {edPPDate?.mainStarting}</div>
+          <div>smallStarting - {edPPDate?.smallStarting}</div>
+          <div>mainFollowing - {edPPDate?.mainFollowing}</div>
+          <div>smallFollowing - {edPPDate?.smallFollowing}</div>
+          <div>mainMaking - {edPPDate?.mainMaking}</div>
+          <div>smallMaking - {edPPDate?.smallMaking}</div>
+          <div>mainExplaining - {edPPDate?.mainExplaining}</div>
+          <div>smallExplaining - {edPPDate?.smallExplaining}</div>
+          <div>mainSlave - {edPPDate?.mainSlave}</div>
+          <div>smallSlave - {edPPDate?.smallSlave}</div>
+          {editPropPerson.plan ? (
+            <div>student has planned</div>
+          ) : (
+            <div>student is out of plan</div>
+          )}
+          <div>portners - {editPropPerson.portners}</div>
+        </div>
       )}
     </div>
   )

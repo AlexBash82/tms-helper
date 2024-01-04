@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Route, Link, Routes, useNavigate } from 'react-router-dom'
-
+import './App.css'
 import PersonsList from './Pages/PersonsList/PersonsList'
 import AddInfoByWeek from './Pages/AddInfoByWeek/AddInfoByWeek'
 
@@ -20,7 +20,7 @@ const App: React.FC = () => {
   // }, [navigate])
 
   return (
-    <div>
+    <div className="mainWindow">
       <nav>
         <ul>
           <li>

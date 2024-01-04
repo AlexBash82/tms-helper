@@ -10,7 +10,7 @@ let weeksDB
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1100,
+    width: 1200,
     height: 700,
     webPreferences: {
       nodeIntegration: false,
@@ -211,38 +211,44 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
 
 ipcMain.handle('edit-one-user', async (event, editItem) => {
   try {
-    //нужно получать id для поиска и новые значения - объект
     const { idPerson, newValue } = editItem
 
-    // Получаем оригинальный объект из базы данных
-    const originalItem = await new Promise((resolve, reject) => {
-      usersDB.findOne({ _id: idPerson }, (err, doc) => {
+    const originalPerson = await new Promise((resolve, reject) => {
+      usersDB.findOne({ _id: idPerson }, (err, person) => {
         if (err) {
           reject(err)
         } else {
-          resolve(doc)
+          resolve(person)
         }
       })
     })
 
-    if (!originalItem) {
+    if (!originalPerson) {
       return { success: false, message: 'Item not found' }
     }
 
-    // Создаем обновленный объект с новым значением
-    const updatedObject = Object.assign(originalItem, newValue)
+    const updatedObject = Object.assign(originalPerson, newValue)
 
-    // Обновляем объект в базе данных
-    usersDB.update({ _id: idPerson }, updatedObject, {}, (err, numReplaced) => {
-      if (err) {
-        console.error('edit-one-user error update', err)
-      } else {
-        //console.log('edit-one-user update number', numReplaced)
-      }
+    const updatedPerson = await new Promise((resolve, reject) => {
+      usersDB.update(
+        { _id: idPerson },
+        updatedObject,
+        {},
+        (err, numUpdated) => {
+          if (err) {
+            console.error('edit-one-user error update', err)
+            reject(err)
+          } else {
+            resolve(numUpdated)
+          }
+        }
+      )
     })
-    usersDB.persistence.compactDatafile()
-    // Возвращаем обновленные данные (по вашему усмотрению)
-    return { success: true, message: 'Item updated successfully' }
+
+    if (updatedPerson) {
+      usersDB.persistence.compactDatafile()
+      return { success: true, message: 'Item updated successfully' }
+    }
   } catch (error) {
     console.error('edit-one-user error', error)
     return { success: false, message: 'Error updating item' }

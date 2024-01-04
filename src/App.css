@@ -1,0 +1,27 @@
+.mainWindow {
+  width: 1200px;
+  height: 675px;
+  box-sizing: border-box;
+  border: 1px solid red;
+  overflow: hidden;
+}
+
+.myButton {
+  box-sizing: border-box;
+  margin: 10px 5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  width: 120px;
+  height: 30px;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.myButton:hover {
+  border-color: blue;
+}
+
+.firstNlast {
+  padding: 15px;
+}
