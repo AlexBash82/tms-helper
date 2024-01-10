@@ -310,7 +310,14 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const deleteWeek = async () => {
-    console.log('delete')
+    if (dateOfMeet) {
+      const result = await window.api.deleteOneWeek(dateOfMeet)
+      if (result.success) {
+        alert(result.message)
+        setState(defaultState)
+        setAction(undefined)
+      }
+    }
   }
 
   return (
@@ -426,7 +433,7 @@ const AddInfoByWeek: React.FC = () => {
                   openAndChoose={openAndChoose}
                   openedList={openedList}
                   firstInput={readPointStMC}
-                  firstInputStr="readPointStMC"
+                  task="readPointStMC"
                   getCurrentWeek={getCurrentWeek}
                   action={action}
                   dateOfMeet={dateOfMeet}
@@ -438,10 +445,10 @@ const AddInfoByWeek: React.FC = () => {
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={startPointStMC}
-                    firstInputStr="startPointStMC"
+                    firstTask="startPointStMC"
                     getCurrentWeek={getCurrentWeek}
                     secondInput={startPointAsMC}
-                    secondInputStr="startPointAsMC"
+                    secondTask="startPointAsMC"
                     action={action}
                     dateOfMeet={dateOfMeet}
                   />
@@ -453,10 +460,10 @@ const AddInfoByWeek: React.FC = () => {
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={followPointStMC}
-                    firstInputStr="followPointStMC"
+                    firstTask="followPointStMC"
                     getCurrentWeek={getCurrentWeek}
                     secondInput={followPointAsMC}
-                    secondInputStr="followPointAsMC"
+                    secondTask="followPointAsMC"
                     action={action}
                     dateOfMeet={dateOfMeet}
                   />
@@ -468,10 +475,10 @@ const AddInfoByWeek: React.FC = () => {
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={makePointStMC}
-                    firstInputStr="makePointStMC"
+                    firstTask="makePointStMC"
                     getCurrentWeek={getCurrentWeek}
                     secondInput={makePointAsMC}
-                    secondInputStr="makePointAsMC"
+                    secondTask="makePointAsMC"
                     action={action}
                     dateOfMeet={dateOfMeet}
                   />
@@ -483,10 +490,10 @@ const AddInfoByWeek: React.FC = () => {
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={explainPointStMC}
-                    firstInputStr="explainPointStMC"
+                    firstTask="explainPointStMC"
                     getCurrentWeek={getCurrentWeek}
                     secondInput={explainPointAsMC}
-                    secondInputStr="explainPointAsMC"
+                    secondTask="explainPointAsMC"
                     action={action}
                     dateOfMeet={dateOfMeet}
                   />
@@ -498,7 +505,7 @@ const AddInfoByWeek: React.FC = () => {
                     openAndChoose={openAndChoose}
                     openedList={openedList}
                     firstInput={speechPointStMC}
-                    firstInputStr="speechPointStMC"
+                    task="speechPointStMC"
                     getCurrentWeek={getCurrentWeek}
                     action={action}
                     dateOfMeet={dateOfMeet}
@@ -524,7 +531,7 @@ const AddInfoByWeek: React.FC = () => {
                       openAndChoose={openAndChoose}
                       openedList={openedList}
                       firstInput={readPointStSC}
-                      firstInputStr="readPointStSC"
+                      task="readPointStSC"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
                       dateOfMeet={dateOfMeet}
@@ -536,10 +543,10 @@ const AddInfoByWeek: React.FC = () => {
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={startPointStSC}
-                        firstInputStr="startPointStSC"
+                        firstTask="startPointStSC"
                         getCurrentWeek={getCurrentWeek}
                         secondInput={startPointAsSC}
-                        secondInputStr="startPointAsSC"
+                        secondTask="startPointAsSC"
                         action={action}
                         dateOfMeet={dateOfMeet}
                       />
@@ -551,10 +558,10 @@ const AddInfoByWeek: React.FC = () => {
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={followPointStSC}
-                        firstInputStr="followPointStSC"
+                        firstTask="followPointStSC"
                         getCurrentWeek={getCurrentWeek}
                         secondInput={followPointAsSC}
-                        secondInputStr="followPointAsSC"
+                        secondTask="followPointAsSC"
                         action={action}
                         dateOfMeet={dateOfMeet}
                       />
@@ -566,10 +573,10 @@ const AddInfoByWeek: React.FC = () => {
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={makePointStSC}
-                        firstInputStr="makePointStSC"
+                        firstTask="makePointStSC"
                         getCurrentWeek={getCurrentWeek}
                         secondInput={makePointAsSC}
-                        secondInputStr="makePointAsSC"
+                        secondTask="makePointAsSC"
                         action={action}
                         dateOfMeet={dateOfMeet}
                       />
@@ -581,10 +588,10 @@ const AddInfoByWeek: React.FC = () => {
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={explainPointStSC}
-                        firstInputStr="explainPointStSC"
+                        firstTask="explainPointStSC"
                         getCurrentWeek={getCurrentWeek}
                         secondInput={explainPointAsSC}
-                        secondInputStr="explainPointAsSC"
+                        secondTask="explainPointAsSC"
                         action={action}
                         dateOfMeet={dateOfMeet}
                       />
@@ -596,7 +603,7 @@ const AddInfoByWeek: React.FC = () => {
                         openAndChoose={openAndChoose}
                         openedList={openedList}
                         firstInput={speechPointStSC}
-                        firstInputStr="speechPointStSC"
+                        task="speechPointStSC"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
                         dateOfMeet={dateOfMeet}

@@ -70,6 +70,7 @@ declare global {
       ) => Promise<SuccecWithNewWeek | UnSuccessWithNewWeek>
       getAllWeeks: () => Promise<SuccesResultAllWeeks | UnSuccessResultAllWeeks>
       updateOneWeek: (weekData: object) => Promise<Result>
+      deleteOneWeek: (dateOfMeet: string) => Promise<Result>
     }
   }
 }

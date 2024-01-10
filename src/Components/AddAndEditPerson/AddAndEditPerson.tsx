@@ -33,14 +33,15 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   readAllData,
 }) => {
   const defaultMaleData = {
-    isChairman: false,
-    isSecondChairm: false,
-    isFirstSpeach: false,
+    //isSpeech: false,
+    isEndPrayer: false,
+    isStudyBibleInReader: false,
     isGems: false,
+    isFirstSpeach: false,
     isLiveAndServ: false,
     isStudyBibleIn: false,
-    isStudyBibleInReader: false,
-    isEndPrayer: false,
+    isSecondChairm: false,
+    isChairman: false,
   }
   const defaultFemaleData = {
     isPortnerOnly: false,

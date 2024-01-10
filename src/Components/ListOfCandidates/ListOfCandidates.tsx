@@ -142,7 +142,6 @@ const ListOfCandidates: React.FC<IProps> = ({
 
   return (
     <div ref={listRef} className="listOfCand">
-      <div>{action}</div>
       {action === 'plan'
         ? students.map((student) => (
             <div

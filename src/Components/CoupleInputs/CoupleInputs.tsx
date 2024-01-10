@@ -7,9 +7,9 @@ interface IProps {
   openAndChoose: (arg: string) => void
   openedList: string
   firstInput: string
-  firstInputStr: string
+  firstTask: string
   secondInput: string
-  secondInputStr: string
+  secondTask: string
   getCurrentWeek: () => void
   dateOfMeet: string
   action: 'plan' | 'confirm' | 'update' | undefined
@@ -21,9 +21,9 @@ const CoupleInputs: React.FC<IProps> = (props) => {
     openAndChoose,
     openedList,
     firstInput,
-    firstInputStr,
+    firstTask,
     secondInput,
-    secondInputStr,
+    secondTask,
     getCurrentWeek,
     dateOfMeet,
     action,
@@ -36,7 +36,7 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         openAndChoose={openAndChoose}
         openedList={openedList}
         firstInput={firstInput}
-        firstInputStr={firstInputStr}
+        task={firstTask}
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}
@@ -46,7 +46,7 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         openAndChoose={openAndChoose}
         openedList={openedList}
         firstInput={secondInput}
-        firstInputStr={secondInputStr}
+        task={secondTask}
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}

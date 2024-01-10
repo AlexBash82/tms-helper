@@ -21,6 +21,8 @@ contextBridge.exposeInMainWorld('api', {
   editOneUser: async (data) => ipcRenderer.invoke('edit-one-user', data),
   deleteOneUser: async (lastFirstName) =>
     ipcRenderer.invoke('delete-one-user', lastFirstName),
+  deleteOneWeek: async (dateOfMeet) =>
+    ipcRenderer.invoke('delete-one-week', dateOfMeet),
 
   writeNewWeek: async (weekData) =>
     ipcRenderer.invoke('write-new-week', weekData),
@@ -29,4 +31,6 @@ contextBridge.exposeInMainWorld('api', {
   getAllWeeks: async () => ipcRenderer.invoke('get-all-weeks'),
   updateOneWeek: async (weekData) =>
     ipcRenderer.invoke('update-one-week', weekData),
+  deleteOneWeek: async (dateOfMeet) =>
+    ipcRenderer.invoke('delete-one-week', dateOfMeet),
 })

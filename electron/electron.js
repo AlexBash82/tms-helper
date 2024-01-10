@@ -350,6 +350,7 @@ ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
 //-----------------------------------------------------------------------------------
 
 //------------------------WRITE-NEW-WEEK---------------------------------------------
+
 ipcMain.handle('write-new-week', async (event, weekData) => {
   try {
     const { startWeekTSt } = weekData
@@ -502,5 +503,28 @@ ipcMain.handle('update-one-week', async (event, weekData) => {
   } catch (error) {
     console.error('update-one-week error', error)
     return { success: false, message: 'Error updating week' }
+  }
+})
+
+//------------------------DELITE-ONE-WEEK--------------------------------------------
+
+ipcMain.handle('delete-one-week', async (event, dateOfMeet) => {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      weeksDB.remove({ dateOfMeet }, {}, (err, numRemoved) => {
+        if (err) {
+          reject(err)
+        } else if (numRemoved > 0) {
+          resolve({ success: true, message: 'Week deleted successfully' })
+        } else {
+          resolve({ success: false, message: 'Week not found' })
+        }
+      })
+    })
+    weeksDB.persistence.compactDatafile()
+    return result
+  } catch (error) {
+    console.error('delete-one-week error', error)
+    return { success: false, message: 'Error deleting week' }
   }
 })

@@ -74,17 +74,17 @@ const PersonsList: React.FC = () => {
         <h1>All users:</h1>
         <div className="overflow">
           {allUsers.map((user, index) => (
-            <div>
-              <div className="df" key={index}>
-                <div className="df g-2 firstNlast">
+            <div key={index}>
+              <div className="df">
+                <div className="df g-1 firstNlast">
                   <div className="df">
                     <div>{user.lastFirstName}</div>
                   </div>
                   <div className="df">
-                    <div>{user.gender}</div>
+                    {user.gender === 'Male' ? <div>M</div> : <div>F</div>}
                   </div>
                 </div>
-                <div className="df g-2">
+                <div className="df g-1">
                   <div
                     className="myButton"
                     onClick={() => setEditablePerson(user)}
@@ -103,13 +103,12 @@ const PersonsList: React.FC = () => {
                 </div>
               </div>
               {showConfirm && user.lastFirstName === deletingName ? (
-                <div className="df g-1">
-                  <div>
-                    Inter '{genCode}' for delete user '{user.lastFirstName}'
-                    from DB
+                <div className="df g-1 deleteForm">
+                  <div className="textDelete">
+                    For delete - inter code: '{genCode}'
                   </div>
                   <input
-                    className="w-1-5"
+                    className="inputCode"
                     placeholder="-/-/-"
                     type="text"
                     maxLength={3}

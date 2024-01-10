@@ -8,7 +8,7 @@ interface IProps {
   openAndChoose: (arg: string) => void
   openedList: string
   firstInput: string
-  firstInputStr: string
+  task: string
   getCurrentWeek: () => void
   dateOfMeet: string
   action: 'plan' | 'confirm' | 'update' | undefined
@@ -20,7 +20,7 @@ const SingleInput: React.FC<IProps> = (props) => {
     openAndChoose,
     openedList,
     firstInput,
-    firstInputStr,
+    task,
     getCurrentWeek,
     dateOfMeet,
     action,
@@ -39,14 +39,33 @@ const SingleInput: React.FC<IProps> = (props) => {
   }, [firstInput])
 
   const searchByLetter = async (inputLatters: string) => {
-    if (inputLatters) {
+    if (inputLatters.length > 0) {
       const students = await window.api.getUsersByLastname(inputLatters)
+
       if (students.success) {
-        setFoundByLetter(students.data)
+        let filtered = students.data
+
+        switch (task.slice(0, -9)) {
+          case 'read':
+            filtered = students.data.filter(
+              (student) => student.gender === 'Male'
+            )
+            break
+          // case 'speech':
+          //   filtered = students.data.filter(
+          //     (student) => student. === ''
+          //   )
+          //   break
+        }
+        console.log('filtered', filtered)
+        setFoundByLetter(filtered)
       } else {
         console.error('Error searching users by lastname:', students.message)
       }
+    } else {
+      setFoundByLetter([])
     }
+
     setInputValue(inputLatters)
   }
 
@@ -64,7 +83,7 @@ const SingleInput: React.FC<IProps> = (props) => {
     <div className="inpDiv">
       <div className="inpTitle">{title}</div>
       {action === 'plan' ? (
-        <div className="inp" onClick={() => openAndChoose(firstInputStr)}>
+        <div className="inp" onClick={() => openAndChoose(task)}>
           {firstInput}
         </div>
       ) : (
@@ -74,22 +93,23 @@ const SingleInput: React.FC<IProps> = (props) => {
           type="text"
           value={inputValue}
           onChange={(e) => searchByLetter(e.target.value)}
-          onFocus={() => focusOrBlur('focus', firstInputStr)}
+          onFocus={() => focusOrBlur('focus', task)}
           onBlur={() => focusOrBlur('blur', '')}
         />
       )}
-      {openedList === firstInputStr && (
-        <ListOfCandidates
-          openAndChoose={openAndChoose}
-          presentValue={firstInput}
-          task={firstInputStr}
-          getCurrentWeek={getCurrentWeek}
-          action={action}
-          dateOfMeet={dateOfMeet}
-          suitsStudents={foundByLetter}
-          inputIs={inputIs}
-        />
-      )}
+      {openedList === task &&
+        (action === 'plan' || foundByLetter.length > 0) && (
+          <ListOfCandidates
+            openAndChoose={openAndChoose}
+            presentValue={firstInput}
+            task={task}
+            getCurrentWeek={getCurrentWeek}
+            action={action}
+            dateOfMeet={dateOfMeet}
+            suitsStudents={foundByLetter}
+            inputIs={inputIs}
+          />
+        )}
     </div>
   )
 }
