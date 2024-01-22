@@ -64,95 +64,8 @@ export interface IStudent {
   chairman: number | undefined
 }
 
-export interface IMaleDB {
-  lastFirstName: string
-  gender: string
-
-  isChairman: boolean
-  isSecondChairm: boolean
-  isFirstSpeach: boolean
-  isGems: boolean
-  isLiveAndServ: boolean
-  isStudyBibleIn: boolean
-  isStudyBibleInReader: boolean
-  isEndPrayer: boolean
-  isSpeech: boolean
-  dontUse: boolean
-  comments: string
-
-  plan: false
-  chairman: number
-  secondChairm: number
-  firstSpeach: number
-  gems: number
-  mainRead: number
-  smallRead: number
-  mainStarting: number
-  smallStarting: number
-  mainFollowing: number
-  smallFollowing: number
-  mainMaking: number
-  smallMaking: number
-  mainExplaining: number
-  smallExplaining: number
-  mainSpeech: number
-  smallSpeech: number
-  mainSlave: number
-  smallSlave: number
-  portners: Array<string>
-  liveAndServ: number
-  studyBibleIn: number
-  studyBibleInReader: number
-  endPrayer: number
-  latest: number
-
-  _id: string | undefined
-}
-
-export interface IFemaleDB {
-  lastFirstName: string
-  gender: string
-  isPortnerOnly: boolean
-  isSecondClassOnly: boolean
-  isNotBibleStudy: boolean
-  dontUse: boolean
-  comments: string
-
-  plan: false
-  mainStarting: number
-  smallStarting: number
-  mainFollowing: number
-  smallFollowing: number
-  mainMaking: number
-  smallMaking: number
-  mainExplaining: number
-  smallExplaining: number
-  mainSlave: number
-  smallSlave: number
-  portners: Array<string>
-  latest: number
-
-  _id: string | undefined
-}
-export interface IMaleData {
-  isChairman: boolean
-  isSecondChairm: boolean
-  isFirstSpeach: boolean
-  isGems: boolean
-  isLiveAndServ: boolean
-  isStudyBibleIn: boolean
-  isStudyBibleInReader: boolean
-  isEndPrayer: boolean
-  isSpeech: boolean
-}
-
-export interface IFemaleData {
-  isPortnerOnly: boolean
-  isSecondClassOnly: boolean
-  isNotBibleStudy: boolean
-}
-
 export interface IWeek {
+  _id: string
   startWeekTSt: number
   dateOfMeet: string
   isPlanned: boolean
@@ -166,24 +79,117 @@ export interface IWeek {
   explainingPointChBx: boolean
   speechPointChBx: boolean
 
-  readPointStMC: string
-  startPointStMC: string
-  startPointAsMC: string
-  followPointStMC: string
-  followPointAsMC: string
-  makePointStMC: string
-  makePointAsMC: string
-  explainPointStMC: string
-  explainPointAsMC: string
-  speechPointStMC: string
-  readPointStSC: string
-  startPointStSC: string
-  startPointAsSC: string
-  followPointStSC: string
-  followPointAsSC: string
-  makePointStSC: string
-  makePointAsSC: string
-  explainPointStSC: string
-  explainPointAsSC: string
-  speechPointStSC: string
+  readPointStMC: string | undefined
+  readPointStSC: string | undefined
+
+  startPointStMC: string | undefined
+  startPointAsMC: string | undefined
+  startPointStSC: string | undefined
+  startPointAsSC: string | undefined
+
+  followPointStMC: string | undefined
+  followPointAsMC: string | undefined
+  followPointStSC: string | undefined
+  followPointAsSC: string | undefined
+
+  makePointStMC: string | undefined
+  makePointAsMC: string | undefined
+  makePointStSC: string | undefined
+  makePointAsSC: string | undefined
+
+  explainPointStMC: string | undefined
+  explainPointAsMC: string | undefined
+  explainPointStSC: string | undefined
+  explainPointAsSC: string | undefined
+
+  speechPointStMC: string | undefined
+  speechPointStSC: string | undefined
 }
+
+// export interface IMaleDB {
+//   lastFirstName: string
+//   gender: string
+
+//   isChairman: boolean
+//   isSecondChairm: boolean
+//   isFirstSpeach: boolean
+//   isGems: boolean
+//   isLiveAndServ: boolean
+//   isStudyBibleIn: boolean
+//   isStudyBibleInReader: boolean
+//   isEndPrayer: boolean
+//   isSpeech: boolean
+//   dontUse: boolean
+//   comments: string
+
+//   plan: false
+//   chairman: number
+//   secondChairm: number
+//   firstSpeach: number
+//   gems: number
+//   mainRead: number
+//   smallRead: number
+//   mainStarting: number
+//   smallStarting: number
+//   mainFollowing: number
+//   smallFollowing: number
+//   mainMaking: number
+//   smallMaking: number
+//   mainExplaining: number
+//   smallExplaining: number
+//   mainSpeech: number
+//   smallSpeech: number
+//   mainSlave: number
+//   smallSlave: number
+//   portners: Array<string>
+//   liveAndServ: number
+//   studyBibleIn: number
+//   studyBibleInReader: number
+//   endPrayer: number
+//   latest: number
+
+//   _id: string | undefined
+// }
+
+// export interface IFemaleDB {
+//   lastFirstName: string
+//   gender: string
+//   isPortnerOnly: boolean
+//   isSecondClassOnly: boolean
+//   isNotBibleStudy: boolean
+//   dontUse: boolean
+//   comments: string
+
+//   plan: false
+//   mainStarting: number
+//   smallStarting: number
+//   mainFollowing: number
+//   smallFollowing: number
+//   mainMaking: number
+//   smallMaking: number
+//   mainExplaining: number
+//   smallExplaining: number
+//   mainSlave: number
+//   smallSlave: number
+//   portners: Array<string>
+//   latest: number
+
+//   _id: string | undefined
+// }
+// export interface IMaleData {
+//   isChairman: boolean
+//   isSecondChairm: boolean
+//   isFirstSpeach: boolean
+//   isGems: boolean
+//   isLiveAndServ: boolean
+//   isStudyBibleIn: boolean
+//   isStudyBibleInReader: boolean
+//   isEndPrayer: boolean
+//   isSpeech: boolean
+// }
+
+// export interface IFemaleData {
+//   isPortnerOnly: boolean
+//   isSecondClassOnly: boolean
+//   isNotBibleStudy: boolean
+// }
