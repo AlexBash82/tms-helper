@@ -14,9 +14,9 @@ const PersonsList: React.FC = () => {
   const [inputCode, setInputCode] = useState('')
   const [editablePerson, setEditablePerson] = useState<IStudent | undefined>()
 
-  const readAllData = async () => {
+  const getAllStudents = async () => {
     try {
-      const allStudents = await window.api.getAllUsers()
+      const allStudents = await window.api.getAllStudents()
       if (allStudents.success) {
         setAllUsers(allStudents.data)
         //console.log('allStudents', allStudents)
@@ -27,7 +27,7 @@ const PersonsList: React.FC = () => {
   }
 
   useEffect(() => {
-    readAllData()
+    getAllStudents()
   }, [])
 
   const deletePerson = async (searchLFName: string) => {
@@ -37,7 +37,7 @@ const PersonsList: React.FC = () => {
         if (result.success) {
           // добавить алерт об успешном результате
           setEditablePerson(undefined)
-          readAllData() //заново читаем весь список
+          getAllStudents() //заново читаем весь список
         } else {
           // Пользователь не найден
           console.error(result.message)
@@ -133,7 +133,7 @@ const PersonsList: React.FC = () => {
       <div className="">
         <AddAndEditPerson
           PropPerson={editablePerson}
-          readAllData={readAllData}
+          getAllStudents={getAllStudents}
         />
       </div>
     </div>

@@ -130,9 +130,9 @@ ipcMain.handle('write-one-user', async (event, personData) => {
   }
 })
 
-//------------------------GET-ALL-USERS---------------------------------------------
+//------------------------GET-ALL-STUDENT---------------------------------------------
 
-ipcMain.handle('get-all-users', async (event) => {
+ipcMain.handle('get-all-students', async (event) => {
   try {
     const allStudents = await new Promise((resolve, reject) => {
       usersDB.find({}, (err, docs) => {

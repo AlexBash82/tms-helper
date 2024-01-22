@@ -40,12 +40,12 @@ interface maleWithDate extends femaleWithDate {
 
 interface IProps {
   PropPerson?: IMaleDB | IFemaleDB
-  readAllData: () => void
+  getAllStudents: () => void
 }
 
 const AddAndEditPropPerson: React.FC<IProps> = ({
   PropPerson,
-  readAllData,
+  getAllStudents,
 }) => {
   const defaultMaleData = {
     isSpeech: false,
@@ -281,7 +281,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
         alert(result.message)
       }
       setClearState()
-      readAllData() //заново читаем весь список
+      getAllStudents() //заново читаем весь список
     } catch (error) {
       console.log('Error writing to database:', error)
     }
@@ -313,7 +313,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
       await window.api
         .editOneUser({ idPerson, newValue })
         .then((result) => {
-          readAllData() //обновляем список после внесения изменений.
+          getAllStudents() //обновляем список после внесения изменений.
           alert(result.message)
         })
         .catch((error) => {

@@ -60,7 +60,7 @@ declare global {
       send: (channel: string, data?: any) => void
       receive: (channel: string, func: (...args: any[]) => void) => void
 
-      getAllUsers: () => Promise<ResultStudents>
+      getAllStudents: () => Promise<ResultStudents>
       //обновить типы функций что ниже
       writeOneUser: (personData: object) => Promise<Result>
       getUsersByLastname: (
