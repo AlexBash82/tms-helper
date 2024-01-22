@@ -59,6 +59,7 @@ export interface IMaleDB {
   isStudyBibleIn: boolean
   isStudyBibleInReader: boolean
   isEndPrayer: boolean
+  isSpeech: boolean
   dontUse: boolean
   comments: string
 
@@ -125,6 +126,7 @@ export interface IMaleData {
   isStudyBibleIn: boolean
   isStudyBibleInReader: boolean
   isEndPrayer: boolean
+  isSpeech: boolean
 }
 
 export interface IFemaleData {

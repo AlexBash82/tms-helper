@@ -9,7 +9,7 @@ import { IFemaleDB, IFemaleData, IMaleDB, IMaleData } from '../../interfaces'
 //редактирование: после введения информации искать по ID и изменять (id т.к. имя можно поменять)
 //исключить возможность редактирования если студент.план = тру
 
-interface studentWithDate {
+interface femaleWithDate {
   mainStarting: string
   smallStarting: string
   mainFollowing: string
@@ -23,6 +23,21 @@ interface studentWithDate {
   latest: string
 }
 
+interface maleWithDate extends femaleWithDate {
+  chairman: string
+  secondChairm: string
+  firstSpeach: string
+  gems: string
+  mainRead: string
+  smallRead: string
+  mainSpeech: string
+  smallSpeech: string
+  liveAndServ: string
+  studyBibleIn: string
+  studyBibleInReader: string
+  endPrayer: string
+}
+
 interface IProps {
   PropPerson?: IMaleDB | IFemaleDB
   readAllData: () => void
@@ -33,7 +48,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   readAllData,
 }) => {
   const defaultMaleData = {
-    //isSpeech: false,
+    isSpeech: false,
     isEndPrayer: false,
     isStudyBibleInReader: false,
     isGems: false,
@@ -59,15 +74,16 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     []
   )
   const [editPropPerson, setEditPropPerson] = useState<IMaleDB | IFemaleDB>()
-  const [edPPDate, setEdPPDate] = useState<studentWithDate>()
+
+  //храним даные студента с преобразованными датами в формат "мм дд гггг"
+  const [edPPDate, setEdPPDate] = useState<maleWithDate | femaleWithDate>()
 
   useEffect(() => {
-    setEditPropPerson(PropPerson)
-    if (PropPerson?.gender === 'Male') {
-      const student = {}
-    }
-    if (PropPerson?.gender === 'Female') {
-      const student = {
+    setEditPropPerson(PropPerson) //закидываем полученного в пропсах студента в состояние
+    //определяем пол и преобразуем даты в формат "мм дд гггг"
+
+    if (PropPerson) {
+      const student: any = {
         mainStarting: stampToDate(PropPerson.mainStarting),
         smallStarting: stampToDate(PropPerson.smallStarting),
         mainFollowing: stampToDate(PropPerson.mainFollowing),
@@ -80,7 +96,26 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
         smallSlave: stampToDate(PropPerson.smallSlave),
         latest: stampToDate(PropPerson.latest),
       }
-      setEdPPDate(student)
+
+      if (PropPerson.gender === 'Male') {
+        const person = PropPerson as IMaleDB
+        student.chairman = stampToDate(person.chairman)
+        student.secondChairm = stampToDate(person.secondChairm)
+        student.firstSpeach = stampToDate(person.firstSpeach)
+        student.gems = stampToDate(person.gems)
+        student.mainRead = stampToDate(person.mainRead)
+        student.smallRead = stampToDate(person.smallRead)
+        student.mainSpeech = stampToDate(person.mainSpeech)
+        student.smallSpeech = stampToDate(person.smallSpeech)
+        student.liveAndServ = stampToDate(person.liveAndServ)
+        student.studyBibleIn = stampToDate(person.studyBibleIn)
+        student.studyBibleInReader = stampToDate(person.studyBibleInReader)
+        student.endPrayer = stampToDate(person.endPrayer)
+        setEdPPDate(student)
+      }
+      if (PropPerson.gender === 'Female') {
+        setEdPPDate(student)
+      }
     }
   }, [PropPerson])
 
@@ -125,6 +160,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           isStudyBibleIn: editP.isStudyBibleIn,
           isStudyBibleInReader: editP.isStudyBibleInReader,
           isEndPrayer: editP.isEndPrayer,
+          isSpeech: editP.isSpeech,
         }
         const result = Object.assign(editPropPerson, maleData)
         setMaleData(result)
@@ -179,6 +215,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           isStudyBibleIn: maleData.isStudyBibleIn,
           isStudyBibleInReader: maleData.isStudyBibleInReader,
           isEndPrayer: maleData.isEndPrayer,
+          isSpeech: maleData.isSpeech,
           dontUse: dontUse,
           comments: comments,
 
@@ -210,7 +247,8 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
 
           _id: undefined,
         }
-        await window.api.writeOneUser(personData)
+        const result = await window.api.writeOneUser(personData)
+        alert(result.message)
       }
 
       if (gender === 'Female' && inputLFName !== '') {
@@ -240,7 +278,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           _id: undefined,
         }
         const result = await window.api.writeOneUser(personData)
-        console.log('result of write one user', result)
+        alert(result.message)
       }
       setClearState()
       readAllData() //заново читаем весь список
@@ -366,7 +404,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           />
           {editPropPerson ? (
             <div className="myButton" onClick={() => editPerson()}>
-              Edit person
+              Confirm edit
             </div>
           ) : inputLFName === foundArrName[0]?.lastFirstName ? (
             <div>That person is already exist</div>
@@ -377,9 +415,11 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           )}
         </div>
       )}
-      {foundArrName.length !== 0 && (
+      {(foundArrName.length === 1 &&
+        foundArrName[0].lastFirstName !== inputLFName) ||
+      foundArrName.length > 1 ? (
         <div>
-          <div>I found in DB: </div>
+          <div>I've found in DB: </div>
           {foundArrName.map(
             (student, index) =>
               student && (
@@ -395,12 +435,14 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
               )
           )}
         </div>
+      ) : (
+        false
       )}
-      {editPropPerson && (
+      <div className="myButton" onClick={() => backToAddPerson()}>
+        Back to add
+      </div>
+      {editPropPerson?.lastFirstName === inputLFName && (
         <div>
-          <div className="myButton" onClick={() => backToAddPerson()}>
-            Back to add
-          </div>
           <div>Another information about student</div>
           <div>latest - {edPPDate?.latest}</div>
           <div>mainStarting - {edPPDate?.mainStarting}</div>
@@ -416,9 +458,17 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           {editPropPerson.plan ? (
             <div>student has planned</div>
           ) : (
-            <div>student is out of plan</div>
+            <div>student is open to plan</div>
           )}
           <div>portners - {editPropPerson.portners}</div>
+          {/* {editPropPerson.isChairman && (
+            <div>chairman - {edPPDate?.chairman}</div>
+          )} */}
+          secondChairm: defoltStamp, firstSpeach: defoltStamp, gems:
+          defoltStamp, mainRead: defoltStamp, smallRead: defoltStamp,
+          mainSpeech: defoltStamp, smallSpeech: defoltStamp, liveAndServ:
+          defoltStamp, studyBibleIn: defoltStamp, studyBibleInReader:
+          defoltStamp, endPrayer: defoltStamp,
         </div>
       )}
     </div>

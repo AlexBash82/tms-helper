@@ -16,6 +16,7 @@ const InputMale: React.FC<IProps> = ({ maleData, setMaleData }) => {
     isStudyBibleIn,
     isStudyBibleInReader,
     isEndPrayer,
+    isSpeech,
   } = maleData
 
   return (
@@ -25,6 +26,17 @@ const InputMale: React.FC<IProps> = ({ maleData, setMaleData }) => {
         checked={isEndPrayer}
         onChange={(e) =>
           setMaleData({ ...maleData, isEndPrayer: !isEndPrayer })
+        }
+      />
+      -Study speech
+      <input
+        type="checkbox"
+        checked={isSpeech}
+        onChange={(e) =>
+          setMaleData({
+            ...maleData,
+            isSpeech: !isSpeech,
+          })
         }
       />
       -Prayer in the end
