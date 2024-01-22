@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
-import { IFemaleDB, IMaleDB, IWeek } from './interfaces'
+import { IStudent, IWeek } from './interfaces'
 
 type Result = {
   success: boolean
@@ -42,6 +42,17 @@ type UnSuccessMalesOrFemales = {
   success: false
   message: string
 }
+//новый формат типов
+type SuccessStudents = {
+  success: true
+  message: string
+  data: IStudent[]
+}
+type FailureStudents = {
+  success: false
+  message: string
+}
+type ResultStudents = SuccessStudents | FailureStudents
 
 declare global {
   interface Window {
@@ -49,8 +60,9 @@ declare global {
       send: (channel: string, data?: any) => void
       receive: (channel: string, func: (...args: any[]) => void) => void
 
+      getAllUsers: () => Promise<ResultStudents>
+      //обновить типы функций что ниже
       writeOneUser: (personData: object) => Promise<Result>
-      getAllUsers: () => Promise<Array<IMaleDB | IFemaleDB>>
       getUsersByLastname: (
         lastFirstName: string
       ) => Promise<SuccessMalesOrFemales | UnSuccessMalesOrFemales>

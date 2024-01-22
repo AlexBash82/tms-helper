@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import AddAndEditPerson from '../../Components/AddAndEditPerson/AddAndEditPerson'
-import { IFemaleDB, IMaleDB } from '../../interfaces'
+//import { IFemaleDB, IMaleDB } from '../../interfaces'
+import { IStudent } from '../../interfaces'
 import './PersonsList.css'
 
 //добавить фильтры для поиска, например кто и когда выступал, м ж,
 
 const PersonsList: React.FC = () => {
-  const [allUsers, setAllUsers] = useState<Array<IMaleDB | IFemaleDB>>([])
+  const [allUsers, setAllUsers] = useState<Array<IStudent>>([])
   const [showConfirm, setShowConfirm] = useState(false)
   const [deletingName, setDeletingName] = useState('')
   const [genCode, setGenCode] = useState('')
   const [inputCode, setInputCode] = useState('')
-  const [editablePerson, setEditablePerson] = useState<
-    IMaleDB | IFemaleDB | undefined
-  >()
+  const [editablePerson, setEditablePerson] = useState<IStudent | undefined>()
 
   const readAllData = async () => {
     try {
-      const allData = await window.api.getAllUsers()
-      setAllUsers(allData)
-      //console.log('allData', allData)
+      const allStudents = await window.api.getAllUsers()
+      if (allStudents.success) {
+        setAllUsers(allStudents.data)
+        //console.log('allStudents', allStudents)
+      }
     } catch (err) {
       //console.log('Error reading all data:', err)
     }

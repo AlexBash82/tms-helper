@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld('api', {
 
   writeOneUser: async (personData) =>
     ipcRenderer.invoke('write-one-user', personData),
-  getAllUsers: async () => ipcRenderer.invoke('read-all-users'),
+  getAllUsers: async () => ipcRenderer.invoke('get-all-users'),
   getUsersByLastname: async (data) =>
     ipcRenderer.invoke('get-sorted-users-by-lastname', data),
   getUsersByLatest: async (addParam) =>

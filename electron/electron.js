@@ -130,11 +130,11 @@ ipcMain.handle('write-one-user', async (event, personData) => {
   }
 })
 
-//------------------------READ-ALL-USERS---------------------------------------------
+//------------------------GET-ALL-USERS---------------------------------------------
 
-ipcMain.handle('read-all-users', async (event) => {
+ipcMain.handle('get-all-users', async (event) => {
   try {
-    const allDocs = await new Promise((resolve, reject) => {
+    const allStudents = await new Promise((resolve, reject) => {
       usersDB.find({}, (err, docs) => {
         if (err) {
           reject(err)
@@ -145,12 +145,14 @@ ipcMain.handle('read-all-users', async (event) => {
     })
 
     // Сбрасываем кэш базы данных
-    usersDB.loadDatabase()
+    //usersDB.loadDatabase()
 
-    return allDocs
+    if (allStudent) {
+      return { success: true, message: '', data: allStudents }
+    }
   } catch (error) {
-    console.error('read-all-users error', error)
-    return []
+    //console.error('read-all-users error', error)
+    return { success: false, message: 'Error with geting all users' }
   }
 })
 
