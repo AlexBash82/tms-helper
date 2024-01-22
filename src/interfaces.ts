@@ -1,56 +1,73 @@
-export interface IPersonDB {
+export interface IStudent {
+  _id: string
   lastFirstName: string
   gender: string
-
-  isChairman?: boolean
-  isSecondChairm?: boolean
-  isFirstSpeach?: boolean
-  isGems?: boolean
-  isLiveAndServ?: boolean
-  isStudyBibleIn?: boolean
-  isStudyBibleInReader?: boolean
-  isEndPrayer?: boolean
-  isPortnerOnly?: boolean
-  isSecondClassOnly?: boolean
-  isNotBibleStudy?: boolean
-
   dontUse: boolean
   comments: string
-
   plan: false
-
-  chairman?: number
-  secondChairm?: number
-  firstSpeach?: number
-  gems?: number
-  mainRead?: number
-  smallRead?: number
-  mainSpeech?: number
-  smallSpeech?: number
-  mainSlave?: number
-  liveAndServ?: number
-  studyBibleIn?: number
-  studyBibleInReader?: number
-  endPrayer?: number
-
-  mainStarting: number
-  smallStarting: number
-  mainFollowing: number
-  smallFollowing: number
-  mainMaking: number
-  smallMaking: number
-  mainExplaining: number
-  smallExplaining: number
-  smallSlave: number
   portners: Array<string>
   latest: number
 
-  _id: string
+  isPortnerOnly: boolean
+  isSecondClassOnly: boolean
+  isNotBibleStudy: boolean
+
+  mainSlave: number | undefined
+  smallSlave: number | undefined
+
+  mainStarting: number | undefined
+  smallStarting: number | undefined
+
+  mainFollowing: number | undefined
+  smallFollowing: number | undefined
+
+  mainMaking: number | undefined
+  smallMaking: number | undefined
+
+  mainExplaining: number | undefined
+  smallExplaining: number | undefined
+
+  isExplainSpeech: boolean
+  mainExplainSpeech: number | undefined
+  smallExplaiSpeech: number | undefined
+
+  isRead: boolean
+  mainRead: number | undefined
+  smallRead: number | undefined
+
+  isSpeech: boolean
+  mainSpeech: number | undefined
+  smallSpeech: number | undefined
+
+  isEndPrayer: boolean
+  endPrayer: number | undefined
+
+  isStudyBibleInReader: boolean
+  studyBibleInReader: number | undefined
+
+  isGems: boolean
+  gems: number | undefined
+
+  isLiveAndServ: boolean
+  liveAndServ: number | undefined
+
+  isFirstSpeach: boolean
+  firstSpeach: number | undefined
+
+  isStudyBibleIn: boolean
+  studyBibleIn: number | undefined
+
+  isSecondChairm: boolean
+  secondChairm: number | undefined
+
+  isChairman: boolean
+  chairman: number | undefined
 }
 
 export interface IMaleDB {
   lastFirstName: string
   gender: string
+
   isChairman: boolean
   isSecondChairm: boolean
   isFirstSpeach: boolean
