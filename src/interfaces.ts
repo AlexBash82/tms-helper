@@ -65,6 +65,58 @@ export interface IStudent {
   chairman: number | undefined
 }
 
+export interface IStudentCheckBox {
+  isChairman: boolean
+  isSecondChairm: boolean
+  isFirstSpeach: boolean
+  isGems: boolean
+  isLiveAndServ: boolean
+  isStudyBibleIn: boolean
+  isStudyBibleInReader: boolean
+  isEndPrayer: boolean
+  isSpeech: boolean
+  isPortnerOnly: boolean
+  isSecondClassOnly: boolean
+  isNotBibleStudy: boolean
+}
+
+export interface IStudentDateToString {
+  latest: string
+
+  mainSlave: string
+  smallSlave: string
+
+  mainStarting: string
+  smallStarting: string
+
+  mainFollowing: string
+  smallFollowing: string
+
+  mainMaking: string
+  smallMaking: string
+
+  mainExplaining: string
+  smallExplaining: string
+
+  mainExplainSpeech: string
+  smallExplaiSpeech: string
+
+  mainRead: string
+  smallRead: string
+
+  mainSpeech: string
+  smallSpeech: string
+
+  endPrayer: string
+  studyBibleInReader: string
+  gems: string
+  liveAndServ: string
+  firstSpeach: string
+  studyBibleIn: string
+  secondChairm: string
+  chairman: string
+}
+
 export interface IWeek {
   _id: string
   startWeekTSt: number
@@ -176,21 +228,4 @@ export interface IWeek {
 //   latest: number
 
 //   _id: string | undefined
-// }
-// export interface IMaleData {
-//   isChairman: boolean
-//   isSecondChairm: boolean
-//   isFirstSpeach: boolean
-//   isGems: boolean
-//   isLiveAndServ: boolean
-//   isStudyBibleIn: boolean
-//   isStudyBibleInReader: boolean
-//   isEndPrayer: boolean
-//   isSpeech: boolean
-// }
-
-// export interface IFemaleData {
-//   isPortnerOnly: boolean
-//   isSecondClassOnly: boolean
-//   isNotBibleStudy: boolean
 // }

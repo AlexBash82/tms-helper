@@ -1,50 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import InputMale from './InputMale'
 import InputFemale from './InputFemale'
-import { IStudent } from '../../interfaces'
+import {
+  IStudent,
+  IStudentDateToString,
+  IStudentCheckBox,
+} from '../../interfaces'
 
 //исключить возможность добавления одноименных пользователей--ok--------------
 //исключить возможность пробела в начале, в конце, и более одного между-----
 //отключить кнопку save если инпут пуст
 //редактирование: после введения информации искать по ID и изменять (id т.к. имя можно поменять)
 //исключить возможность редактирования если студент.план = тру
-
-interface IStudentDateToString {
-  latest: string
-
-  mainSlave: string
-  smallSlave: string
-
-  mainStarting: string
-  smallStarting: string
-
-  mainFollowing: string
-  smallFollowing: string
-
-  mainMaking: string
-  smallMaking: string
-
-  mainExplaining: string
-  smallExplaining: string
-
-  mainExplainSpeech: string
-  smallExplaiSpeech: string
-
-  mainRead: string
-  smallRead: string
-
-  mainSpeech: string
-  smallSpeech: string
-
-  endPrayer: string
-  studyBibleInReader: string
-  gems: string
-  liveAndServ: string
-  firstSpeach: string
-  studyBibleIn: string
-  secondChairm: string
-  chairman: string
-}
 
 interface IProps {
   PropPerson?: IStudent
@@ -55,7 +22,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   PropPerson,
   getAllStudents,
 }) => {
-  const defaultStudentData = {
+  const defaultStudentChBx: IStudentCheckBox = {
     isSpeech: false,
     isEndPrayer: false,
     isStudyBibleInReader: false,
@@ -70,8 +37,10 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     isNotBibleStudy: false,
   }
 
-  const [maleData, setMaleData] = useState<IMaleData>(defaultMaleData)
-  const [femaleData, setFemaleData] = useState<IFemaleData>(defaultFemaleData)
+  //const [maleData, setMaleData] = useState<IMaleData>(defaultMaleData)
+  //const [femaleData, setFemaleData] = useState<IFemaleData>(defaultFemaleData)
+  const [inputCheckBox, setInputCheckBox] =
+    useState<IStudentCheckBox>(defaultStudentChBx)
   const [inputLFName, setInputLFName] = useState('')
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
@@ -82,7 +51,8 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   const [editPropPerson, setEditPropPerson] = useState<IStudent>()
 
   //храним даные студента с преобразованными датами в формат "мм дд гггг"
-  const [edPPDate, setEdPPDate] = useState<maleWithDate | femaleWithDate>()
+  const [studentDateToString, setStudentDateToString] =
+    useState<IStudentDateToString>()
 
   useEffect(() => {
     setEditPropPerson(PropPerson) //закидываем полученного в пропсах студента в состояние
@@ -117,10 +87,10 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
         student.studyBibleIn = stampToDate(person.studyBibleIn)
         student.studyBibleInReader = stampToDate(person.studyBibleInReader)
         student.endPrayer = stampToDate(person.endPrayer)
-        setEdPPDate(student)
+        setStudentDateToString(student)
       }
       if (PropPerson.gender === 'Female') {
-        setEdPPDate(student)
+        setStudentDateToString(student)
       }
     }
   }, [PropPerson])
@@ -449,17 +419,17 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
       {editPropPerson?.lastFirstName === inputLFName && (
         <div>
           <div>Another information about student</div>
-          <div>latest - {edPPDate?.latest}</div>
-          <div>mainStarting - {edPPDate?.mainStarting}</div>
-          <div>smallStarting - {edPPDate?.smallStarting}</div>
-          <div>mainFollowing - {edPPDate?.mainFollowing}</div>
-          <div>smallFollowing - {edPPDate?.smallFollowing}</div>
-          <div>mainMaking - {edPPDate?.mainMaking}</div>
-          <div>smallMaking - {edPPDate?.smallMaking}</div>
-          <div>mainExplaining - {edPPDate?.mainExplaining}</div>
-          <div>smallExplaining - {edPPDate?.smallExplaining}</div>
-          <div>mainSlave - {edPPDate?.mainSlave}</div>
-          <div>smallSlave - {edPPDate?.smallSlave}</div>
+          <div>latest - {studentDateToString?.latest}</div>
+          <div>mainStarting - {studentDateToString?.mainStarting}</div>
+          <div>smallStarting - {studentDateToString?.smallStarting}</div>
+          <div>mainFollowing - {studentDateToString?.mainFollowing}</div>
+          <div>smallFollowing - {studentDateToString?.smallFollowing}</div>
+          <div>mainMaking - {studentDateToString?.mainMaking}</div>
+          <div>smallMaking - {studentDateToString?.smallMaking}</div>
+          <div>mainExplaining - {studentDateToString?.mainExplaining}</div>
+          <div>smallExplaining - {studentDateToString?.smallExplaining}</div>
+          <div>mainSlave - {studentDateToString?.mainSlave}</div>
+          <div>smallSlave - {studentDateToString?.smallSlave}</div>
           {editPropPerson.plan ? (
             <div>student has planned</div>
           ) : (
