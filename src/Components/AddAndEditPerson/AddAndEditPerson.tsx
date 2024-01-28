@@ -51,8 +51,8 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   const [studentDateToString, setStudentDateToString] =
     useState<IStudentDateToString>()
 
+  //если в пропсах есть студент, то преобразуем его метки времени в формат "мм дд гггг" и сохраняем в studentDateToString
   useEffect(() => {
-    //создаем студента и преобразуем его метки времени в формат "мм дд гггг"
     if (PropPerson) {
       //функция возвращает студента по типу IStudentDateToString
       const makeStudentDateToString = () => {
@@ -97,9 +97,13 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
       //   endPrayer: stampToDate(person.endPrayer)
 
       // }
-      setEditPropPerson(PropPerson) //закидываем полученного в пропсах студента в состояние
       setStudentDateToString(student)
     }
+  }, [PropPerson])
+
+  //закидываем полученного в пропсах студента в состояние
+  useEffect(() => {
+    setEditPropPerson(PropPerson)
   }, [PropPerson])
 
   //проверяем ниличие ключа в обьекте и возвращаем stampToString или дефолтное зачение
@@ -135,38 +139,29 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     return result
   }
 
+  //если есть editPropPerson, то заполняем данными checkBox, lastFirstName, gender, dontUse, comments
   useEffect(() => {
     if (editPropPerson) {
+      const checkBoxData = {
+        isChairman: editPropPerson.isChairman,
+        isSecondChairm: editPropPerson.isSecondChairm,
+        isFirstSpeach: editPropPerson.isFirstSpeach,
+        isGems: editPropPerson.isGems,
+        isLiveAndServ: editPropPerson.isLiveAndServ,
+        isStudyBibleIn: editPropPerson.isStudyBibleIn,
+        isStudyBibleInReader: editPropPerson.isStudyBibleInReader,
+        isEndPrayer: editPropPerson.isEndPrayer,
+        isSpeech: editPropPerson.isSpeech,
+        isPortnerOnly: editPropPerson.isPortnerOnly,
+        isSecondClassOnly: editPropPerson.isSecondClassOnly,
+        isNotBibleStudy: editPropPerson.isNotBibleStudy,
+      }
+      setInputCheckBox(checkBoxData)
+
       searchByLetter(editPropPerson.lastFirstName)
       setGender(editPropPerson.gender)
       setDontUse(editPropPerson.dontUse)
       setComments(editPropPerson.comments)
-
-      if (editPropPerson.gender === 'Male') {
-        const editP = editPropPerson as IMaleDB
-        const maleData = {
-          isChairman: editP.isChairman,
-          isSecondChairm: editP.isSecondChairm,
-          isFirstSpeach: editP.isFirstSpeach,
-          isGems: editP.isGems,
-          isLiveAndServ: editP.isLiveAndServ,
-          isStudyBibleIn: editP.isStudyBibleIn,
-          isStudyBibleInReader: editP.isStudyBibleInReader,
-          isEndPrayer: editP.isEndPrayer,
-          isSpeech: editP.isSpeech,
-        }
-        const result = Object.assign(editPropPerson, maleData)
-        setMaleData(result)
-      } else if (editPropPerson.gender === 'Female') {
-        const editP = editPropPerson as IFemaleDB
-        const femaleData = {
-          isPortnerOnly: editP.isPortnerOnly,
-          isSecondClassOnly: editP.isSecondClassOnly,
-          isNotBibleStudy: editP.isNotBibleStudy,
-        }
-        const result = Object.assign(editPropPerson, femaleData)
-        setFemaleData(result)
-      }
     } else {
       setClearState()
     }
