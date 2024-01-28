@@ -55,45 +55,64 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     useState<IStudentDateToString>()
 
   useEffect(() => {
-    setEditPropPerson(PropPerson) //закидываем полученного в пропсах студента в состояние
-
-    //определяем пол и преобразуем даты в формат "мм дд гггг"
+    //создаем студента и преобразуем его метки времени в формат "мм дд гггг"
     if (PropPerson) {
-      const student: any = {
-        mainStarting: stampToDate(PropPerson.mainStarting),
-        smallStarting: stampToDate(PropPerson.smallStarting),
-        mainFollowing: stampToDate(PropPerson.mainFollowing),
-        smallFollowing: stampToDate(PropPerson.smallFollowing),
-        mainMaking: stampToDate(PropPerson.mainMaking),
-        smallMaking: stampToDate(PropPerson.smallMaking),
-        mainExplaining: stampToDate(PropPerson.mainExplaining),
-        smallExplaining: stampToDate(PropPerson.smallExplaining),
-        mainSlave: stampToDate(PropPerson.mainSlave),
-        smallSlave: stampToDate(PropPerson.smallSlave),
-        latest: stampToDate(PropPerson.latest),
+      //функция возвращает студента по типу IStudentDateToString
+      const makeStudentDateToString = () => {
+        // создаем строковый массив из ключей IStudentDateToString
+        const keysArray = Object.keys({} as IStudentDateToString) as Array<
+          keyof IStudentDateToString
+        >
+
+        const result = {}
+        keysArray.forEach((keyName) => {
+          result[keyName] = getDateToSting(PropPerson, keyName)
+        })
+        return result as IStudentDateToString
       }
 
-      if (PropPerson.gender === 'Male') {
-        const person = PropPerson as IMaleDB
-        student.chairman = stampToDate(person.chairman)
-        student.secondChairm = stampToDate(person.secondChairm)
-        student.firstSpeach = stampToDate(person.firstSpeach)
-        student.gems = stampToDate(person.gems)
-        student.mainRead = stampToDate(person.mainRead)
-        student.smallRead = stampToDate(person.smallRead)
-        student.mainSpeech = stampToDate(person.mainSpeech)
-        student.smallSpeech = stampToDate(person.smallSpeech)
-        student.liveAndServ = stampToDate(person.liveAndServ)
-        student.studyBibleIn = stampToDate(person.studyBibleIn)
-        student.studyBibleInReader = stampToDate(person.studyBibleInReader)
-        student.endPrayer = stampToDate(person.endPrayer)
-        setStudentDateToString(student)
-      }
-      if (PropPerson.gender === 'Female') {
-        setStudentDateToString(student)
-      }
+      const student = makeStudentDateToString()
+
+      // const student: IStudentDateToString = {
+      //   mainStarting: getDateToSting(PropPerson, 'mainStarting', 'Din not perform'),
+      //   smallStarting: getDateToSting(PropPerson, 'smallStarting', 'Din not perform'),
+      //   mainFollowing: getDateToSting(PropPerson, 'mainFollowing', 'Din not perform'),
+      //   smallFollowing: getDateToSting(PropPerson, 'smallFollowing', 'Din not perform'),
+      //   mainMaking: getDateToSting(PropPerson, 'mainMaking', 'Din not perform'),
+      //   smallMaking: getDateToSting(PropPerson, 'smallMaking', 'Din not perform'),
+      //   mainExplaining: getDateToSting(PropPerson, 'mainExplaining', 'Din not perform'),
+      //   smallExplaining: getDateToSting(PropPerson, 'smallExplaining', 'Din not perform'),
+      //   mainSlave: getDateToSting(PropPerson, 'mainSlave', 'Din not perform'),
+      //   smallSlave: getDateToSting(PropPerson, 'smallSlave', 'Din not perform'),
+      //   latest: getDateToSting(PropPerson, 'latest', 'Din not perform'),
+
+      //   chairman: stampToDate(person.chairman)
+      //   secondChairm: stampToDate(person.secondChairm)
+      //   firstSpeach: stampToDate(person.firstSpeach)
+      //   gems: stampToDate(person.gems)
+      //   mainRead: stampToDate(person.mainRead)
+      //   smallRead: stampToDate(person.smallRead)
+      //   mainSpeech: stampToDate(person.mainSpeech)
+      //   smallSpeech: stampToDate(person.smallSpeech)
+      //   liveAndServ: stampToDate(person.liveAndServ)
+      //   studyBibleIn: stampToDate(person.studyBibleIn)
+      //   studyBibleInReader: stampToDate(person.studyBibleInReader)
+      //   endPrayer: stampToDate(person.endPrayer)
+
+      // }
+      setEditPropPerson(PropPerson) //закидываем полученного в пропсах студента в состояние
+      setStudentDateToString(student)
     }
   }, [PropPerson])
+
+  //проверяем ниличие ключа в обьекте и возвращаем stampToDate или дефолтное зачение
+  const getDateToSting = (obj: IStudent, key: string) => {
+    if (key in obj && typeof obj[key] === 'number') {
+      return stampToDate(obj[key] as number)
+    } else {
+      return 'Din not perform'
+    }
+  }
 
   const stampToDate = (stamp: number) => {
     const months = [
