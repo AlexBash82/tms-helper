@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import InputMale from './InputMale'
 import InputFemale from './InputFemale'
-import { IFemaleDB, IFemaleData, IMaleDB, IMaleData } from '../../interfaces'
+import { IStudent } from '../../interfaces'
 
 //исключить возможность добавления одноименных пользователей--ok--------------
 //исключить возможность пробела в начале, в конце, и более одного между-----
@@ -9,37 +9,45 @@ import { IFemaleDB, IFemaleData, IMaleDB, IMaleData } from '../../interfaces'
 //редактирование: после введения информации искать по ID и изменять (id т.к. имя можно поменять)
 //исключить возможность редактирования если студент.план = тру
 
-interface femaleWithDate {
-  mainStarting: string
-  smallStarting: string
-  mainFollowing: string
-  smallFollowing: string
-  mainMaking: string
-  smallMaking: string
-  mainExplaining: string
-  smallExplaining: string
+interface IStudentDateToString {
+  latest: string
+
   mainSlave: string
   smallSlave: string
-  latest: string
-}
 
-interface maleWithDate extends femaleWithDate {
-  chairman: string
-  secondChairm: string
-  firstSpeach: string
-  gems: string
+  mainStarting: string
+  smallStarting: string
+
+  mainFollowing: string
+  smallFollowing: string
+
+  mainMaking: string
+  smallMaking: string
+
+  mainExplaining: string
+  smallExplaining: string
+
+  mainExplainSpeech: string
+  smallExplaiSpeech: string
+
   mainRead: string
   smallRead: string
+
   mainSpeech: string
   smallSpeech: string
-  liveAndServ: string
-  studyBibleIn: string
-  studyBibleInReader: string
+
   endPrayer: string
+  studyBibleInReader: string
+  gems: string
+  liveAndServ: string
+  firstSpeach: string
+  studyBibleIn: string
+  secondChairm: string
+  chairman: string
 }
 
 interface IProps {
-  PropPerson?: IMaleDB | IFemaleDB
+  PropPerson?: IStudent
   getAllStudents: () => void
 }
 
@@ -47,7 +55,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   PropPerson,
   getAllStudents,
 }) => {
-  const defaultMaleData = {
+  const defaultStudentData = {
     isSpeech: false,
     isEndPrayer: false,
     isStudyBibleInReader: false,
@@ -57,8 +65,6 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     isStudyBibleIn: false,
     isSecondChairm: false,
     isChairman: false,
-  }
-  const defaultFemaleData = {
     isPortnerOnly: false,
     isSecondClassOnly: false,
     isNotBibleStudy: false,
@@ -70,18 +76,18 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
   const [comments, setComments] = useState('')
-  const [foundArrName, setFoundArrName] = useState<Array<IMaleDB | IFemaleDB>>(
-    []
-  )
-  const [editPropPerson, setEditPropPerson] = useState<IMaleDB | IFemaleDB>()
+  const [foundStudentsByLetter, setFoundStudentsByLetter] = useState<
+    Array<IStudent>
+  >([])
+  const [editPropPerson, setEditPropPerson] = useState<IStudent>()
 
   //храним даные студента с преобразованными датами в формат "мм дд гггг"
   const [edPPDate, setEdPPDate] = useState<maleWithDate | femaleWithDate>()
 
   useEffect(() => {
     setEditPropPerson(PropPerson) //закидываем полученного в пропсах студента в состояние
-    //определяем пол и преобразуем даты в формат "мм дд гггг"
 
+    //определяем пол и преобразуем даты в формат "мм дд гггг"
     if (PropPerson) {
       const student: any = {
         mainStarting: stampToDate(PropPerson.mainStarting),
@@ -184,14 +190,14 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     setGender('')
     setDontUse(false)
     setComments('')
-    setFoundArrName([])
+    setFoundStudentsByLetter([])
   }
 
   const searchByLetter = async (inputLatters: string) => {
     if (inputLatters) {
       const students = await window.api.getUsersByLastname(inputLatters)
       if (students.success) {
-        setFoundArrName(students.data)
+        setFoundStudentsByLetter(students.data)
       } else {
         console.error('Error searching users by lastname:', students.message)
       }
@@ -200,8 +206,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   }
 
   const addPerson = async () => {
-    const defoltStamp = 1685000178013
-    let personData: IMaleDB | IFemaleDB
+    let personData: IStudent
     try {
       if (gender === 'Male' && inputLFName !== '') {
         personData = {
@@ -406,7 +411,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
             <div className="myButton" onClick={() => editPerson()}>
               Confirm edit
             </div>
-          ) : inputLFName === foundArrName[0]?.lastFirstName ? (
+          ) : inputLFName === foundStudentsByLetter[0]?.lastFirstName ? (
             <div>That person is already exist</div>
           ) : (
             <button className="myButton" onClick={() => addPerson()}>
@@ -415,12 +420,12 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           )}
         </div>
       )}
-      {(foundArrName.length === 1 &&
-        foundArrName[0].lastFirstName !== inputLFName) ||
-      foundArrName.length > 1 ? (
+      {(foundStudentsByLetter.length === 1 &&
+        foundStudentsByLetter[0].lastFirstName !== inputLFName) ||
+      foundStudentsByLetter.length > 1 ? (
         <div>
           <div>I've found in DB: </div>
-          {foundArrName.map(
+          {foundStudentsByLetter.map(
             (student, index) =>
               student && (
                 <div key={index}>

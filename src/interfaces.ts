@@ -6,7 +6,8 @@ export interface IStudent {
   comments: string
   plan: false
   portners: Array<string>
-  latest: number
+
+  latest: number | undefined
 
   isPortnerOnly: boolean
   isSecondClassOnly: boolean
