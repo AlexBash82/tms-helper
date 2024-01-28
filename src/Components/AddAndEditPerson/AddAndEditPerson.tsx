@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import InputMale from './InputMale'
-import InputFemale from './InputFemale'
+import InputCheckBox from './InputCheckBox'
 import {
   IStudent,
   IStudentDateToString,
@@ -37,8 +36,6 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     isNotBibleStudy: false,
   }
 
-  //const [maleData, setMaleData] = useState<IMaleData>(defaultMaleData)
-  //const [femaleData, setFemaleData] = useState<IFemaleData>(defaultFemaleData)
   const [inputCheckBox, setInputCheckBox] =
     useState<IStudentCheckBox>(defaultStudentChBx)
   const [inputLFName, setInputLFName] = useState('')
@@ -66,7 +63,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
 
         const result = {}
         keysArray.forEach((keyName) => {
-          result[keyName] = getDateToSting(PropPerson, keyName)
+          result[keyName] = getStingOrDefault(PropPerson, keyName)
         })
         return result as IStudentDateToString
       }
@@ -105,16 +102,17 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     }
   }, [PropPerson])
 
-  //проверяем ниличие ключа в обьекте и возвращаем stampToDate или дефолтное зачение
-  const getDateToSting = (obj: IStudent, key: string) => {
+  //проверяем ниличие ключа в обьекте и возвращаем stampToString или дефолтное зачение
+  const getStingOrDefault = (obj: IStudent, key: string) => {
     if (key in obj && typeof obj[key] === 'number') {
-      return stampToDate(obj[key] as number)
+      return stampToString(obj[key] as number)
     } else {
       return 'Din not perform'
     }
   }
 
-  const stampToDate = (stamp: number) => {
+  //преобразуем stamp в формат "мм дд гггг"
+  const stampToString = (stamp: number) => {
     const months = [
       'Jan',
       'Feb',
@@ -375,13 +373,13 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           -Female
         </>
       )}
-      {gender === 'Male' ? (
-        <InputMale maleData={maleData} setMaleData={setMaleData} />
-      ) : gender === 'Female' ? (
-        <InputFemale femaleData={femaleData} setFemaleData={setFemaleData} />
-      ) : (
-        <div>Input lastname, firstname and choose the gender</div>
-      )}
+
+      <InputCheckBox
+        inputCheckBox={inputCheckBox}
+        setInputCheckBox={setInputCheckBox}
+        gender={gender}
+      />
+
       {(gender === 'Male' || gender === 'Female') && (
         <div>
           <input
@@ -409,6 +407,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
           )}
         </div>
       )}
+
       {(foundStudentsByLetter.length === 1 &&
         foundStudentsByLetter[0].lastFirstName !== inputLFName) ||
       foundStudentsByLetter.length > 1 ? (
@@ -432,9 +431,11 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
       ) : (
         false
       )}
+
       <div className="myButton" onClick={() => backToAddPerson()}>
         Back to add
       </div>
+
       {editPropPerson?.lastFirstName === inputLFName && (
         <div>
           <div>Another information about student</div>
