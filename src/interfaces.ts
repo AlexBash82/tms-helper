@@ -1,5 +1,5 @@
 export interface IStudent {
-  _id: string
+  _id: string | undefined
   lastFirstName: string
   gender: string
   dontUse: boolean
@@ -66,18 +66,20 @@ export interface IStudent {
 }
 
 export interface IStudentCheckBox {
-  isChairman: boolean
-  isSecondChairm: boolean
-  isFirstSpeach: boolean
-  isGems: boolean
-  isLiveAndServ: boolean
-  isStudyBibleIn: boolean
-  isStudyBibleInReader: boolean
-  isEndPrayer: boolean
-  isSpeech: boolean
   isPortnerOnly: boolean
   isSecondClassOnly: boolean
   isNotBibleStudy: boolean
+  isExplainSpeech: boolean
+  isRead: boolean
+  isSpeech: boolean
+  isEndPrayer: boolean
+  isStudyBibleInReader: boolean
+  isGems: boolean
+  isLiveAndServ: boolean
+  isFirstSpeach: boolean
+  isStudyBibleIn: boolean
+  isSecondChairm: boolean
+  isChairman: boolean
 }
 
 export interface IStudentDateToString {

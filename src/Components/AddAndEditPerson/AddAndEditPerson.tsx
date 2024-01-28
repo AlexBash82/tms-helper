@@ -173,6 +173,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     setDontUse(false)
     setComments('')
     setFoundStudentsByLetter([])
+    //нужно ли тут чистить имя и фамиию????
   }
 
   const searchByLetter = async (inputLatters: string) => {
@@ -188,85 +189,62 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   }
 
   const addPerson = async () => {
-    let personData: IStudent
+    let studentData: Omit<IStudent, '_id'>
     try {
-      if (gender === 'Male' && inputLFName !== '') {
-        personData = {
+      //добавить проверку по переменной valid где проверять на пробелы и т.д.
+      if (inputLFName !== '') {
+        studentData = {
           lastFirstName: inputLFName,
           gender: gender,
-          isChairman: maleData.isChairman,
-          isSecondChairm: maleData.isSecondChairm,
-          isFirstSpeach: maleData.isFirstSpeach,
-          isGems: maleData.isGems,
-          isLiveAndServ: maleData.isLiveAndServ,
-          isStudyBibleIn: maleData.isStudyBibleIn,
-          isStudyBibleInReader: maleData.isStudyBibleInReader,
-          isEndPrayer: maleData.isEndPrayer,
-          isSpeech: maleData.isSpeech,
+          isChairman: inputCheckBox.isChairman,
+          isSecondChairm: inputCheckBox.isSecondChairm,
+          isFirstSpeach: inputCheckBox.isFirstSpeach,
+          isGems: inputCheckBox.isGems,
+          isLiveAndServ: inputCheckBox.isLiveAndServ,
+          isStudyBibleIn: inputCheckBox.isStudyBibleIn,
+          isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
+          isEndPrayer: inputCheckBox.isEndPrayer,
+          isSpeech: inputCheckBox.isSpeech,
           dontUse: dontUse,
           comments: comments,
+          isPortnerOnly: inputCheckBox.isPortnerOnly,
+          isSecondClassOnly: inputCheckBox.isSecondClassOnly,
+          isNotBibleStudy: inputCheckBox.isNotBibleStudy,
+          isExplainSpeech: inputCheckBox.isExplainSpeech,
+          isRead: inputCheckBox.isRead,
 
           plan: false,
-          chairman: defoltStamp,
-          secondChairm: defoltStamp,
-          firstSpeach: defoltStamp,
-          gems: defoltStamp,
-          mainRead: defoltStamp,
-          smallRead: defoltStamp,
-          mainStarting: defoltStamp,
-          smallStarting: defoltStamp,
-          mainFollowing: defoltStamp,
-          smallFollowing: defoltStamp,
-          mainMaking: defoltStamp,
-          smallMaking: defoltStamp,
-          mainExplaining: defoltStamp,
-          smallExplaining: defoltStamp,
-          mainSpeech: defoltStamp,
-          smallSpeech: defoltStamp,
-          mainSlave: defoltStamp,
-          smallSlave: defoltStamp,
+          mainExplainSpeech: undefined,
+          smallExplaiSpeech: undefined,
+          chairman: undefined,
+          secondChairm: undefined,
+          firstSpeach: undefined,
+          gems: undefined,
+          mainRead: undefined,
+          smallRead: undefined,
+          mainStarting: undefined,
+          smallStarting: undefined,
+          mainFollowing: undefined,
+          smallFollowing: undefined,
+          mainMaking: undefined,
+          smallMaking: undefined,
+          mainExplaining: undefined,
+          smallExplaining: undefined,
+          mainSpeech: undefined,
+          smallSpeech: undefined,
+          mainSlave: undefined,
+          smallSlave: undefined,
           portners: [],
-          liveAndServ: defoltStamp,
-          studyBibleIn: defoltStamp,
-          studyBibleInReader: defoltStamp,
-          endPrayer: defoltStamp,
-          latest: defoltStamp,
-
-          _id: undefined,
+          liveAndServ: undefined,
+          studyBibleIn: undefined,
+          studyBibleInReader: undefined,
+          endPrayer: undefined,
+          latest: undefined,
         }
-        const result = await window.api.writeOneUser(personData)
+        const result = await window.api.writeOneUser(studentData)
         alert(result.message)
       }
 
-      if (gender === 'Female' && inputLFName !== '') {
-        personData = {
-          lastFirstName: inputLFName,
-          gender: gender,
-          isPortnerOnly: femaleData.isPortnerOnly,
-          isSecondClassOnly: femaleData.isSecondClassOnly,
-          isNotBibleStudy: femaleData.isNotBibleStudy,
-          dontUse: dontUse,
-          comments: comments,
-
-          plan: false,
-          mainStarting: defoltStamp,
-          smallStarting: defoltStamp,
-          mainFollowing: defoltStamp,
-          smallFollowing: defoltStamp,
-          mainMaking: defoltStamp,
-          smallMaking: defoltStamp,
-          mainExplaining: defoltStamp,
-          smallExplaining: defoltStamp,
-          mainSlave: defoltStamp,
-          smallSlave: defoltStamp,
-          portners: [],
-          latest: defoltStamp,
-
-          _id: undefined,
-        }
-        const result = await window.api.writeOneUser(personData)
-        alert(result.message)
-      }
       setClearState()
       getAllStudents() //заново читаем весь список
     } catch (error) {
