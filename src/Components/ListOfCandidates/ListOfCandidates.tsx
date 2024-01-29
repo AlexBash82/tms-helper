@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ListOfCandidates.css'
-import { IFemaleDB, IMaleDB } from '../../interfaces'
+import { IStudent } from '../../interfaces'
 
 //повесить слушатель клика вне окошка на закрытие
 //добавить фильтрацию по колонкам: перый разговор, повтор, главный зал...
@@ -12,10 +12,10 @@ import { IFemaleDB, IMaleDB } from '../../interfaces'
 interface IProps {
   openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
-  presentValue: string
+  presentValue: string | undefined
   task: string
   dateOfMeet: string
-  suitsStudents: Array<IMaleDB | IFemaleDB>
+  suitsStudents: Array<IStudent>
   inputIs: string
   action: 'plan' | 'confirm' | 'update' | undefined
 }
@@ -30,7 +30,7 @@ const ListOfCandidates: React.FC<IProps> = ({
   suitsStudents,
   inputIs,
 }) => {
-  const [students, setStudents] = useState<Array<IMaleDB | IFemaleDB>>([])
+  const [students, setStudents] = useState<Array<IStudent>>([])
   const listRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -74,6 +74,7 @@ const ListOfCandidates: React.FC<IProps> = ({
   }, [])
 
   const makePlan = async (studentName: string) => {
+    //добавть проверку на presentValue на андефайнд
     const presentUser = await window.api.getOneUserByLFName(presentValue)
     if (presentUser.data?.plan) {
       try {

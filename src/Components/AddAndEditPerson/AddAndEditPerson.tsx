@@ -65,7 +65,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
 
         const result = {}
         keysArray.forEach((keyName) => {
-          result[keyName] = getStingOrDefault(PropPerson, keyName)
+          result[keyName] = getStringOrDefault(PropPerson, keyName)
         })
         return result as IStudentDateToString
       }
@@ -109,7 +109,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   }, [PropPerson])
 
   //проверяем ниличие ключа в обьекте и возвращаем stampToString или дефолтное зачение
-  const getStingOrDefault = (obj: IStudent, key: string) => {
+  const getStringOrDefault = (obj: IStudent, key: string) => {
     if (key in obj && typeof obj[key] === 'number') {
       return stampToString(obj[key] as number)
     } else {

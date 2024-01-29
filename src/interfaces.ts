@@ -1,5 +1,5 @@
 export interface IStudent {
-  _id: string | undefined
+  _id: string
   lastFirstName: string
   gender: string
   dontUse: boolean

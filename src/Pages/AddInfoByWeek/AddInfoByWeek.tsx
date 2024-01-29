@@ -7,7 +7,7 @@ import SingleInput from '../../Components/SingleInput/SingleInput'
 import CoupleInputs from '../../Components/CoupleInputs/CoupleInputs'
 
 interface IStateWeek
-  extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet' | 'isPlanned'> {
+  extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet' | 'isPlanned' | '_id'> {
   dateOfMeet?: string
 }
 
@@ -24,27 +24,27 @@ const AddInfoByWeek: React.FC = () => {
   const [makingPointChBx, setMakingPointChBx] = useState(false)
   const [explainingPointChBx, setExplainingPointChBx] = useState(false)
   const [speechPointChBx, setSpeechPointChBx] = useState(false)
-  const [readPointStMC, setReadPointStMC] = useState('')
-  const [startPointStMC, setStartPointStMC] = useState('')
-  const [startPointAsMC, setStartPointASMC] = useState('')
-  const [followPointStMC, setFollowPointStMC] = useState('')
-  const [followPointAsMC, setFollowPointAsMC] = useState('')
-  const [makePointStMC, setMakePointStMC] = useState('')
-  const [makePointAsMC, setMakePointAsMC] = useState('')
-  const [explainPointStMC, setExplainPointStMC] = useState('')
-  const [explainPointAsMC, setExplainPointAsMC] = useState('')
-  const [speechPointStMC, setSpeechPointStMC] = useState('')
-  const [readPointStSC, setReadPointStSC] = useState('')
-  const [startPointStSC, setStartPointStSC] = useState('')
-  const [startPointAsSC, setStartPointAsSC] = useState('')
-  const [followPointStSC, setFollowPointStSC] = useState('')
-  const [followPointAsSC, setFollowPointAsSC] = useState('')
-  const [makePointStSC, setMakePointStSC] = useState('')
-  const [makePointAsSC, setMakePointAsSC] = useState('')
-  const [explainPointStSC, setExplainPointStSC] = useState('')
-  const [explainPointAsSC, setExplainPointAsSC] = useState('')
-  const [speechPointStSC, setSpeechPointStSC] = useState('')
-  const [openedList, setOpenedList] = useState('')
+  const [readPointStMC, setReadPointStMC] = useState<string | undefined>()
+  const [startPointStMC, setStartPointStMC] = useState<string | undefined>()
+  const [startPointAsMC, setStartPointASMC] = useState<string | undefined>()
+  const [followPointStMC, setFollowPointStMC] = useState<string | undefined>()
+  const [followPointAsMC, setFollowPointAsMC] = useState<string | undefined>()
+  const [makePointStMC, setMakePointStMC] = useState<string | undefined>()
+  const [makePointAsMC, setMakePointAsMC] = useState<string | undefined>()
+  const [explainPointStMC, setExplainPointStMC] = useState<string | undefined>()
+  const [explainPointAsMC, setExplainPointAsMC] = useState<string | undefined>()
+  const [speechPointStMC, setSpeechPointStMC] = useState<string | undefined>()
+  const [readPointStSC, setReadPointStSC] = useState<string | undefined>()
+  const [startPointStSC, setStartPointStSC] = useState<string | undefined>()
+  const [startPointAsSC, setStartPointAsSC] = useState<string | undefined>()
+  const [followPointStSC, setFollowPointStSC] = useState<string | undefined>()
+  const [followPointAsSC, setFollowPointAsSC] = useState<string | undefined>()
+  const [makePointStSC, setMakePointStSC] = useState<string | undefined>()
+  const [makePointAsSC, setMakePointAsSC] = useState<string | undefined>()
+  const [explainPointStSC, setExplainPointStSC] = useState<string | undefined>()
+  const [explainPointAsSC, setExplainPointAsSC] = useState<string | undefined>()
+  const [speechPointStSC, setSpeechPointStSC] = useState<string | undefined>()
+  const [openedList, setOpenedList] = useState<string | undefined>()
   const [action, setAction] = useState<
     'plan' | 'confirm' | 'update' | undefined
   >()
@@ -146,7 +146,7 @@ const AddInfoByWeek: React.FC = () => {
     startWeekTSt: number,
     isPlanned: boolean
   ) => {
-    const newWeek: IWeek = {
+    const newWeek: Omit<IWeek, '_id'> = {
       startWeekTSt,
       dateOfMeet,
       isPlanned,
@@ -188,6 +188,18 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const setState = (week: IStateWeek) => {
+    const arrOfKeys = Object.keys(week)
+    arrOfKeys.forEach((nameOfKey: string) => {
+      //код нужно усовершенствовать: пробежаться по ключам и естли есть разница, тодобавить их в обьект, а после всего мутировать его с сотсоянием
+      if (inputState[nameOfKey].id !== week[nameOfKey].id) {
+        setInputState((prevState) => ({
+          ...prevState,
+          [nameOfKey]: week[nameOfKey],
+        }))
+      }
+    })
+    //код выше призван заменить весь код? что ниже, но нужно в inputState поместить состояние всех инпутов, при этом у каждого имени (например: dateOfMeet) будет значение не строка, а {input: '', id: ''}
+
     if (dateOfMeet !== week.dateOfMeet) {
       setDateOfMeet(week.dateOfMeet)
     }

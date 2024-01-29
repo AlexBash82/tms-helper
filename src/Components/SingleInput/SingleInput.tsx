@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './SingleInput.css'
-import { IFemaleDB, IMaleDB } from '../../interfaces'
+import { IStudent } from '../../interfaces'
 import ListOfCandidates from '../ListOfCandidates/ListOfCandidates'
 
 interface IProps {
   title: string
   openAndChoose: (arg: string) => void
   openedList: string
-  firstInput: string
+  firstInput: string | undefined
   task: string
   getCurrentWeek: () => void
   dateOfMeet: string
@@ -27,9 +27,7 @@ const SingleInput: React.FC<IProps> = (props) => {
   } = props
 
   const [inputValue, setInputValue] = useState(firstInput)
-  const [foundByLetter, setFoundByLetter] = useState<
-    Array<IMaleDB | IFemaleDB>
-  >([])
+  const [foundByLetter, setFoundByLetter] = useState<Array<IStudent>>([])
   const [inputIs, setInputIs] = useState('blur')
 
   useEffect(() => {
