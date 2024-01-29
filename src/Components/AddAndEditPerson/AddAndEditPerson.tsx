@@ -22,18 +22,20 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   getAllStudents,
 }) => {
   const defaultStudentChBx: IStudentCheckBox = {
+    isPortnerOnly: false,
+    isSecondClassOnly: false,
+    isNotBibleStudy: false,
+    isExplainSpeech: false,
+    isRead: false,
     isSpeech: false,
     isEndPrayer: false,
     isStudyBibleInReader: false,
     isGems: false,
-    isFirstSpeach: false,
     isLiveAndServ: false,
+    isFirstSpeach: false,
     isStudyBibleIn: false,
     isSecondChairm: false,
     isChairman: false,
-    isPortnerOnly: false,
-    isSecondClassOnly: false,
-    isNotBibleStudy: false,
   }
 
   const [inputCheckBox, setInputCheckBox] =
@@ -143,18 +145,20 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   useEffect(() => {
     if (editPropPerson) {
       const checkBoxData = {
-        isChairman: editPropPerson.isChairman,
-        isSecondChairm: editPropPerson.isSecondChairm,
-        isFirstSpeach: editPropPerson.isFirstSpeach,
-        isGems: editPropPerson.isGems,
-        isLiveAndServ: editPropPerson.isLiveAndServ,
-        isStudyBibleIn: editPropPerson.isStudyBibleIn,
-        isStudyBibleInReader: editPropPerson.isStudyBibleInReader,
-        isEndPrayer: editPropPerson.isEndPrayer,
-        isSpeech: editPropPerson.isSpeech,
         isPortnerOnly: editPropPerson.isPortnerOnly,
         isSecondClassOnly: editPropPerson.isSecondClassOnly,
         isNotBibleStudy: editPropPerson.isNotBibleStudy,
+        isExplainSpeech: editPropPerson.isExplainSpeech,
+        isRead: editPropPerson.isRead,
+        isSpeech: editPropPerson.isSpeech,
+        isEndPrayer: editPropPerson.isEndPrayer,
+        isStudyBibleInReader: editPropPerson.isStudyBibleInReader,
+        isGems: editPropPerson.isGems,
+        isLiveAndServ: editPropPerson.isLiveAndServ,
+        isFirstSpeach: editPropPerson.isFirstSpeach,
+        isStudyBibleIn: editPropPerson.isStudyBibleIn,
+        isSecondChairm: editPropPerson.isSecondChairm,
+        isChairman: editPropPerson.isChairman,
       }
       setInputCheckBox(checkBoxData)
 
@@ -176,6 +180,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     //нужно ли тут чистить имя и фамиию????
   }
 
+  //ищем по букве в фамилии и обновляем стейты setFoundStudentsByLetter и setInputLFName
   const searchByLetter = async (inputLatters: string) => {
     if (inputLatters) {
       const students = await window.api.getUsersByLastname(inputLatters)
@@ -189,57 +194,73 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   }
 
   const addPerson = async () => {
-    let studentData: Omit<IStudent, '_id'>
     try {
       //добавить проверку по переменной valid где проверять на пробелы и т.д.
       if (inputLFName !== '') {
-        studentData = {
+        const studentData: Omit<IStudent, '_id'> = {
           lastFirstName: inputLFName,
           gender: gender,
-          isChairman: inputCheckBox.isChairman,
-          isSecondChairm: inputCheckBox.isSecondChairm,
-          isFirstSpeach: inputCheckBox.isFirstSpeach,
-          isGems: inputCheckBox.isGems,
-          isLiveAndServ: inputCheckBox.isLiveAndServ,
-          isStudyBibleIn: inputCheckBox.isStudyBibleIn,
-          isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
-          isEndPrayer: inputCheckBox.isEndPrayer,
-          isSpeech: inputCheckBox.isSpeech,
           dontUse: dontUse,
           comments: comments,
+          plan: false,
+          portners: [],
+
+          latest: undefined,
+
           isPortnerOnly: inputCheckBox.isPortnerOnly,
           isSecondClassOnly: inputCheckBox.isSecondClassOnly,
           isNotBibleStudy: inputCheckBox.isNotBibleStudy,
-          isExplainSpeech: inputCheckBox.isExplainSpeech,
-          isRead: inputCheckBox.isRead,
 
-          plan: false,
-          mainExplainSpeech: undefined,
-          smallExplaiSpeech: undefined,
-          chairman: undefined,
-          secondChairm: undefined,
-          firstSpeach: undefined,
-          gems: undefined,
-          mainRead: undefined,
-          smallRead: undefined,
-          mainStarting: undefined,
-          smallStarting: undefined,
-          mainFollowing: undefined,
-          smallFollowing: undefined,
-          mainMaking: undefined,
-          smallMaking: undefined,
-          mainExplaining: undefined,
-          smallExplaining: undefined,
-          mainSpeech: undefined,
-          smallSpeech: undefined,
           mainSlave: undefined,
           smallSlave: undefined,
-          portners: [],
-          liveAndServ: undefined,
-          studyBibleIn: undefined,
-          studyBibleInReader: undefined,
+
+          mainStarting: undefined,
+          smallStarting: undefined,
+
+          mainFollowing: undefined,
+          smallFollowing: undefined,
+
+          mainMaking: undefined,
+          smallMaking: undefined,
+
+          mainExplaining: undefined,
+          smallExplaining: undefined,
+
+          isExplainSpeech: inputCheckBox.isExplainSpeech,
+          mainExplainSpeech: undefined,
+          smallExplaiSpeech: undefined,
+
+          isRead: inputCheckBox.isRead,
+          mainRead: undefined,
+          smallRead: undefined,
+
+          isSpeech: inputCheckBox.isSpeech,
+          mainSpeech: undefined,
+          smallSpeech: undefined,
+
+          isEndPrayer: inputCheckBox.isEndPrayer,
           endPrayer: undefined,
-          latest: undefined,
+
+          isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
+          studyBibleInReader: undefined,
+
+          isGems: inputCheckBox.isGems,
+          gems: undefined,
+
+          isLiveAndServ: inputCheckBox.isLiveAndServ,
+          liveAndServ: undefined,
+
+          isFirstSpeach: inputCheckBox.isFirstSpeach,
+          firstSpeach: undefined,
+
+          isStudyBibleIn: inputCheckBox.isStudyBibleIn,
+          studyBibleIn: undefined,
+
+          isSecondChairm: inputCheckBox.isSecondChairm,
+          secondChairm: undefined,
+
+          isChairman: inputCheckBox.isChairman,
+          chairman: undefined,
         }
         const result = await window.api.writeOneUser(studentData)
         alert(result.message)
@@ -253,27 +274,15 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
   }
 
   const editPerson = async () => {
-    //получить новые даные, старые из базы и обновить
     if (editPropPerson) {
       const idPerson = editPropPerson._id
-      let newValue
-      if (editPropPerson.gender === 'Male') {
-        newValue = {
-          ...maleData,
-          lastFirstName: inputLFName,
-          gender,
-          dontUse,
-          comments,
-        }
-      } else if (editPropPerson.gender === 'Female') {
-        newValue = {
-          ...femaleData,
-          lastFirstName: inputLFName,
-          gender,
-          dontUse,
-          comments,
-        }
+      const newValue = {
+        ...inputCheckBox,
+        lastFirstName: inputLFName,
+        dontUse,
+        comments,
       }
+      //задание:
       //если в базе есть такое имя но id не совпадает, то не обновлять базу а сообщить об этом
       await window.api
         .editOneUser({ idPerson, newValue })
@@ -287,15 +296,15 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
     }
   }
 
-  const findToEdit = async (LFName: string) => {
-    const result = await window.api.getOneUserByLFName(LFName)
-    if (result.success) {
-      setEditPropPerson(result.data)
-      //console.log('find to edit', filteredUser)
-    } else {
-      console.error('Error searching users by lastname:', result.message)
-    }
-  }
+  // const findToEdit = async (LFName: string) => {
+  //   const result = await window.api.getOneUserByLFName(LFName)
+  //   if (result.success) {
+  //     setEditPropPerson(result.data)
+  //     //console.log('find to edit', filteredUser)
+  //   } else {
+  //     console.error('Error searching users by lastname:', result.message)
+  //   }
+  // }
 
   const backToAddPerson = () => {
     setClearState()
@@ -393,7 +402,7 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
                   <div>{student.lastFirstName}</div>
                   <div
                     className="myButton"
-                    onClick={() => findToEdit(student.lastFirstName)}
+                    onClick={() => setEditPropPerson(student)}
                   >
                     Edit that
                   </div>
