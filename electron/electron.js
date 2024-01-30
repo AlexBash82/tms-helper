@@ -130,7 +130,7 @@ ipcMain.handle('write-one-user', async (event, personData) => {
   }
 })
 
-//------------------------GET-ALL-STUDENT---------------------------------------------
+//------------------------GET-ALL-STUDENTS---------------------------------------------
 
 ipcMain.handle('get-all-students', async (event) => {
   try {
@@ -147,7 +147,7 @@ ipcMain.handle('get-all-students', async (event) => {
     // Сбрасываем кэш базы данных
     //usersDB.loadDatabase()
 
-    if (allStudent) {
+    if (allStudents) {
       return { success: true, message: '', data: allStudents }
     }
   } catch (error) {
@@ -198,10 +198,13 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
       )
     })
     usersDB.persistence.compactDatafile()
-    // Возвращаем обновленные данные (по вашему усмотрению)
-    return {
-      success: true,
-      message: `${studentName} updated field ${keyName} to ${newValue}`,
+
+    if (numUpdated) {
+      return {
+        success: true,
+        message: `${studentName} updated field ${keyName} to ${newValue}`,
+        data: updatedObject,
+      }
     }
   } catch (error) {
     console.error('update-one-user error', error)
@@ -374,13 +377,13 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
         data: foundWeek,
       }
     }
+    console.log('insert data', weekData)
     const insertWeek = await new Promise((resolve, reject) => {
       weeksDB.insert(weekData, (err, newDoc) => {
         if (err) {
-          console.log('write-new-week error insert', err)
+          console.log('write-new-week error-insert: ', err)
           reject(err)
         } else {
-          //console.log('write-new-week insert', newDoc)
           resolve(newDoc)
         }
       })
@@ -393,7 +396,7 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
       }
     }
   } catch (error) {
-    console.error('write-new-week error', error)
+    //console.error('write-new-week error', error)
     return { success: false, message: 'Error creating new week' }
   }
 })

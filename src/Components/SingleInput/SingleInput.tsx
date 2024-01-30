@@ -6,8 +6,8 @@ import ListOfCandidates from '../ListOfCandidates/ListOfCandidates'
 interface IProps {
   title: string
   openAndChoose: (arg: string) => void
-  openedList: string
-  firstInput: string | undefined
+  openedList: string | undefined
+  firstInput: { name: string; _id: string } | undefined
   task: string
   getCurrentWeek: () => void
   dateOfMeet: string
@@ -26,13 +26,13 @@ const SingleInput: React.FC<IProps> = (props) => {
     action,
   } = props
 
-  const [inputValue, setInputValue] = useState(firstInput)
+  const [inputValue, setInputValue] = useState(firstInput?.name)
   const [foundByLetter, setFoundByLetter] = useState<Array<IStudent>>([])
   const [inputIs, setInputIs] = useState('blur')
 
   useEffect(() => {
-    if (firstInput !== inputValue) {
-      setInputValue(firstInput)
+    if (firstInput?.name !== inputValue) {
+      setInputValue(firstInput?.name)
     }
   }, [firstInput])
 
@@ -82,7 +82,7 @@ const SingleInput: React.FC<IProps> = (props) => {
       <div className="inpTitle">{title}</div>
       {action === 'plan' ? (
         <div className="inp" onClick={() => openAndChoose(task)}>
-          {firstInput}
+          {firstInput?.name}
         </div>
       ) : (
         <input

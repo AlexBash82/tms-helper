@@ -1,58 +1,19 @@
 import React, { useState } from 'react'
 import './AddInfoByWeek.css'
-import { IWeek } from '../../interfaces'
 import { getStartAndEndWeek } from '../../services/logicDate'
 import Weeks from '../../Components/Weeks/Weeks'
 import SingleInput from '../../Components/SingleInput/SingleInput'
 import CoupleInputs from '../../Components/CoupleInputs/CoupleInputs'
-
-interface IStateWeek
-  extends Omit<IWeek, 'startWeekTSt' | 'dateOfMeet' | 'isPlanned' | '_id'> {
-  dateOfMeet?: string
-}
+import { IWeek } from '../../interfaces'
 
 //кнопку формирования бланка
 
 const AddInfoByWeek: React.FC = () => {
-  const [dateOfMeet, setDateOfMeet] = useState<string | undefined>()
-
-  const [teachingChBx, setTeachingChBx] = useState(false)
-  const [trainingChBx, setTrainingChBx] = useState(false)
-  const [smallClassChBx, setSmallClassChBx] = useState(false)
-  const [startingPointChBx, setStartingPointChBx] = useState(false)
-  const [followingPointChBx, setFollowingPointChBx] = useState(false)
-  const [makingPointChBx, setMakingPointChBx] = useState(false)
-  const [explainingPointChBx, setExplainingPointChBx] = useState(false)
-  const [speechPointChBx, setSpeechPointChBx] = useState(false)
-  const [readPointStMC, setReadPointStMC] = useState<string | undefined>()
-  const [startPointStMC, setStartPointStMC] = useState<string | undefined>()
-  const [startPointAsMC, setStartPointASMC] = useState<string | undefined>()
-  const [followPointStMC, setFollowPointStMC] = useState<string | undefined>()
-  const [followPointAsMC, setFollowPointAsMC] = useState<string | undefined>()
-  const [makePointStMC, setMakePointStMC] = useState<string | undefined>()
-  const [makePointAsMC, setMakePointAsMC] = useState<string | undefined>()
-  const [explainPointStMC, setExplainPointStMC] = useState<string | undefined>()
-  const [explainPointAsMC, setExplainPointAsMC] = useState<string | undefined>()
-  const [speechPointStMC, setSpeechPointStMC] = useState<string | undefined>()
-  const [readPointStSC, setReadPointStSC] = useState<string | undefined>()
-  const [startPointStSC, setStartPointStSC] = useState<string | undefined>()
-  const [startPointAsSC, setStartPointAsSC] = useState<string | undefined>()
-  const [followPointStSC, setFollowPointStSC] = useState<string | undefined>()
-  const [followPointAsSC, setFollowPointAsSC] = useState<string | undefined>()
-  const [makePointStSC, setMakePointStSC] = useState<string | undefined>()
-  const [makePointAsSC, setMakePointAsSC] = useState<string | undefined>()
-  const [explainPointStSC, setExplainPointStSC] = useState<string | undefined>()
-  const [explainPointAsSC, setExplainPointAsSC] = useState<string | undefined>()
-  const [speechPointStSC, setSpeechPointStSC] = useState<string | undefined>()
-  const [openedList, setOpenedList] = useState<string | undefined>()
-  const [action, setAction] = useState<
-    'plan' | 'confirm' | 'update' | undefined
-  >()
-
-  const timeEndOfMeet = '21:45'
-
-  const defaultState = {
-    dateOfMeet: undefined,
+  const defaultWeekState = {
+    _id: undefined,
+    startWeekTSt: 0,
+    dateOfMeet: '',
+    isPlanned: false,
 
     teachingChBx: false,
     trainingChBx: false,
@@ -63,42 +24,52 @@ const AddInfoByWeek: React.FC = () => {
     explainingPointChBx: false,
     speechPointChBx: false,
 
-    readPointStMC: '',
-    startPointStMC: '',
-    startPointAsMC: '',
-    followPointStMC: '',
-    followPointAsMC: '',
-    makePointStMC: '',
-    makePointAsMC: '',
-    explainPointStMC: '',
-    explainPointAsMC: '',
-    speechPointStMC: '',
-    readPointStSC: '',
-    startPointStSC: '',
-    startPointAsSC: '',
-    followPointStSC: '',
-    followPointAsSC: '',
-    makePointStSC: '',
-    makePointAsSC: '',
-    explainPointStSC: '',
-    explainPointAsSC: '',
-    speechPointStSC: '',
+    readPointStMC: undefined,
+    startPointStMC: undefined,
+    startPointAsMC: undefined,
+    followPointStMC: undefined,
+    followPointAsMC: undefined,
+    makePointStMC: undefined,
+    makePointAsMC: undefined,
+    explainPointStMC: undefined,
+    explainPointAsMC: undefined,
+    speechPointStMC: undefined,
+    readPointStSC: undefined,
+    startPointStSC: undefined,
+    startPointAsSC: undefined,
+    followPointStSC: undefined,
+    followPointAsSC: undefined,
+    makePointStSC: undefined,
+    makePointAsSC: undefined,
+    explainPointStSC: undefined,
+    explainPointAsSC: undefined,
+    speechPointStSC: undefined,
   }
+  const [weekState, setWeekState] = useState<IWeek>(defaultWeekState)
+
+  const [openedList, setOpenedList] = useState<string | undefined>()
+  const [action, setAction] = useState<
+    'plan' | 'confirm' | 'update' | undefined
+  >()
+
+  const timeEndOfMeet = '21:45'
 
   const openAndChoose = (task: string) => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
   }
 
   const makeAMeet = async (inpDateOfMeet: string) => {
+    //inpDateOfMeet - дата выбранная пользователем в календаре
     const [year, month, day] = inpDateOfMeet.split('-').map(Number)
     const [hour, minute] = timeEndOfMeet.split(':').map(Number)
 
     const { startWeekTSt } = getStartAndEndWeek(year, month, day)
     const dateObject = new Date(year, month - 1, day, hour, minute)
-    // Получаем метку времени календаря и сейчас
+    // Получаем метку времени даты выбранной в календаре и сейчас
     const timestampCal = dateObject.getTime()
     const timestampNow = Date.now()
 
+    //условие: если выбранная дата - это будущее
     if (timestampCal > timestampNow) {
       const isPlanned = true
       const result = await writeDefaultWeekToDB(
@@ -106,34 +77,38 @@ const AddInfoByWeek: React.FC = () => {
         startWeekTSt,
         isPlanned
       )
-      console.log('future result', result)
+      //в случае result.success: data = уже имеющаяся неделя, либо только что созданная
       if (result.success) {
-        setState(result.data)
+        setWeekState(result.data)
       }
       setAction('plan')
     }
 
+    //условие: если выбранная дата - это прошлое
     if (timestampCal < timestampNow) {
+      //проверяем есть ли эта неделя в планах и если есть полуачем ее
       const isWeekExist = await window.api.getOneWeek(inpDateOfMeet)
-
       if (isWeekExist.success) {
-        //console.log('past get - confirm', isWeekExist)
-        setState(isWeekExist.data)
+        setWeekState(isWeekExist.data)
+
+        //если прошедшая неделя была в планах, то включаем "подтверждение", иначе "обновление"
         if (isWeekExist.data.isPlanned) {
           setAction('confirm')
         } else {
           setAction('update')
         }
       } else {
+        //если такой недели в запланированных нет, значит создаем ее
         const isPlanned = false
         const result = await writeDefaultWeekToDB(
           inpDateOfMeet,
           startWeekTSt,
           isPlanned
         )
+
+        //включаем режим "обновление"
         if (result.success) {
-          console.log('past insert - update', result)
-          setState(result.data)
+          setWeekState(result.data)
           setAction('update')
         } //а сли не успех
       }
@@ -142,156 +117,26 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const writeDefaultWeekToDB = async (
-    dateOfMeet: string,
+    inpDateOfMeet: string,
     startWeekTSt: number,
     isPlanned: boolean
   ) => {
-    const newWeek: Omit<IWeek, '_id'> = {
+    const newWeek = Object.assign(weekState, {
+      dateOfMeet: inpDateOfMeet,
       startWeekTSt,
-      dateOfMeet,
       isPlanned,
+    })
 
-      teachingChBx: false,
-      trainingChBx: false,
-      smallClassChBx: false,
-      startingPointChBx: false,
-      followingPointChBx: false,
-      makingPointChBx: false,
-      explainingPointChBx: false,
-      speechPointChBx: false,
-
-      readPointStMC: '',
-      startPointStMC: '',
-      startPointAsMC: '',
-      followPointStMC: '',
-      followPointAsMC: '',
-      makePointStMC: '',
-      makePointAsMC: '',
-      explainPointStMC: '',
-      explainPointAsMC: '',
-      speechPointStMC: '',
-      readPointStSC: '',
-      startPointStSC: '',
-      startPointAsSC: '',
-      followPointStSC: '',
-      followPointAsSC: '',
-      makePointStSC: '',
-      makePointAsSC: '',
-      explainPointStSC: '',
-      explainPointAsSC: '',
-      speechPointStSC: '',
-    }
+    delete newWeek._id
 
     const result = await window.api.writeNewWeek(newWeek)
     //console.log('result', result)
     return result
   }
 
-  const setState = (week: IStateWeek) => {
-    const arrOfKeys = Object.keys(week)
-    arrOfKeys.forEach((nameOfKey: string) => {
-      //код нужно усовершенствовать: пробежаться по ключам и естли есть разница, тодобавить их в обьект, а после всего мутировать его с сотсоянием
-      if (inputState[nameOfKey].id !== week[nameOfKey].id) {
-        setInputState((prevState) => ({
-          ...prevState,
-          [nameOfKey]: week[nameOfKey],
-        }))
-      }
-    })
-    //код выше призван заменить весь код? что ниже, но нужно в inputState поместить состояние всех инпутов, при этом у каждого имени (например: dateOfMeet) будет значение не строка, а {input: '', id: ''}
-
-    if (dateOfMeet !== week.dateOfMeet) {
-      setDateOfMeet(week.dateOfMeet)
-    }
-    if (teachingChBx !== week.teachingChBx) {
-      setTeachingChBx(week.teachingChBx)
-    }
-    if (trainingChBx !== week.trainingChBx) {
-      setTrainingChBx(week.trainingChBx)
-    }
-    if (smallClassChBx !== week.smallClassChBx) {
-      setSmallClassChBx(week.smallClassChBx)
-    }
-    if (startingPointChBx !== week.startingPointChBx) {
-      setStartingPointChBx(week.startingPointChBx)
-    }
-    if (followingPointChBx !== week.followingPointChBx) {
-      setFollowingPointChBx(week.followingPointChBx)
-    }
-    if (makingPointChBx !== week.makingPointChBx) {
-      setMakingPointChBx(week.makingPointChBx)
-    }
-    if (explainingPointChBx !== week.explainingPointChBx) {
-      setExplainingPointChBx(week.explainingPointChBx)
-    }
-    if (speechPointChBx !== week.speechPointChBx) {
-      setSpeechPointChBx(week.speechPointChBx)
-    }
-    if (readPointStMC !== week.readPointStMC) {
-      setReadPointStMC(week.readPointStMC)
-    }
-    if (startPointStMC !== week.startPointStMC) {
-      setStartPointStMC(week.startPointStMC)
-    }
-    if (startPointAsMC !== week.startPointAsMC) {
-      setStartPointASMC(week.startPointAsMC)
-    }
-    if (followPointStMC !== week.followPointStMC) {
-      setFollowPointStMC(week.followPointStMC)
-    }
-    if (followPointAsMC !== week.followPointAsMC) {
-      setFollowPointAsMC(week.followPointAsMC)
-    }
-    if (makePointStMC !== week.makePointStMC) {
-      setMakePointStMC(week.makePointStMC)
-    }
-    if (makePointAsMC !== week.makePointAsMC) {
-      setMakePointAsMC(week.makePointAsMC)
-    }
-    if (explainPointStMC !== week.explainPointStMC) {
-      setExplainPointStMC(week.explainPointStMC)
-    }
-    if (explainPointAsMC !== week.explainPointAsMC) {
-      setExplainPointAsMC(week.explainPointAsMC)
-    }
-    if (speechPointStMC !== week.speechPointStMC) {
-      setSpeechPointStMC(week.speechPointStMC)
-    }
-    if (readPointStSC !== week.readPointStSC) {
-      setReadPointStSC(week.readPointStSC)
-    }
-    if (startPointStSC !== week.startPointStSC) {
-      setStartPointStSC(week.startPointStSC)
-    }
-    if (startPointAsSC !== week.startPointAsSC) {
-      setStartPointAsSC(week.startPointAsSC)
-    }
-    if (followPointStSC !== week.followPointStSC) {
-      setFollowPointStSC(week.followPointStSC)
-    }
-    if (followPointAsSC !== week.followPointAsSC) {
-      setFollowPointAsSC(week.followPointAsSC)
-    }
-    if (makePointStSC !== week.makePointStSC) {
-      setMakePointStSC(week.makePointStSC)
-    }
-    if (makePointAsSC !== week.makePointAsSC) {
-      setMakePointAsSC(week.makePointAsSC)
-    }
-    if (explainPointStSC !== week.explainPointStSC) {
-      setExplainPointStSC(week.explainPointStSC)
-    }
-    if (explainPointAsSC !== week.explainPointAsSC) {
-      setExplainPointAsSC(week.explainPointAsSC)
-    }
-    if (speechPointStSC !== week.speechPointStSC) {
-      setSpeechPointStSC(week.speechPointStSC)
-    }
-  }
-
   const makeChangeChBx = async (nameChBx: string, value: boolean) => {
     const updateWeek = {
-      dateOfMeet,
+      dateOfMeet: weekState.dateOfMeet,
       keyName: nameChBx,
       newValue: value,
     }
@@ -303,10 +148,10 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const getCurrentWeek = async () => {
-    if (dateOfMeet) {
-      const weekFromBD = await window.api.getOneWeek(dateOfMeet)
+    if (weekState.dateOfMeet) {
+      const weekFromBD = await window.api.getOneWeek(weekState.dateOfMeet)
       if (weekFromBD.success) {
-        setState(weekFromBD.data)
+        setWeekState(weekFromBD.data)
       }
     }
   }
@@ -322,11 +167,11 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const deleteWeek = async () => {
-    if (dateOfMeet) {
-      const result = await window.api.deleteOneWeek(dateOfMeet)
+    if (weekState.dateOfMeet) {
+      const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
       if (result.success) {
         alert(result.message)
-        setState(defaultState)
+        setWeekState(defaultWeekState)
         setAction(undefined)
       }
     }
@@ -335,10 +180,9 @@ const AddInfoByWeek: React.FC = () => {
   return (
     <div>
       <Weeks
-        calendarDateOfMeet={dateOfMeet}
         timeEndOfMeet={timeEndOfMeet}
         makeAMeet={makeAMeet}
-        activeDate={dateOfMeet}
+        dateOfMeet={weekState.dateOfMeet}
       />
       {action === 'plan' ? (
         <div>Plan the week</div>
@@ -352,29 +196,33 @@ const AddInfoByWeek: React.FC = () => {
       <input
         placeholder="Date of meeting"
         type="date"
-        value={dateOfMeet ? dateOfMeet : ''}
+        value={weekState.dateOfMeet ? weekState.dateOfMeet : ''}
         onChange={(e) => makeAMeet(e.target.value)}
       />
-      {!dateOfMeet ? (
+      {!weekState.dateOfMeet ? (
         <div>For creating new week just choose the date</div>
       ) : (
         <div>
           <input
             type="checkbox"
-            checked={teachingChBx}
-            onChange={(e) => makeChangeChBx('teachingChBx', !teachingChBx)}
+            checked={weekState.teachingChBx}
+            onChange={(e) =>
+              makeChangeChBx('teachingChBx', !weekState.teachingChBx)
+            }
           />
           -Teaching points
           <input
             type="checkbox"
-            checked={trainingChBx}
-            onChange={(e) => makeChangeChBx('trainingChBx', !trainingChBx)}
+            checked={weekState.trainingChBx}
+            onChange={(e) =>
+              makeChangeChBx('trainingChBx', !weekState.trainingChBx)
+            }
           />
           -Training points
           {/*---------------------------Teaching--------------------------- */}
-          {teachingChBx && <div>teaching</div>}
+          {weekState.teachingChBx && <div>teaching</div>}
           {/*---------------------------Training--------------------------- */}
-          {trainingChBx && (
+          {weekState.trainingChBx && (
             <div className="df">
               <div>
                 <div>Choose</div>
@@ -385,9 +233,12 @@ const AddInfoByWeek: React.FC = () => {
                 <div className="df">
                   <input
                     type="checkbox"
-                    checked={startingPointChBx}
+                    checked={weekState.startingPointChBx}
                     onChange={(e) =>
-                      makeChangeChBx('startingPointChBx', !startingPointChBx)
+                      makeChangeChBx(
+                        'startingPointChBx',
+                        !weekState.startingPointChBx
+                      )
                     }
                   />
                   <div> - Starting a Conversation</div>
@@ -395,9 +246,12 @@ const AddInfoByWeek: React.FC = () => {
                 <div className="df">
                   <input
                     type="checkbox"
-                    checked={followingPointChBx}
+                    checked={weekState.followingPointChBx}
                     onChange={(e) =>
-                      makeChangeChBx('followingPointChBx', !followingPointChBx)
+                      makeChangeChBx(
+                        'followingPointChBx',
+                        !weekState.followingPointChBx
+                      )
                     }
                   />
                   <div> - Following Up</div>
@@ -405,9 +259,12 @@ const AddInfoByWeek: React.FC = () => {
                 <div className="df">
                   <input
                     type="checkbox"
-                    checked={makingPointChBx}
+                    checked={weekState.makingPointChBx}
                     onChange={(e) =>
-                      makeChangeChBx('makingPointChBx', !makingPointChBx)
+                      makeChangeChBx(
+                        'makingPointChBx',
+                        !weekState.makingPointChBx
+                      )
                     }
                   />
                   <div> - Making Disciples</div>
@@ -415,11 +272,11 @@ const AddInfoByWeek: React.FC = () => {
                 <div className="df">
                   <input
                     type="checkbox"
-                    checked={explainingPointChBx}
+                    checked={weekState.explainingPointChBx}
                     onChange={(e) =>
                       makeChangeChBx(
                         'explainingPointChBx',
-                        !explainingPointChBx
+                        !weekState.explainingPointChBx
                       )
                     }
                   />
@@ -428,9 +285,12 @@ const AddInfoByWeek: React.FC = () => {
                 <div className="df">
                   <input
                     type="checkbox"
-                    checked={speechPointChBx}
+                    checked={weekState.speechPointChBx}
                     onChange={(e) =>
-                      makeChangeChBx('speechPointChBx', !speechPointChBx)
+                      makeChangeChBx(
+                        'speechPointChBx',
+                        !weekState.speechPointChBx
+                      )
                     }
                   />
                   <div> - Talk</div>
@@ -444,83 +304,83 @@ const AddInfoByWeek: React.FC = () => {
                   title={'Bible Reading'}
                   openAndChoose={openAndChoose}
                   openedList={openedList}
-                  firstInput={readPointStMC}
+                  firstInput={weekState.readPointStMC}
                   task="readPointStMC"
                   getCurrentWeek={getCurrentWeek}
                   action={action}
-                  dateOfMeet={dateOfMeet}
+                  dateOfMeet={weekState.dateOfMeet}
                 />
 
-                {startingPointChBx && (
+                {weekState.startingPointChBx && (
                   <CoupleInputs
                     title={'Starting a Conversation'}
                     openAndChoose={openAndChoose}
                     openedList={openedList}
-                    firstInput={startPointStMC}
+                    firstInput={weekState.startPointStMC}
                     firstTask="startPointStMC"
                     getCurrentWeek={getCurrentWeek}
-                    secondInput={startPointAsMC}
+                    secondInput={weekState.startPointAsMC}
                     secondTask="startPointAsMC"
                     action={action}
-                    dateOfMeet={dateOfMeet}
+                    dateOfMeet={weekState.dateOfMeet}
                   />
                 )}
 
-                {followingPointChBx && (
+                {weekState.followingPointChBx && (
                   <CoupleInputs
                     title="Following Up"
                     openAndChoose={openAndChoose}
                     openedList={openedList}
-                    firstInput={followPointStMC}
+                    firstInput={weekState.followPointStMC}
                     firstTask="followPointStMC"
                     getCurrentWeek={getCurrentWeek}
-                    secondInput={followPointAsMC}
+                    secondInput={weekState.followPointAsMC}
                     secondTask="followPointAsMC"
                     action={action}
-                    dateOfMeet={dateOfMeet}
+                    dateOfMeet={weekState.dateOfMeet}
                   />
                 )}
 
-                {makingPointChBx && (
+                {weekState.makingPointChBx && (
                   <CoupleInputs
                     title="Making Disciples"
                     openAndChoose={openAndChoose}
                     openedList={openedList}
-                    firstInput={makePointStMC}
+                    firstInput={weekState.makePointStMC}
                     firstTask="makePointStMC"
                     getCurrentWeek={getCurrentWeek}
-                    secondInput={makePointAsMC}
+                    secondInput={weekState.makePointAsMC}
                     secondTask="makePointAsMC"
                     action={action}
-                    dateOfMeet={dateOfMeet}
+                    dateOfMeet={weekState.dateOfMeet}
                   />
                 )}
 
-                {explainingPointChBx && (
+                {weekState.explainingPointChBx && (
                   <CoupleInputs
                     title="Explaining Your Beliefs"
                     openAndChoose={openAndChoose}
                     openedList={openedList}
-                    firstInput={explainPointStMC}
+                    firstInput={weekState.explainPointStMC}
                     firstTask="explainPointStMC"
                     getCurrentWeek={getCurrentWeek}
-                    secondInput={explainPointAsMC}
+                    secondInput={weekState.explainPointAsMC}
                     secondTask="explainPointAsMC"
                     action={action}
-                    dateOfMeet={dateOfMeet}
+                    dateOfMeet={weekState.dateOfMeet}
                   />
                 )}
 
-                {speechPointChBx && (
+                {weekState.speechPointChBx && (
                   <SingleInput
                     title={'Talk'}
                     openAndChoose={openAndChoose}
                     openedList={openedList}
-                    firstInput={speechPointStMC}
+                    firstInput={weekState.speechPointStMC}
                     task="speechPointStMC"
                     getCurrentWeek={getCurrentWeek}
                     action={action}
-                    dateOfMeet={dateOfMeet}
+                    dateOfMeet={weekState.dateOfMeet}
                   />
                 )}
               </div>
@@ -529,96 +389,99 @@ const AddInfoByWeek: React.FC = () => {
                 <div className="df">
                   <input
                     type="checkbox"
-                    checked={smallClassChBx}
+                    checked={weekState.smallClassChBx}
                     onChange={(e) =>
-                      makeChangeChBx('smallClassChBx', !smallClassChBx)
+                      makeChangeChBx(
+                        'smallClassChBx',
+                        !weekState.smallClassChBx
+                      )
                     }
                   />
                   <div>- Training points small class</div>
                 </div>
-                {smallClassChBx && (
+                {weekState.smallClassChBx && (
                   <div>
                     <SingleInput
                       title={'Bible Reading'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={readPointStSC}
+                      firstInput={weekState.readPointStSC}
                       task="readPointStSC"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
-                      dateOfMeet={dateOfMeet}
+                      dateOfMeet={weekState.dateOfMeet}
                     />
 
-                    {startingPointChBx && (
+                    {weekState.startingPointChBx && (
                       <CoupleInputs
                         title="Starting a Conversation"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={startPointStSC}
+                        firstInput={weekState.startPointStSC}
                         firstTask="startPointStSC"
                         getCurrentWeek={getCurrentWeek}
-                        secondInput={startPointAsSC}
+                        secondInput={weekState.startPointAsSC}
                         secondTask="startPointAsSC"
                         action={action}
-                        dateOfMeet={dateOfMeet}
+                        dateOfMeet={weekState.dateOfMeet}
                       />
                     )}
 
-                    {followingPointChBx && (
+                    {weekState.followingPointChBx && (
                       <CoupleInputs
                         title="Following Up"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={followPointStSC}
+                        firstInput={weekState.followPointStSC}
                         firstTask="followPointStSC"
                         getCurrentWeek={getCurrentWeek}
-                        secondInput={followPointAsSC}
+                        secondInput={weekState.followPointAsSC}
                         secondTask="followPointAsSC"
                         action={action}
-                        dateOfMeet={dateOfMeet}
+                        dateOfMeet={weekState.dateOfMeet}
                       />
                     )}
 
-                    {makingPointChBx && (
+                    {weekState.makingPointChBx && (
                       <CoupleInputs
                         title="Making Disciples"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={makePointStSC}
+                        firstInput={weekState.makePointStSC}
                         firstTask="makePointStSC"
                         getCurrentWeek={getCurrentWeek}
-                        secondInput={makePointAsSC}
+                        secondInput={weekState.makePointAsSC}
                         secondTask="makePointAsSC"
                         action={action}
-                        dateOfMeet={dateOfMeet}
+                        dateOfMeet={weekState.dateOfMeet}
                       />
                     )}
 
-                    {explainingPointChBx && (
+                    {weekState.explainingPointChBx && (
                       <CoupleInputs
                         title="Explaining Your Beliefs"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={explainPointStSC}
+                        firstInput={weekState.explainPointStSC}
                         firstTask="explainPointStSC"
                         getCurrentWeek={getCurrentWeek}
-                        secondInput={explainPointAsSC}
+                        secondInput={weekState.explainPointAsSC}
                         secondTask="explainPointAsSC"
                         action={action}
-                        dateOfMeet={dateOfMeet}
+                        dateOfMeet={weekState.dateOfMeet}
                       />
                     )}
 
-                    {speechPointChBx && (
+                    {weekState.speechPointChBx && (
                       <SingleInput
                         title="Talk"
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={speechPointStSC}
+                        firstInput={weekState.speechPointStSC}
                         task="speechPointStSC"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
-                        dateOfMeet={dateOfMeet}
+                        dateOfMeet={weekState.dateOfMeet}
                       />
                     )}
                   </div>
@@ -628,8 +491,10 @@ const AddInfoByWeek: React.FC = () => {
           )}
         </div>
       )}
-      {action === 'plan' && dateOfMeet && (
-        <div onClick={() => setState(defaultState)}>Close the window</div>
+      {action === 'plan' && weekState.dateOfMeet && (
+        <div onClick={() => setWeekState(defaultWeekState)}>
+          Close the window
+        </div>
       )}
       {/* close week - setdate-und */}
       {action === 'confirm' && <div onClick={confirmWeek}>Confirm change</div>}

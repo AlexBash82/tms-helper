@@ -11,20 +11,14 @@ import { IWeek } from '../../interfaces'
 //при нажатии на неделю отправлять эту неделю на редактирование и подсвечивать...
 
 interface IProps {
-  calendarDateOfMeet?: string
   timeEndOfMeet: string
   makeAMeet: (dateOfMeet: string) => void
-  activeDate: string | undefined
+  dateOfMeet: string
 }
 
 interface IEmptyWeek extends Pick<IWeek, 'dateOfMeet' | 'startWeekTSt'> {}
 
-const Weeks: React.FC<IProps> = ({
-  calendarDateOfMeet,
-  timeEndOfMeet,
-  makeAMeet,
-  activeDate,
-}) => {
+const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
   const [previousWeeks, setPreviousWeeks] = useState<Array<IWeek> | undefined>()
   const [currentWeek, setCurrentWeek] = useState<
     IWeek | IEmptyWeek | undefined
@@ -36,11 +30,11 @@ const Weeks: React.FC<IProps> = ({
 
   useEffect(() => {
     getWeeks()
-  }, [calendarDateOfMeet])
+  }, [dateOfMeet])
 
   useEffect(() => {
     const compareDates = () => {
-      if (currentWeek) {
+      if (currentWeek && currentWeek.dateOfMeet) {
         const [year, month, day] = currentWeek.dateOfMeet.split('-').map(Number)
         const [hour, minute] = timeEndOfMeet.split(':').map(Number)
         const dateObject = new Date(year, month - 1, day, hour, minute)
@@ -76,7 +70,7 @@ const Weeks: React.FC<IProps> = ({
 
   const getWeeks = async () => {
     const weeksFromBD = await window.api.getAllWeeks()
-    //console.log('allWeeks', weeksFromBD.data)
+
     if (weeksFromBD.success) {
       // Функция для получения таймстемпа начала понедельника для конкретной недели
       function getMondayTimestamp(date: Date) {
@@ -120,15 +114,15 @@ const Weeks: React.FC<IProps> = ({
       // console.log('Прошлые 10 понедельников:', timestamps.pastMondays)
       // console.log('Будущие 10 понедельников:', timestamps.futureMondays)
 
-      const curWeek = weeksFromBD.data.find(
+      const currentWeek = weeksFromBD.data.find(
         (week) => week.startWeekTSt === timestamps.currentMonday
       )
 
-      if (curWeek) {
-        setCurrentWeek(curWeek)
+      if (currentWeek) {
+        setCurrentWeek(currentWeek)
       } else {
         setCurrentWeek({
-          dateOfMeet: 'empty',
+          dateOfMeet: '',
           startWeekTSt: timestamps.currentMonday,
         })
       }
@@ -179,7 +173,7 @@ const Weeks: React.FC<IProps> = ({
             {previousWeeks.map((week) => (
               <div
                 className={`oneWeek orange ${
-                  activeDate === week.dateOfMeet ? 'active' : ''
+                  dateOfMeet === week.dateOfMeet ? 'active' : ''
                 }`}
                 key={week.startWeekTSt}
                 onClick={() => makeAMeet(week.dateOfMeet)}
@@ -198,7 +192,7 @@ const Weeks: React.FC<IProps> = ({
               className={`oneWeek ${
                 currentWeek.dateOfMeet === 'empty' ? 'gray' : ''
               } ${currWeekPerf ? 'orange' : ''}
-                 ${activeDate === currentWeek.dateOfMeet ? 'active' : ''}`}
+                 ${dateOfMeet === currentWeek.dateOfMeet ? 'active' : ''}`}
               onClick={() => makeAMeet(currentWeek.dateOfMeet)}
             >
               {currentWeek.dateOfMeet}
@@ -213,7 +207,7 @@ const Weeks: React.FC<IProps> = ({
             {futureWeeks.map((week) => (
               <div
                 className={`oneWeek ${week.dateOfMeet === 'empty' ? 'gray' : ''}
-                   ${activeDate === week.dateOfMeet ? 'active' : ''}`}
+                   ${dateOfMeet === week.dateOfMeet ? 'active' : ''}`}
                 key={week.startWeekTSt}
                 onClick={() => makeAMeet(week.dateOfMeet)}
               >

@@ -17,10 +17,7 @@ interface IProps {
   getAllStudents: () => void
 }
 
-const AddAndEditPropPerson: React.FC<IProps> = ({
-  PropPerson,
-  getAllStudents,
-}) => {
+const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
   const defaultStudentChBx: IStudentCheckBox = {
     isPortnerOnly: false,
     isSecondClassOnly: false,
@@ -59,12 +56,45 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
       //функция возвращает студента по типу IStudentDateToString
       const makeStudentDateToString = () => {
         // создаем строковый массив из ключей IStudentDateToString
-        const keysArray = Object.keys({} as IStudentDateToString) as Array<
-          keyof IStudentDateToString
-        >
+        const keyOfStudentDateToString = [
+          'latest',
+
+          'mainSlave',
+          'smallSlave',
+
+          'mainStarting',
+          'smallStarting',
+
+          'mainFollowing',
+          'smallFollowing',
+
+          'mainMaking',
+          'smallMaking',
+
+          'mainExplaining',
+          'smallExplaining',
+
+          'mainExplainSpeech',
+          'smallExplaiSpeech',
+
+          'mainRead',
+          'smallRead',
+
+          'mainSpeech',
+          'smallSpeech',
+
+          'endPrayer',
+          'studyBibleInReader',
+          'gems',
+          'liveAndServ',
+          'firstSpeach',
+          'studyBibleIn',
+          'secondChairm',
+          'chairman',
+        ]
 
         const result = {}
-        keysArray.forEach((keyName) => {
+        keyOfStudentDateToString.forEach((keyName) => {
           result[keyName] = getStringOrDefault(PropPerson, keyName)
         })
         return result as IStudentDateToString
@@ -438,18 +468,48 @@ const AddAndEditPropPerson: React.FC<IProps> = ({
             <div>student is open to plan</div>
           )}
           <div>portners - {editPropPerson.portners}</div>
-          {/* {editPropPerson.isChairman && (
-            <div>chairman - {edPPDate?.chairman}</div>
-          )} */}
-          secondChairm: defoltStamp, firstSpeach: defoltStamp, gems:
-          defoltStamp, mainRead: defoltStamp, smallRead: defoltStamp,
-          mainSpeech: defoltStamp, smallSpeech: defoltStamp, liveAndServ:
-          defoltStamp, studyBibleIn: defoltStamp, studyBibleInReader:
-          defoltStamp, endPrayer: defoltStamp,
+          {editPropPerson.isChairman && (
+            <div>chairman - {studentDateToString?.chairman}</div>
+          )}
+          {editPropPerson.isSecondChairm && (
+            <div>secondChairm - {studentDateToString?.secondChairm}</div>
+          )}
+          {editPropPerson.isFirstSpeach && (
+            <div>firstSpeach - {studentDateToString?.firstSpeach}</div>
+          )}
+          {editPropPerson.isGems && (
+            <div>gems - {studentDateToString?.gems}</div>
+          )}
+          {editPropPerson.isRead && (
+            <>
+              <div>mainRead - {studentDateToString?.mainRead}</div>
+              <div>smallRead - {studentDateToString?.smallRead}</div>
+            </>
+          )}
+          {editPropPerson.isSpeech && (
+            <>
+              <div>mainSpeech - {studentDateToString?.mainSpeech}</div>
+              <div>smallSpeech - {studentDateToString?.smallSpeech}</div>
+            </>
+          )}
+          {editPropPerson.isLiveAndServ && (
+            <div>liveAndServ - {studentDateToString?.liveAndServ}</div>
+          )}
+          {editPropPerson.isStudyBibleIn && (
+            <div>studyBibleIn - {studentDateToString?.studyBibleIn}</div>
+          )}
+          {editPropPerson.isStudyBibleInReader && (
+            <div>
+              studyBibleInReader - {studentDateToString?.studyBibleInReader}
+            </div>
+          )}
+          {editPropPerson.isEndPrayer && (
+            <div>endPrayer - {studentDateToString?.endPrayer}</div>
+          )}
         </div>
       )}
     </div>
   )
 }
 
-export default AddAndEditPropPerson
+export default AddAndEditPerson

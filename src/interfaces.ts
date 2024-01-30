@@ -120,7 +120,7 @@ export interface IStudentDateToString {
 }
 
 export interface IWeek {
-  _id: string
+  _id: string | undefined
   startWeekTSt: number
   dateOfMeet: string
   isPlanned: boolean
@@ -134,29 +134,29 @@ export interface IWeek {
   explainingPointChBx: boolean
   speechPointChBx: boolean
 
-  readPointStMC: string | undefined
-  readPointStSC: string | undefined
+  readPointStMC: { name: string; _id: string } | undefined
+  readPointStSC: { name: string; _id: string } | undefined
 
-  startPointStMC: string | undefined
-  startPointAsMC: string | undefined
-  startPointStSC: string | undefined
-  startPointAsSC: string | undefined
+  startPointStMC: { name: string; _id: string } | undefined
+  startPointAsMC: { name: string; _id: string } | undefined
+  startPointStSC: { name: string; _id: string } | undefined
+  startPointAsSC: { name: string; _id: string } | undefined
 
-  followPointStMC: string | undefined
-  followPointAsMC: string | undefined
-  followPointStSC: string | undefined
-  followPointAsSC: string | undefined
+  followPointStMC: { name: string; _id: string } | undefined
+  followPointAsMC: { name: string; _id: string } | undefined
+  followPointStSC: { name: string; _id: string } | undefined
+  followPointAsSC: { name: string; _id: string } | undefined
 
-  makePointStMC: string | undefined
-  makePointAsMC: string | undefined
-  makePointStSC: string | undefined
-  makePointAsSC: string | undefined
+  makePointStMC: { name: string; _id: string } | undefined
+  makePointAsMC: { name: string; _id: string } | undefined
+  makePointStSC: { name: string; _id: string } | undefined
+  makePointAsSC: { name: string; _id: string } | undefined
 
-  explainPointStMC: string | undefined
-  explainPointAsMC: string | undefined
-  explainPointStSC: string | undefined
-  explainPointAsSC: string | undefined
+  explainPointStMC: { name: string; _id: string } | undefined
+  explainPointAsMC: { name: string; _id: string } | undefined
+  explainPointStSC: { name: string; _id: string } | undefined
+  explainPointAsSC: { name: string; _id: string } | undefined
 
-  speechPointStMC: string | undefined
-  speechPointStSC: string | undefined
+  speechPointStMC: { name: string; _id: string } | undefined
+  speechPointStSC: { name: string; _id: string } | undefined
 }

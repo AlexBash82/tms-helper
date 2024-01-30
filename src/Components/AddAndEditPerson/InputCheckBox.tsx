@@ -64,115 +64,119 @@ const inputCheckBox: React.FC<IProps> = ({
         }
       />
       -Not a Bible study
-      <input
-        type="checkbox"
-        checked={isExplainSpeech}
-        onChange={(e) =>
-          setInputCheckBox({
-            ...inputCheckBox,
-            isExplainSpeech: !isExplainSpeech,
-          })
-        }
-      />
-      -Explain - speech
-      <input
-        type="checkbox"
-        checked={isRead}
-        onChange={(e) =>
-          setInputCheckBox({ ...inputCheckBox, isRead: !isRead })
-        }
-      />
-      -Read Bible
-      <input
-        type="checkbox"
-        checked={isSpeech}
-        onChange={(e) =>
-          setInputCheckBox({
-            ...inputCheckBox,
-            isSpeech: !isSpeech,
-          })
-        }
-      />
-      -Study speech
-      <input
-        type="checkbox"
-        checked={isEndPrayer}
-        onChange={(e) =>
-          setInputCheckBox({ ...inputCheckBox, isEndPrayer: !isEndPrayer })
-        }
-      />
-      -Prayer in the end
-      <input
-        type="checkbox"
-        checked={isStudyBibleInReader}
-        onChange={(e) =>
-          setInputCheckBox({
-            ...inputCheckBox,
-            isStudyBibleInReader: !isStudyBibleInReader,
-          })
-        }
-      />
-      -Study Bible reader
-      <input
-        type="checkbox"
-        checked={isGems}
-        onChange={(e) =>
-          setInputCheckBox({ ...inputCheckBox, isGems: !isGems })
-        }
-      />
-      -Spiritual Gems
-      <input
-        type="checkbox"
-        checked={isLiveAndServ}
-        onChange={(e) =>
-          setInputCheckBox({
-            ...inputCheckBox,
-            isLiveAndServ: !isLiveAndServ,
-          })
-        }
-      />
-      -LiveAndServ and service
-      <input
-        type="checkbox"
-        checked={isFirstSpeach}
-        onChange={(e) =>
-          setInputCheckBox({
-            ...inputCheckBox,
-            isFirstSpeach: !isFirstSpeach,
-          })
-        }
-      />
-      -First speach
-      <input
-        type="checkbox"
-        checked={isStudyBibleIn}
-        onChange={(e) =>
-          setInputCheckBox({
-            ...inputCheckBox,
-            isStudyBibleIn: !isStudyBibleIn,
-          })
-        }
-      />
-      -Study Bible
-      <input
-        type="checkbox"
-        checked={isSecondChairm}
-        onChange={(e) =>
-          setInputCheckBox({
-            ...inputCheckBox,
-            isSecondChairm: !isSecondChairm,
-          })
-        }
-      />
-      -Chairman in second
-      <input
-        type="checkbox"
-        checked={isChairman}
-        onChange={(e) =>
-          setInputCheckBox({ ...inputCheckBox, isChairman: !isChairman })
-        }
-      />
-      -Chairman in main
+      {gender === 'Male' && (
+        <>
+          <input
+            type="checkbox"
+            checked={isExplainSpeech}
+            onChange={(e) =>
+              setInputCheckBox({
+                ...inputCheckBox,
+                isExplainSpeech: !isExplainSpeech,
+              })
+            }
+          />
+          -Explain - speech
+          <input
+            type="checkbox"
+            checked={isRead}
+            onChange={(e) =>
+              setInputCheckBox({ ...inputCheckBox, isRead: !isRead })
+            }
+          />
+          -Read Bible
+          <input
+            type="checkbox"
+            checked={isSpeech}
+            onChange={(e) =>
+              setInputCheckBox({
+                ...inputCheckBox,
+                isSpeech: !isSpeech,
+              })
+            }
+          />
+          -Study speech
+          <input
+            type="checkbox"
+            checked={isEndPrayer}
+            onChange={(e) =>
+              setInputCheckBox({ ...inputCheckBox, isEndPrayer: !isEndPrayer })
+            }
+          />
+          -Prayer in the end
+          <input
+            type="checkbox"
+            checked={isStudyBibleInReader}
+            onChange={(e) =>
+              setInputCheckBox({
+                ...inputCheckBox,
+                isStudyBibleInReader: !isStudyBibleInReader,
+              })
+            }
+          />
+          -Study Bible reader
+          <input
+            type="checkbox"
+            checked={isGems}
+            onChange={(e) =>
+              setInputCheckBox({ ...inputCheckBox, isGems: !isGems })
+            }
+          />
+          -Spiritual Gems
+          <input
+            type="checkbox"
+            checked={isLiveAndServ}
+            onChange={(e) =>
+              setInputCheckBox({
+                ...inputCheckBox,
+                isLiveAndServ: !isLiveAndServ,
+              })
+            }
+          />
+          -LiveAndServ and service
+          <input
+            type="checkbox"
+            checked={isFirstSpeach}
+            onChange={(e) =>
+              setInputCheckBox({
+                ...inputCheckBox,
+                isFirstSpeach: !isFirstSpeach,
+              })
+            }
+          />
+          -First speach
+          <input
+            type="checkbox"
+            checked={isStudyBibleIn}
+            onChange={(e) =>
+              setInputCheckBox({
+                ...inputCheckBox,
+                isStudyBibleIn: !isStudyBibleIn,
+              })
+            }
+          />
+          -Study Bible
+          <input
+            type="checkbox"
+            checked={isSecondChairm}
+            onChange={(e) =>
+              setInputCheckBox({
+                ...inputCheckBox,
+                isSecondChairm: !isSecondChairm,
+              })
+            }
+          />
+          -Chairman in second
+          <input
+            type="checkbox"
+            checked={isChairman}
+            onChange={(e) =>
+              setInputCheckBox({ ...inputCheckBox, isChairman: !isChairman })
+            }
+          />
+          -Chairman in main
+        </>
+      )}
     </div>
   )
 }

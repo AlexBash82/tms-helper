@@ -31,28 +31,30 @@ type UnSuccessResultAllWeeks = {
 type ResultMaleOrFemale = {
   success: boolean
   message: string
-  data?: IMaleDB | IFemaleDB
+  data?: IStudent
 }
-type SuccessMalesOrFemales = {
-  success: true
-  message: string
-  data: Array<IMaleDB | IFemaleDB>
-}
-type UnSuccessMalesOrFemales = {
+
+//новый формат типов
+type Failure = {
   success: false
   message: string
 }
-//новый формат типов
+
+type SuccessStudent = {
+  success: true
+  message: string
+  data: IStudent
+}
+
+type ResultStudent = SuccessStudent | Failure
+
 type SuccessStudents = {
   success: true
   message: string
   data: IStudent[]
 }
-type FailureStudents = {
-  success: false
-  message: string
-}
-type ResultStudents = SuccessStudents | FailureStudents
+
+type ResultStudents = SuccessStudents | Failure
 
 declare global {
   interface Window {
@@ -61,16 +63,12 @@ declare global {
       receive: (channel: string, func: (...args: any[]) => void) => void
 
       getAllStudents: () => Promise<ResultStudents>
+      getUsersByLastname: (lastFirstName: string) => Promise<ResultStudents>
+      updateOneUser: (personData: object) => Promise<ResultStudent>
       //обновить типы функций что ниже
       writeOneUser: (personData: object) => Promise<Result>
-      getUsersByLastname: (
-        lastFirstName: string
-      ) => Promise<SuccessMalesOrFemales | UnSuccessMalesOrFemales>
-      getUsersByLatest: (
-        addParam: object
-      ) => Promise<Array<IMaleDB | IFemaleDB>>
+      getUsersByLatest: (addParam: object) => Promise<Array<IStudent>>
       getOneUserByLFName: (lastFirstName: string) => Promise<ResultMaleOrFemale>
-      updateOneUser: (data: object) => Promise<Result>
       editOneUser: (data: object) => Promise<Result>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
 

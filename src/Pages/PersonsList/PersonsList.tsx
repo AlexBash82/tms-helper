@@ -19,7 +19,6 @@ const PersonsList: React.FC = () => {
       const allStudents = await window.api.getAllStudents()
       if (allStudents.success) {
         setAllUsers(allStudents.data)
-        //console.log('allStudents', allStudents)
       }
     } catch (err) {
       //console.log('Error reading all data:', err)

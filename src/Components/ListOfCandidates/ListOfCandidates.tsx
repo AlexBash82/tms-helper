@@ -12,7 +12,7 @@ import { IStudent } from '../../interfaces'
 interface IProps {
   openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
-  presentValue: string | undefined
+  presentValue: { name: string; _id: string } | undefined
   task: string
   dateOfMeet: string
   suitsStudents: Array<IStudent>
@@ -70,27 +70,37 @@ const ListOfCandidates: React.FC<IProps> = ({
   }
 
   useEffect(() => {
-    getUsersLatest()
+    if (action === 'plan') {
+      getUsersLatest()
+    }
   }, [])
 
+  //эта функция полуает studentName: имя студента, у которого нужно в базе сделать plan: true
   const makePlan = async (studentName: string) => {
-    //добавть проверку на presentValue на андефайнд
-    const presentUser = await window.api.getOneUserByLFName(presentValue)
-    if (presentUser.data?.plan) {
-      try {
-        const updatePresent = {
-          studentName: presentValue,
-          keyName: 'plan',
-          newValue: false,
-        }
-        const presentResult = await window.api.updateOneUser(updatePresent)
+    //если в строке уже имеется студент: presentValue, то получаем его из базы
+    if (presentValue) {
+      const presentUser = await window.api.getOneUserByLFName(
+        presentValue?.name
+      )
 
-        console.log('presentResult', presentResult)
-      } catch (error) {
-        console.error('Error updating item:', error)
+      //проверяем у этого студента поле plan: true и меняем на false
+      if (presentUser.success && presentUser.data?.plan) {
+        try {
+          const updatePresent = {
+            studentName: presentValue,
+            keyName: 'plan',
+            newValue: false,
+          }
+          const presentResult = await window.api.updateOneUser(updatePresent)
+          console.log('presentResult', presentResult)
+        } catch (error) {
+          console.error('Error updating item:', error)
+        }
       }
     }
-    if (presentValue !== studentName) {
+
+    //если вновь полученное имя отличается от предыдущего (если оно вообще есть), то меняем поле plan: true
+    if (studentName !== presentValue?.name) {
       try {
         const updateUser = {
           studentName: studentName,
@@ -98,16 +108,19 @@ const ListOfCandidates: React.FC<IProps> = ({
           newValue: true,
         }
         const resultUser = await window.api.updateOneUser(updateUser)
-        //console.log('resultUser', resultUser)
 
+        //если обновить студента получилось, то обновляем данные в базе недели
         if (resultUser.success) {
           const updateWeek = {
             dateOfMeet,
             keyName: task,
-            newValue: studentName,
+            newValue: {
+              name: resultUser.data.lastFirstName,
+              _id: resultUser.data._id,
+            },
           }
           const resultWeek = await window.api.updateOneWeek(updateWeek)
-          //console.log('resultWeek', resultWeek)
+
           if (resultWeek.success) {
             getCurrentWeek()
           }
@@ -119,9 +132,10 @@ const ListOfCandidates: React.FC<IProps> = ({
     openAndChoose('')
   }
 
+  //для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - обновятся поя дат у студентов
   const makeUpdate = async (studentName: string) => {
     const student = await window.api.getOneUserByLFName(studentName)
-    console.log('update. user', studentName)
+
     if (student.success) {
       try {
         const updateWeek = {
@@ -130,7 +144,7 @@ const ListOfCandidates: React.FC<IProps> = ({
           newValue: studentName,
         }
         const resultWeek = await window.api.updateOneWeek(updateWeek)
-        console.log('resultWeek', resultWeek)
+
         if (resultWeek.success) {
           getCurrentWeek()
         }

@@ -5,10 +5,10 @@ import SingleInput from '../SingleInput/SingleInput'
 interface IProps {
   title: string
   openAndChoose: (arg: string) => void
-  openedList: string
-  firstInput: string | undefined
+  openedList: string | undefined
+  firstInput: { name: string; _id: string } | undefined
   firstTask: string
-  secondInput: string | undefined
+  secondInput: { name: string; _id: string } | undefined
   secondTask: string
   getCurrentWeek: () => void
   dateOfMeet: string
