@@ -7,62 +7,62 @@ export interface IStudent {
   plan: false
   portners: Array<string>
 
-  latest: number | undefined
+  latest: number | null
 
   isPortnerOnly: boolean
   isSecondClassOnly: boolean
   isNotBibleStudy: boolean
 
-  mainSlave: number | undefined
-  smallSlave: number | undefined
+  mainSlave: number | null
+  smallSlave: number | null
 
-  mainStarting: number | undefined
-  smallStarting: number | undefined
+  mainStarting: number | null
+  smallStarting: number | null
 
-  mainFollowing: number | undefined
-  smallFollowing: number | undefined
+  mainFollowing: number | null
+  smallFollowing: number | null
 
-  mainMaking: number | undefined
-  smallMaking: number | undefined
+  mainMaking: number | null
+  smallMaking: number | null
 
-  mainExplaining: number | undefined
-  smallExplaining: number | undefined
+  mainExplaining: number | null
+  smallExplaining: number | null
 
   isExplainSpeech: boolean
-  mainExplainSpeech: number | undefined
-  smallExplaiSpeech: number | undefined
+  mainExplainSpeech: number | null
+  smallExplaiSpeech: number | null
 
   isRead: boolean
-  mainRead: number | undefined
-  smallRead: number | undefined
+  mainRead: number | null
+  smallRead: number | null
 
   isSpeech: boolean
-  mainSpeech: number | undefined
-  smallSpeech: number | undefined
+  mainSpeech: number | null
+  smallSpeech: number | null
 
   isEndPrayer: boolean
-  endPrayer: number | undefined
+  endPrayer: number | null
 
   isStudyBibleInReader: boolean
-  studyBibleInReader: number | undefined
+  studyBibleInReader: number | null
 
   isGems: boolean
-  gems: number | undefined
+  gems: number | null
 
   isLiveAndServ: boolean
-  liveAndServ: number | undefined
+  liveAndServ: number | null
 
   isFirstSpeach: boolean
-  firstSpeach: number | undefined
+  firstSpeach: number | null
 
   isStudyBibleIn: boolean
-  studyBibleIn: number | undefined
+  studyBibleIn: number | null
 
   isSecondChairm: boolean
-  secondChairm: number | undefined
+  secondChairm: number | null
 
   isChairman: boolean
-  chairman: number | undefined
+  chairman: number | null
 }
 
 export interface IStudentCheckBox {
@@ -134,29 +134,29 @@ export interface IWeek {
   explainingPointChBx: boolean
   speechPointChBx: boolean
 
-  readPointStMC: { name: string; _id: string } | undefined
-  readPointStSC: { name: string; _id: string } | undefined
+  readPointStMC: { name: string; _id: string } | null
+  readPointStSC: { name: string; _id: string } | null
 
-  startPointStMC: { name: string; _id: string } | undefined
-  startPointAsMC: { name: string; _id: string } | undefined
-  startPointStSC: { name: string; _id: string } | undefined
-  startPointAsSC: { name: string; _id: string } | undefined
+  startPointStMC: { name: string; _id: string } | null
+  startPointAsMC: { name: string; _id: string } | null
+  startPointStSC: { name: string; _id: string } | null
+  startPointAsSC: { name: string; _id: string } | null
 
-  followPointStMC: { name: string; _id: string } | undefined
-  followPointAsMC: { name: string; _id: string } | undefined
-  followPointStSC: { name: string; _id: string } | undefined
-  followPointAsSC: { name: string; _id: string } | undefined
+  followPointStMC: { name: string; _id: string } | null
+  followPointAsMC: { name: string; _id: string } | null
+  followPointStSC: { name: string; _id: string } | null
+  followPointAsSC: { name: string; _id: string } | null
 
-  makePointStMC: { name: string; _id: string } | undefined
-  makePointAsMC: { name: string; _id: string } | undefined
-  makePointStSC: { name: string; _id: string } | undefined
-  makePointAsSC: { name: string; _id: string } | undefined
+  makePointStMC: { name: string; _id: string } | null
+  makePointAsMC: { name: string; _id: string } | null
+  makePointStSC: { name: string; _id: string } | null
+  makePointAsSC: { name: string; _id: string } | null
 
-  explainPointStMC: { name: string; _id: string } | undefined
-  explainPointAsMC: { name: string; _id: string } | undefined
-  explainPointStSC: { name: string; _id: string } | undefined
-  explainPointAsSC: { name: string; _id: string } | undefined
+  explainPointStMC: { name: string; _id: string } | null
+  explainPointAsMC: { name: string; _id: string } | null
+  explainPointStSC: { name: string; _id: string } | null
+  explainPointAsSC: { name: string; _id: string } | null
 
-  speechPointStMC: { name: string; _id: string } | undefined
-  speechPointStSC: { name: string; _id: string } | undefined
+  speechPointStMC: { name: string; _id: string } | null
+  speechPointStSC: { name: string; _id: string } | null
 }

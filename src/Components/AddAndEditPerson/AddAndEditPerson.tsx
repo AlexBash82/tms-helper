@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
-  const defaultStudentChBx: IStudentCheckBox = {
+  const defaultInputChBx: IStudentCheckBox = {
     isPortnerOnly: false,
     isSecondClassOnly: false,
     isNotBibleStudy: false,
@@ -36,7 +36,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
   }
 
   const [inputCheckBox, setInputCheckBox] =
-    useState<IStudentCheckBox>(defaultStudentChBx)
+    useState<IStudentCheckBox>(defaultInputChBx)
   const [inputLFName, setInputLFName] = useState('')
   const [gender, setGender] = useState('')
   const [dontUse, setDontUse] = useState(false)
@@ -175,20 +175,20 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
   useEffect(() => {
     if (editPropPerson) {
       const checkBoxData = {
-        isPortnerOnly: editPropPerson.isPortnerOnly,
-        isSecondClassOnly: editPropPerson.isSecondClassOnly,
-        isNotBibleStudy: editPropPerson.isNotBibleStudy,
-        isExplainSpeech: editPropPerson.isExplainSpeech,
-        isRead: editPropPerson.isRead,
-        isSpeech: editPropPerson.isSpeech,
-        isEndPrayer: editPropPerson.isEndPrayer,
-        isStudyBibleInReader: editPropPerson.isStudyBibleInReader,
-        isGems: editPropPerson.isGems,
-        isLiveAndServ: editPropPerson.isLiveAndServ,
-        isFirstSpeach: editPropPerson.isFirstSpeach,
-        isStudyBibleIn: editPropPerson.isStudyBibleIn,
-        isSecondChairm: editPropPerson.isSecondChairm,
-        isChairman: editPropPerson.isChairman,
+        isPortnerOnly: editPropPerson.isPortnerOnly || false,
+        isSecondClassOnly: editPropPerson.isSecondClassOnly || false,
+        isNotBibleStudy: editPropPerson.isNotBibleStudy || false,
+        isExplainSpeech: editPropPerson.isExplainSpeech || false,
+        isRead: editPropPerson.isRead || false,
+        isSpeech: editPropPerson.isSpeech || false,
+        isEndPrayer: editPropPerson.isEndPrayer || false,
+        isStudyBibleInReader: editPropPerson.isStudyBibleInReader || false,
+        isGems: editPropPerson.isGems || false,
+        isLiveAndServ: editPropPerson.isLiveAndServ || false,
+        isFirstSpeach: editPropPerson.isFirstSpeach || false,
+        isStudyBibleIn: editPropPerson.isStudyBibleIn || false,
+        isSecondChairm: editPropPerson.isSecondChairm || false,
+        isChairman: editPropPerson.isChairman || false,
       }
       setInputCheckBox(checkBoxData)
 
@@ -207,7 +207,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
     setDontUse(false)
     setComments('')
     setFoundStudentsByLetter([])
-    //нужно ли тут чистить имя и фамиию????
+    setInputCheckBox(defaultInputChBx)
   }
 
   //ищем по букве в фамилии и обновляем стейты setFoundStudentsByLetter и setInputLFName
@@ -227,7 +227,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
     try {
       //добавить проверку по переменной valid где проверять на пробелы и т.д.
       if (inputLFName !== '') {
-        const studentData: Omit<IStudent, '_id'> = {
+        const defaultStudentData: Omit<IStudent, '_id'> = {
           lastFirstName: inputLFName,
           gender: gender,
           dontUse: dontUse,
@@ -235,64 +235,64 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           plan: false,
           portners: [],
 
-          latest: undefined,
+          latest: null,
 
           isPortnerOnly: inputCheckBox.isPortnerOnly,
           isSecondClassOnly: inputCheckBox.isSecondClassOnly,
           isNotBibleStudy: inputCheckBox.isNotBibleStudy,
 
-          mainSlave: undefined,
-          smallSlave: undefined,
+          mainSlave: null,
+          smallSlave: null,
 
-          mainStarting: undefined,
-          smallStarting: undefined,
+          mainStarting: null,
+          smallStarting: null,
 
-          mainFollowing: undefined,
-          smallFollowing: undefined,
+          mainFollowing: null,
+          smallFollowing: null,
 
-          mainMaking: undefined,
-          smallMaking: undefined,
+          mainMaking: null,
+          smallMaking: null,
 
-          mainExplaining: undefined,
-          smallExplaining: undefined,
+          mainExplaining: null,
+          smallExplaining: null,
 
           isExplainSpeech: inputCheckBox.isExplainSpeech,
-          mainExplainSpeech: undefined,
-          smallExplaiSpeech: undefined,
+          mainExplainSpeech: null,
+          smallExplaiSpeech: null,
 
           isRead: inputCheckBox.isRead,
-          mainRead: undefined,
-          smallRead: undefined,
+          mainRead: null,
+          smallRead: null,
 
           isSpeech: inputCheckBox.isSpeech,
-          mainSpeech: undefined,
-          smallSpeech: undefined,
+          mainSpeech: null,
+          smallSpeech: null,
 
           isEndPrayer: inputCheckBox.isEndPrayer,
-          endPrayer: undefined,
+          endPrayer: null,
 
           isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
-          studyBibleInReader: undefined,
+          studyBibleInReader: null,
 
           isGems: inputCheckBox.isGems,
-          gems: undefined,
+          gems: null,
 
           isLiveAndServ: inputCheckBox.isLiveAndServ,
-          liveAndServ: undefined,
+          liveAndServ: null,
 
           isFirstSpeach: inputCheckBox.isFirstSpeach,
-          firstSpeach: undefined,
+          firstSpeach: null,
 
           isStudyBibleIn: inputCheckBox.isStudyBibleIn,
-          studyBibleIn: undefined,
+          studyBibleIn: null,
 
           isSecondChairm: inputCheckBox.isSecondChairm,
-          secondChairm: undefined,
+          secondChairm: null,
 
           isChairman: inputCheckBox.isChairman,
-          chairman: undefined,
+          chairman: null,
         }
-        const result = await window.api.writeOneUser(studentData)
+        const result = await window.api.writeOneUser(defaultStudentData)
         alert(result.message)
       }
 
@@ -303,19 +303,78 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
     }
   }
 
+  //эта функция не просто обновляет некоторые поля, она полность перезаписывает данные студента учитывая шаблон который в нее заложен через переменную newStudentData
   const editPerson = async () => {
     if (editPropPerson) {
-      const idPerson = editPropPerson._id
-      const newValue = {
-        ...inputCheckBox,
+      const newStudentData: Omit<IStudent, '_id'> = {
         lastFirstName: inputLFName,
-        dontUse,
-        comments,
+        gender: gender,
+        dontUse: dontUse,
+        comments: comments,
+        plan: editPropPerson.plan,
+        portners: editPropPerson.portners,
+
+        latest: editPropPerson.latest || null,
+
+        isPortnerOnly: inputCheckBox.isPortnerOnly,
+        isSecondClassOnly: inputCheckBox.isSecondClassOnly,
+        isNotBibleStudy: inputCheckBox.isNotBibleStudy,
+
+        mainSlave: editPropPerson.mainSlave || null,
+        smallSlave: editPropPerson.smallSlave || null,
+
+        mainStarting: editPropPerson.mainStarting || null,
+        smallStarting: editPropPerson.smallStarting || null,
+
+        mainFollowing: editPropPerson.mainFollowing || null,
+        smallFollowing: editPropPerson.smallFollowing || null,
+
+        mainMaking: editPropPerson.mainMaking || null,
+        smallMaking: editPropPerson.smallMaking || null,
+
+        mainExplaining: editPropPerson.mainExplaining || null,
+        smallExplaining: editPropPerson.smallExplaining || null,
+
+        isExplainSpeech: inputCheckBox.isExplainSpeech,
+        mainExplainSpeech: editPropPerson.mainExplainSpeech || null,
+        smallExplaiSpeech: editPropPerson.smallExplaiSpeech || null,
+
+        isRead: inputCheckBox.isRead,
+        mainRead: editPropPerson.mainRead || null,
+        smallRead: editPropPerson.smallRead || null,
+
+        isSpeech: inputCheckBox.isSpeech,
+        mainSpeech: editPropPerson.mainSpeech || null,
+        smallSpeech: editPropPerson.smallSpeech || null,
+
+        isEndPrayer: inputCheckBox.isEndPrayer,
+        endPrayer: editPropPerson.endPrayer || null,
+
+        isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
+        studyBibleInReader: editPropPerson.studyBibleInReader || null,
+
+        isGems: inputCheckBox.isGems,
+        gems: editPropPerson.gems || null,
+
+        isLiveAndServ: inputCheckBox.isLiveAndServ,
+        liveAndServ: editPropPerson.liveAndServ || null,
+
+        isFirstSpeach: inputCheckBox.isFirstSpeach,
+        firstSpeach: editPropPerson.firstSpeach || null,
+
+        isStudyBibleIn: inputCheckBox.isStudyBibleIn,
+        studyBibleIn: editPropPerson.studyBibleIn || null,
+
+        isSecondChairm: inputCheckBox.isSecondChairm,
+        secondChairm: editPropPerson.secondChairm || null,
+
+        isChairman: inputCheckBox.isChairman,
+        chairman: editPropPerson.chairman || null,
       }
       //задание:
       //если в базе есть такое имя но id не совпадает, то не обновлять базу а сообщить об этом
       await window.api
-        .editOneUser({ idPerson, newValue })
+        .editOneUser({ idStudent: editPropPerson._id, newStudentData })
         .then((result) => {
           getAllStudents() //обновляем список после внесения изменений.
           alert(result.message)

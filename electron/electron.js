@@ -139,7 +139,14 @@ ipcMain.handle('get-all-students', async (event) => {
         if (err) {
           reject(err)
         } else {
-          resolve(docs)
+          // Сортируем пользователей по полю "lastFirstName"
+          const sortedUsers = docs.sort((a, b) => {
+            const nameA = a.lastFirstName.toLowerCase()
+            const nameB = b.lastFirstName.toLowerCase()
+            return nameA.localeCompare(nameB)
+          })
+
+          resolve(sortedUsers)
         }
       })
     })
@@ -216,11 +223,12 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
 
 ipcMain.handle('edit-one-user', async (event, editItem) => {
   try {
-    const { idPerson, newValue } = editItem
+    const { idStudent, newStudentData } = editItem
 
     const originalPerson = await new Promise((resolve, reject) => {
-      usersDB.findOne({ _id: idPerson }, (err, person) => {
+      usersDB.findOne({ _id: idStudent }, (err, person) => {
         if (err) {
+          console.log('edit-one-user error-find', err)
           reject(err)
         } else {
           resolve(person)
@@ -229,19 +237,19 @@ ipcMain.handle('edit-one-user', async (event, editItem) => {
     })
 
     if (!originalPerson) {
-      return { success: false, message: 'Item not found' }
+      return { success: false, message: 'Student not found' }
     }
 
-    const updatedObject = Object.assign(originalPerson, newValue)
+    const updatedObject = Object.assign(originalPerson, newStudentData)
 
-    const updatedPerson = await new Promise((resolve, reject) => {
+    const numUpdatedPerson = await new Promise((resolve, reject) => {
       usersDB.update(
-        { _id: idPerson },
+        { _id: idStudent },
         updatedObject,
         {},
         (err, numUpdated) => {
           if (err) {
-            console.error('edit-one-user error update', err)
+            console.log('edit-one-user error-update', err)
             reject(err)
           } else {
             resolve(numUpdated)
@@ -250,13 +258,13 @@ ipcMain.handle('edit-one-user', async (event, editItem) => {
       )
     })
 
-    if (updatedPerson) {
+    if (numUpdatedPerson) {
       usersDB.persistence.compactDatafile()
-      return { success: true, message: 'Item updated successfully' }
+      return { success: true, message: 'Student updated successfully' }
     }
-  } catch (error) {
-    console.error('edit-one-user error', error)
-    return { success: false, message: 'Error updating item' }
+  } catch (err) {
+    console.error('edit-one-user error', err)
+    return { success: false, message: 'Error updating student' }
   }
 })
 
