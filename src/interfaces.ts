@@ -132,6 +132,7 @@ export interface IWeek {
   followingPointChBx: boolean
   makingPointChBx: boolean
   explainingPointChBx: boolean
+  explainingSpPointChBx: boolean
   speechPointChBx: boolean
 
   readPointStMC: { name: string; _id: string } | null
@@ -156,6 +157,9 @@ export interface IWeek {
   explainPointAsMC: { name: string; _id: string } | null
   explainPointStSC: { name: string; _id: string } | null
   explainPointAsSC: { name: string; _id: string } | null
+
+  explainSpPointStMC: { name: string; _id: string } | null
+  explainSpPointStSC: { name: string; _id: string } | null
 
   speechPointStMC: { name: string; _id: string } | null
   speechPointStSC: { name: string; _id: string } | null

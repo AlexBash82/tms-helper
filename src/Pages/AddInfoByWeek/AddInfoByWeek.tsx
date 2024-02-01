@@ -22,6 +22,7 @@ const AddInfoByWeek: React.FC = () => {
     followingPointChBx: false,
     makingPointChBx: false,
     explainingPointChBx: false,
+    explainingSpPointChBx: false,
     speechPointChBx: false,
 
     readPointStMC: null,
@@ -43,6 +44,8 @@ const AddInfoByWeek: React.FC = () => {
     makePointAsSC: null,
     explainPointStSC: null,
     explainPointAsSC: null,
+    explainSpPointStMC: null,
+    explainSpPointStSC: null,
     speechPointStSC: null,
   }
   const [weekState, setWeekState] = useState<IWeek>(defaultWeekState)
@@ -226,10 +229,12 @@ const AddInfoByWeek: React.FC = () => {
             <div className="df">
               <div>
                 <div>Choose</div>
+
                 <div className="df">
                   <input type="checkbox" checked={true} readOnly />
                   <div> - Bible Reading</div>
                 </div>
+
                 <div className="df">
                   <input
                     type="checkbox"
@@ -243,6 +248,7 @@ const AddInfoByWeek: React.FC = () => {
                   />
                   <div> - Starting a Conversation</div>
                 </div>
+
                 <div className="df">
                   <input
                     type="checkbox"
@@ -256,6 +262,7 @@ const AddInfoByWeek: React.FC = () => {
                   />
                   <div> - Following Up</div>
                 </div>
+
                 <div className="df">
                   <input
                     type="checkbox"
@@ -269,6 +276,21 @@ const AddInfoByWeek: React.FC = () => {
                   />
                   <div> - Making Disciples</div>
                 </div>
+
+                <div className="df">
+                  <input
+                    type="checkbox"
+                    checked={weekState.explainingSpPointChBx}
+                    onChange={(e) =>
+                      makeChangeChBx(
+                        'explainingSpPointChBx',
+                        !weekState.explainingSpPointChBx
+                      )
+                    }
+                  />
+                  <div> - Explaining as Speech</div>
+                </div>
+
                 <div className="df">
                   <input
                     type="checkbox"
@@ -282,6 +304,7 @@ const AddInfoByWeek: React.FC = () => {
                   />
                   <div> - Explaining Your Beliefs</div>
                 </div>
+
                 <div className="df">
                   <input
                     type="checkbox"
@@ -351,6 +374,19 @@ const AddInfoByWeek: React.FC = () => {
                     getCurrentWeek={getCurrentWeek}
                     secondInput={weekState.makePointAsMC}
                     secondTask="makePointAsMC"
+                    action={action}
+                    dateOfMeet={weekState.dateOfMeet}
+                  />
+                )}
+
+                {weekState.explainingSpPointChBx && (
+                  <SingleInput
+                    title={'Explaining as Speech'}
+                    openAndChoose={openAndChoose}
+                    openedList={openedList}
+                    firstInput={weekState.explainSpPointStMC}
+                    task="explainSpPointStMC"
+                    getCurrentWeek={getCurrentWeek}
                     action={action}
                     dateOfMeet={weekState.dateOfMeet}
                   />
@@ -452,6 +488,19 @@ const AddInfoByWeek: React.FC = () => {
                         getCurrentWeek={getCurrentWeek}
                         secondInput={weekState.makePointAsSC}
                         secondTask="makePointAsSC"
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )}
+
+                    {weekState.explainingSpPointChBx && (
+                      <SingleInput
+                        title={'Explaining as Speech'}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={weekState.explainSpPointStSC}
+                        task="explainSpPointStSC"
+                        getCurrentWeek={getCurrentWeek}
                         action={action}
                         dateOfMeet={weekState.dateOfMeet}
                       />
