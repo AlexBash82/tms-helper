@@ -338,6 +338,7 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
 })
 
 //------------------------GET-SORTED-USERS-BY-LATEST-------------------------------------------
+//условия фильтрации: dontUse: false, plan: false, ...addParam
 
 ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
   try {

@@ -29,7 +29,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
     isStudyBibleInReader: false,
     isGems: false,
     isLiveAndServ: false,
-    isFirstSpeach: false,
+    isFirstSpeech: false,
     isStudyBibleIn: false,
     isSecondChairm: false,
     isChairman: false,
@@ -87,7 +87,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           'studyBibleInReader',
           'gems',
           'liveAndServ',
-          'firstSpeach',
+          'firstSpeech',
           'studyBibleIn',
           'secondChairm',
           'chairman',
@@ -117,7 +117,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
 
       //   chairman: stampToDate(person.chairman)
       //   secondChairm: stampToDate(person.secondChairm)
-      //   firstSpeach: stampToDate(person.firstSpeach)
+      //   firstSpeech: stampToDate(person.firstSpeech)
       //   gems: stampToDate(person.gems)
       //   mainRead: stampToDate(person.mainRead)
       //   smallRead: stampToDate(person.smallRead)
@@ -185,7 +185,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         isStudyBibleInReader: editPropPerson.isStudyBibleInReader || false,
         isGems: editPropPerson.isGems || false,
         isLiveAndServ: editPropPerson.isLiveAndServ || false,
-        isFirstSpeach: editPropPerson.isFirstSpeach || false,
+        isFirstSpeech: editPropPerson.isFirstSpeech || false,
         isStudyBibleIn: editPropPerson.isStudyBibleIn || false,
         isSecondChairm: editPropPerson.isSecondChairm || false,
         isChairman: editPropPerson.isChairman || false,
@@ -280,8 +280,8 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           isLiveAndServ: inputCheckBox.isLiveAndServ,
           liveAndServ: null,
 
-          isFirstSpeach: inputCheckBox.isFirstSpeach,
-          firstSpeach: null,
+          isFirstSpeech: inputCheckBox.isFirstSpeech,
+          firstSpeech: null,
 
           isStudyBibleIn: inputCheckBox.isStudyBibleIn,
           studyBibleIn: null,
@@ -359,8 +359,8 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         isLiveAndServ: inputCheckBox.isLiveAndServ,
         liveAndServ: editPropPerson.liveAndServ || null,
 
-        isFirstSpeach: inputCheckBox.isFirstSpeach,
-        firstSpeach: editPropPerson.firstSpeach || null,
+        isFirstSpeech: inputCheckBox.isFirstSpeech,
+        firstSpeech: editPropPerson.firstSpeech || null,
 
         isStudyBibleIn: inputCheckBox.isStudyBibleIn,
         studyBibleIn: editPropPerson.studyBibleIn || null,
@@ -533,8 +533,8 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           {editPropPerson.isSecondChairm && (
             <div>secondChairm - {studentDateToString?.secondChairm}</div>
           )}
-          {editPropPerson.isFirstSpeach && (
-            <div>firstSpeach - {studentDateToString?.firstSpeach}</div>
+          {editPropPerson.isFirstSpeech && (
+            <div>firstSpeech - {studentDateToString?.firstSpeech}</div>
           )}
           {editPropPerson.isGems && (
             <div>gems - {studentDateToString?.gems}</div>

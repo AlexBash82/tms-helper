@@ -52,8 +52,8 @@ export interface IStudent {
   isLiveAndServ: boolean
   liveAndServ: number | null
 
-  isFirstSpeach: boolean
-  firstSpeach: number | null
+  isFirstSpeech: boolean
+  firstSpeech: number | null
 
   isStudyBibleIn: boolean
   studyBibleIn: number | null
@@ -76,7 +76,7 @@ export interface IStudentCheckBox {
   isStudyBibleInReader: boolean
   isGems: boolean
   isLiveAndServ: boolean
-  isFirstSpeach: boolean
+  isFirstSpeech: boolean
   isStudyBibleIn: boolean
   isSecondChairm: boolean
   isChairman: boolean
@@ -113,7 +113,7 @@ export interface IStudentDateToString {
   studyBibleInReader: string
   gems: string
   liveAndServ: string
-  firstSpeach: string
+  firstSpeech: string
   studyBibleIn: string
   secondChairm: string
   chairman: string

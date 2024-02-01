@@ -12,12 +12,20 @@ import { IStudent } from '../../interfaces'
 interface IProps {
   openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
-  presentValue: { name: string; _id: string } | undefined
+  presentValue: { name: string; _id: string } | null
   task: string
   dateOfMeet: string
   suitsStudents: Array<IStudent>
   inputIs: string
   action: 'plan' | 'confirm' | 'update' | undefined
+}
+
+interface IAddParams {
+  isRead?: boolean
+  isSpeech?: boolean
+  isSecondClassOnly?: boolean
+  isPortnerOnly?: boolean
+  isNotBibleStudy?: boolean
 }
 
 const ListOfCandidates: React.FC<IProps> = ({
@@ -52,11 +60,112 @@ const ListOfCandidates: React.FC<IProps> = ({
     }
   }, [inputIs])
 
+  //в зависимости от содержания строки task - формируется объект для поиска по базе с дополнительными фильтрами
   const addSearchParams = () => {
-    if (task.includes('read') || task.includes('speech')) {
-      return { gender: 'Male' }
+    const addParams: IAddParams = {}
+
+    if (task.includes('readPoint')) addParams.isRead = true
+
+    if (task.includes('speechPoint')) addParams.isSpeech = true
+
+    if (task.includes('makePoint')) addParams.isNotBibleStudy = false
+
+    if (task.includes('MC')) addParams.isSecondClassOnly = false
+
+    if (task.includes('St')) addParams.isPortnerOnly = false
+
+    //console.log('search params', addParams)
+    return addParams
+  }
+
+  //функция для поиска задания с которым студент не выступал дольше всего. Сравниваем его с названием текущего таска и возвращаем true & false
+  const oldestPerform = (studentData: IStudent): boolean => {
+    //формируем массивы из ключей, значение которых number и null
+    const nullFields: string[] = []
+    const numericFields = Object.keys(studentData).filter((key) => {
+      if (studentData[key] === null) {
+        nullFields.push(key)
+        return false
+      }
+      return typeof studentData[key] === 'number'
+    })
+
+    let minField: string = ''
+    if (numericFields.length > 0) {
+      //ищем поле с минимальным значением
+      minField = numericFields.reduce((minField, currentField) => {
+        const currentValue = studentData[currentField]
+        const minValue = studentData[minField]
+
+        return currentValue < minValue ? currentField : minField
+      }, numericFields[0])
     }
-    return {}
+
+    //создаем массив ключей со значением null и ключа с миимальным значением
+    const minValues =
+      nullFields.length > 0 ? [...nullFields, minField] : [minField]
+
+    let isSuits = false
+
+    //сравниваем название task и строки массива ключей
+    switch (task) {
+      case 'readPointStMC':
+        isSuits = minValues.includes('mainRead')
+        break
+      case 'startPointStMC':
+        isSuits = minValues.includes('mainStarting')
+        break
+      case 'followPointStMC':
+        isSuits = minValues.includes('mainFollowing')
+        break
+      case 'makePointStMC':
+        isSuits = minValues.includes('mainMaking')
+        break
+      case 'explainPointStMC':
+        isSuits = minValues.includes('mainExplaining')
+        break
+      case 'explainSpPointStMC':
+        isSuits = minValues.includes('mainExplainSpeech')
+        break
+      case 'speechPointStMC':
+        isSuits = minValues.includes('mainSpeech')
+        break
+      case 'readPointStSC':
+        isSuits = minValues.includes('smallRead')
+        break
+      case 'startPointStSC':
+        isSuits = minValues.includes('smallStarting')
+        break
+      case 'followPointStSC':
+        isSuits = minValues.includes('smallFollowing')
+        break
+      case 'makePointStSC':
+        isSuits = minValues.includes('smallMaking')
+        break
+      case 'explainPointStSC':
+        isSuits = minValues.includes('smallExplaining')
+        break
+      case 'explainSpPointStSC':
+        isSuits = minValues.includes('smallExplaiSpeech')
+        break
+      case 'speechPointStSC':
+        isSuits = minValues.includes('smallSpeech')
+        break
+      case 'startPointAsMC':
+      case 'followPointAsMC':
+      case 'makePointAsMC':
+      case 'explainPointAsMC':
+        isSuits = minValues.includes('mainSlave')
+        break
+      case 'startPointAsSC':
+      case 'followPointAsSC':
+      case 'makePointAsSC':
+      case 'explainPointAsSC':
+        isSuits = minValues.includes('smallSlave')
+        break
+    }
+
+    return isSuits
   }
 
   const getUsersLatest = async () => {
@@ -132,7 +241,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     openAndChoose('')
   }
 
-  //для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - обновятся поя дат у студентов
+  //для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - обновятся поля дат у студентов
   const makeUpdate = async (studentName: string) => {
     const student = await window.api.getOneUserByLFName(studentName)
 

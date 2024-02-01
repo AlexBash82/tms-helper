@@ -23,7 +23,7 @@ const inputCheckBox: React.FC<IProps> = ({
     isStudyBibleInReader,
     isGems,
     isLiveAndServ,
-    isFirstSpeach,
+    isFirstSpeech,
     isStudyBibleIn,
     isSecondChairm,
     isChairman,
@@ -136,11 +136,11 @@ const inputCheckBox: React.FC<IProps> = ({
           -LiveAndServ and service
           <input
             type="checkbox"
-            checked={isFirstSpeach}
+            checked={isFirstSpeech}
             onChange={(e) =>
               setInputCheckBox({
                 ...inputCheckBox,
-                isFirstSpeach: !isFirstSpeach,
+                isFirstSpeech: !isFirstSpeech,
               })
             }
           />
