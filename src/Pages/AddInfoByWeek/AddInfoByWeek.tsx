@@ -18,12 +18,32 @@ const AddInfoByWeek: React.FC = () => {
     teachingChBx: false,
     trainingChBx: false,
     smallClassChBx: false,
+
     startingPointChBx: false,
     followingPointChBx: false,
     makingPointChBx: false,
     explainingPointChBx: false,
     explainingSpPointChBx: false,
     speechPointChBx: false,
+
+    lessonOneChBx: false,
+    lessonTwoChBx: false,
+    liveAndServTwoChBx: false,
+    liveAndServThreeChBx: false,
+    secondChairmChBx: false,
+
+    chearManPoint: null,
+    firstSpeechPoint: null,
+    gemsPoint: null,
+    lessonOnePoint: null,
+    lessonTwoPoint: null,
+    liveAndServPoint: null,
+    liveAndServTwoPoint: null,
+    liveAndServThreePoint: null,
+    studyBibleInPoint: null,
+    studyBibleInReaderPoint: null,
+    endPrayerPoint: null,
+    secondChairmPoint: null,
 
     readPointStMC: null,
     startPointStMC: null,
@@ -223,7 +243,231 @@ const AddInfoByWeek: React.FC = () => {
           />
           -Training points
           {/*---------------------------Teaching--------------------------- */}
-          {weekState.teachingChBx && <div>teaching</div>}
+          {weekState.teachingChBx && (
+            <div className="df">
+              <div>
+                <div>Choose</div>
+
+                <div className="df">
+                  <input
+                    type="checkbox"
+                    checked={weekState.lessonOneChBx}
+                    onChange={(e) =>
+                      makeChangeChBx('lessonOneChBx', !weekState.lessonOneChBx)
+                    }
+                  />
+                  <div> - Considering lesson</div>
+                </div>
+
+                <div className="df">
+                  <input
+                    type="checkbox"
+                    checked={weekState.lessonTwoChBx && weekState.lessonOneChBx}
+                    onChange={(e) =>
+                      makeChangeChBx('lessonTwoChBx', !weekState.lessonTwoChBx)
+                    }
+                  />
+                  <div> - Considering second lesson</div>
+                </div>
+
+                <div className="df">
+                  <input
+                    type="checkbox"
+                    checked={weekState.liveAndServTwoChBx}
+                    onChange={(e) =>
+                      makeChangeChBx(
+                        'liveAndServTwoChBx',
+                        !weekState.liveAndServTwoChBx
+                      )
+                    }
+                  />
+                  <div> - live And Serv second point</div>
+                </div>
+
+                <div className="df">
+                  <input
+                    type="checkbox"
+                    checked={weekState.liveAndServThreeChBx}
+                    onChange={(e) =>
+                      makeChangeChBx(
+                        'liveAndServThreeChBx',
+                        !weekState.liveAndServThreeChBx
+                      )
+                    }
+                  />
+                  <div> - live And Serv third point</div>
+                </div>
+
+                <div className="df">
+                  <input
+                    type="checkbox"
+                    checked={weekState.secondChairmChBx}
+                    onChange={(e) =>
+                      makeChangeChBx(
+                        'secondChairmChBx',
+                        !weekState.secondChairmChBx
+                      )
+                    }
+                  />
+                  <div> - Second class</div>
+                </div>
+              </div>
+              {weekState.teachingChBx && (
+                <div>
+                  <div>Teaching points </div>
+                  <div className="df">
+                    <SingleInput
+                      title={'Chearman'}
+                      openAndChoose={openAndChoose}
+                      openedList={openedList}
+                      firstInput={weekState.chearManPoint}
+                      task="chearManPoint"
+                      getCurrentWeek={getCurrentWeek}
+                      action={action}
+                      dateOfMeet={weekState.dateOfMeet}
+                    />
+
+                    <SingleInput
+                      title={'First speech'}
+                      openAndChoose={openAndChoose}
+                      openedList={openedList}
+                      firstInput={weekState.firstSpeechPoint}
+                      task="firstSpeechPoint"
+                      getCurrentWeek={getCurrentWeek}
+                      action={action}
+                      dateOfMeet={weekState.dateOfMeet}
+                    />
+
+                    <SingleInput
+                      title={'Spiritual gems'}
+                      openAndChoose={openAndChoose}
+                      openedList={openedList}
+                      firstInput={weekState.gemsPoint}
+                      task="gemsPoint"
+                      getCurrentWeek={getCurrentWeek}
+                      action={action}
+                      dateOfMeet={weekState.dateOfMeet}
+                    />
+
+                    {weekState.secondChairmChBx && (
+                      <SingleInput
+                        title={'Second class'}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={weekState.secondChairmPoint}
+                        task="secondChairmPoint"
+                        getCurrentWeek={getCurrentWeek}
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )}
+                  </div>
+
+                  <div className="df">
+                    {weekState.lessonOneChBx && (
+                      <SingleInput
+                        title={'Lesson one'}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={weekState.lessonOnePoint}
+                        task="lessonOnePoint"
+                        getCurrentWeek={getCurrentWeek}
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )}
+
+                    {weekState.lessonTwoChBx && weekState.lessonOneChBx && (
+                      <SingleInput
+                        title={'Lesson two'}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={weekState.lessonTwoPoint}
+                        task="lessonTwoPoint"
+                        getCurrentWeek={getCurrentWeek}
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )}
+                  </div>
+
+                  <div className="df">
+                    <SingleInput
+                      title={'Live and Serving'}
+                      openAndChoose={openAndChoose}
+                      openedList={openedList}
+                      firstInput={weekState.liveAndServPoint}
+                      task="liveAndServPoint"
+                      getCurrentWeek={getCurrentWeek}
+                      action={action}
+                      dateOfMeet={weekState.dateOfMeet}
+                    />
+
+                    {weekState.liveAndServTwoChBx && (
+                      <SingleInput
+                        title={'Live and Serving second'}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={weekState.liveAndServTwoPoint}
+                        task="liveAndServTwoPoint"
+                        getCurrentWeek={getCurrentWeek}
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )}
+
+                    {weekState.liveAndServThreeChBx && (
+                      <SingleInput
+                        title={'Live and Serving third'}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={weekState.liveAndServThreePoint}
+                        task="liveAndServThreePoint"
+                        getCurrentWeek={getCurrentWeek}
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )}
+                  </div>
+
+                  <div className="df">
+                    <SingleInput
+                      title={'Study Bible in'}
+                      openAndChoose={openAndChoose}
+                      openedList={openedList}
+                      firstInput={weekState.studyBibleInPoint}
+                      task="studyBibleInPoint"
+                      getCurrentWeek={getCurrentWeek}
+                      action={action}
+                      dateOfMeet={weekState.dateOfMeet}
+                    />
+
+                    <SingleInput
+                      title={'Study Bible Reader'}
+                      openAndChoose={openAndChoose}
+                      openedList={openedList}
+                      firstInput={weekState.studyBibleInReaderPoint}
+                      task="studyBibleInReaderPoint"
+                      getCurrentWeek={getCurrentWeek}
+                      action={action}
+                      dateOfMeet={weekState.dateOfMeet}
+                    />
+
+                    <SingleInput
+                      title={'End prayer'}
+                      openAndChoose={openAndChoose}
+                      openedList={openedList}
+                      firstInput={weekState.endPrayerPoint}
+                      task="endPrayerPoint"
+                      getCurrentWeek={getCurrentWeek}
+                      action={action}
+                      dateOfMeet={weekState.dateOfMeet}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           {/*---------------------------Training--------------------------- */}
           {weekState.trainingChBx && (
             <div className="df">

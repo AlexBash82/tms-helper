@@ -128,12 +128,32 @@ export interface IWeek {
   teachingChBx: boolean
   trainingChBx: boolean
   smallClassChBx: boolean
+
   startingPointChBx: boolean
   followingPointChBx: boolean
   makingPointChBx: boolean
   explainingPointChBx: boolean
   explainingSpPointChBx: boolean
   speechPointChBx: boolean
+
+  lessonOneChBx: boolean
+  lessonTwoChBx: boolean
+  liveAndServTwoChBx: boolean
+  liveAndServThreeChBx: boolean
+  secondChairmChBx: boolean
+
+  chearManPoint: { name: string; _id: string } | null
+  firstSpeechPoint: { name: string; _id: string } | null
+  gemsPoint: { name: string; _id: string } | null
+  lessonOnePoint: { name: string; _id: string } | null
+  lessonTwoPoint: { name: string; _id: string } | null
+  liveAndServPoint: { name: string; _id: string } | null
+  liveAndServTwoPoint: { name: string; _id: string } | null
+  liveAndServThreePoint: { name: string; _id: string } | null
+  studyBibleInPoint: { name: string; _id: string } | null
+  studyBibleInReaderPoint: { name: string; _id: string } | null
+  endPrayerPoint: { name: string; _id: string } | null
+  secondChairmPoint: { name: string; _id: string } | null
 
   readPointStMC: { name: string; _id: string } | null
   readPointStSC: { name: string; _id: string } | null

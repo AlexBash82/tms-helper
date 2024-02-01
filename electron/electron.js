@@ -386,7 +386,7 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
         data: foundWeek,
       }
     }
-    console.log('insert data', weekData)
+
     const insertWeek = await new Promise((resolve, reject) => {
       weeksDB.insert(weekData, (err, newDoc) => {
         if (err) {

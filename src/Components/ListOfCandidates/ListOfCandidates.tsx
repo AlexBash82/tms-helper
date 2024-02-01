@@ -108,6 +108,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     let isSuits = false
 
     //сравниваем название task и строки массива ключей
+    //на данный момент готовы только учебные задания
     switch (task) {
       case 'readPointStMC':
         isSuits = minValues.includes('mainRead')
