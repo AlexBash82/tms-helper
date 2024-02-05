@@ -26,6 +26,14 @@ interface IAddParams {
   isSecondClassOnly?: boolean
   isPortnerOnly?: boolean
   isNotBibleStudy?: boolean
+  isChairman?: boolean
+  isFirstSpeech?: boolean
+  isGems?: boolean
+  isSecondChairm?: boolean
+  isLiveAndServ?: boolean
+  isStudyBibleIn?: boolean
+  isStudyBibleInReader?: boolean
+  isEndPrayer?: boolean
 }
 
 const ListOfCandidates: React.FC<IProps> = ({
@@ -65,22 +73,30 @@ const ListOfCandidates: React.FC<IProps> = ({
     const addParams: IAddParams = {}
 
     if (task.includes('readPoint')) addParams.isRead = true
-
     if (task.includes('speechPoint')) addParams.isSpeech = true
-
     if (task.includes('makePoint')) addParams.isNotBibleStudy = false
-
     if (task.includes('MC')) addParams.isSecondClassOnly = false
-
     if (task.includes('St')) addParams.isPortnerOnly = false
+    if (task.includes('chearManPoint')) addParams.isChairman = true
+    if (task.includes('firstSpeechPoint')) addParams.isFirstSpeech = true
+    if (task.includes('gemsPoint')) addParams.isGems = true
+    if (task.includes('secondChairmPoint')) addParams.isSecondChairm = true
+    if (task.includes('liveAndServPoint')) addParams.isLiveAndServ = true
+    if (task.includes('lessonOnePoint')) addParams.isLiveAndServ = true
+    if (task.includes('lessonTwoPoint')) addParams.isLiveAndServ = true
+    if (task.includes('studyBibleInPoint')) addParams.isStudyBibleIn = true
+    if (task.includes('studyBibleInReaderPoint'))
+      addParams.isStudyBibleInReader = true
+    if (task.includes('endPrayerPoint')) addParams.isEndPrayer = true
 
-    //console.log('search params', addParams)
+    //console.log('search params: ', addParams)
+    //console.log('task: ', task)
     return addParams
   }
 
-  //функция для поиска задания с которым студент не выступал дольше всего. Сравниваем его с названием текущего таска и возвращаем true & false
+  //функция для поиска задания с которым студент не выступал дольше всего. Сравниваем его с task и возвращаем true или false
   const oldestPerform = (studentData: IStudent): boolean => {
-    //формируем массивы из ключей, значение которых number и null
+    //формируем массивы из ключей, значение которых number или null - это ключи дат выступлений
     const nullFields: string[] = []
     const numericFields = Object.keys(studentData).filter((key) => {
       if (studentData[key] === null) {
@@ -106,9 +122,7 @@ const ListOfCandidates: React.FC<IProps> = ({
       nullFields.length > 0 ? [...nullFields, minField] : [minField]
 
     let isSuits = false
-
-    //сравниваем название task и строки массива ключей
-    //на данный момент готовы только учебные задания
+    //сравниваем название task и строки массива ключей и если совпадения есть, то isSuits присваиваем true
     switch (task) {
       case 'readPointStMC':
         isSuits = minValues.includes('mainRead')
@@ -164,6 +178,34 @@ const ListOfCandidates: React.FC<IProps> = ({
       case 'explainPointAsSC':
         isSuits = minValues.includes('smallSlave')
         break
+      case 'chearManPoint':
+        isSuits = minValues.includes('chairman')
+        break
+      case 'firstSpeechPoint':
+        isSuits = minValues.includes('firstSpeech')
+        break
+      case 'gemsPoint':
+        isSuits = minValues.includes('gems')
+        break
+      case 'lessonOnePoint':
+      case 'lessonTwoPoint':
+      case 'liveAndServPoint':
+      case 'liveAndServTwoPoint':
+      case 'liveAndServThreePoint':
+        isSuits = minValues.includes('liveAndServ')
+        break
+      case 'studyBibleInPoint':
+        isSuits = minValues.includes('studyBibleIn')
+        break
+      case 'studyBibleInReaderPoint':
+        isSuits = minValues.includes('studyBibleInReader')
+        break
+      case 'endPrayerPoint':
+        isSuits = minValues.includes('endPrayer')
+        break
+      case 'secondChairmPoint':
+        isSuits = minValues.includes('secondChairm')
+        break
     }
 
     return isSuits
@@ -171,6 +213,7 @@ const ListOfCandidates: React.FC<IProps> = ({
 
   const getUsersLatest = async () => {
     try {
+      //формируем параметры для фильтрации студентов по task
       const addParam = addSearchParams()
       const users = await window.api.getUsersByLatest(addParam)
       setStudents(users)
@@ -242,7 +285,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     openAndChoose('')
   }
 
-  //для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - обновятся поля дат у студентов
+  //для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - (должны) обновятся поля дат у студентов
   const makeUpdate = async (studentName: string) => {
     const student = await window.api.getOneUserByLFName(studentName)
 
@@ -270,6 +313,9 @@ const ListOfCandidates: React.FC<IProps> = ({
       {action === 'plan'
         ? students.map((student) => (
             <div
+              className={`Candidate ${
+                oldestPerform(student) ? 'Match-student' : ''
+              } `}
               key={student.lastFirstName}
               onClick={() => makePlan(student.lastFirstName)}
             >

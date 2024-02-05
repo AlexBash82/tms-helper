@@ -190,6 +190,7 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const deleteWeek = async () => {
+    console.log('delete weekState', weekState.dateOfMeet)
     if (weekState.dateOfMeet) {
       const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
       if (result.success) {
@@ -784,13 +785,15 @@ const AddInfoByWeek: React.FC = () => {
           )}
         </div>
       )}
+
       {action === 'plan' && weekState.dateOfMeet && (
         <div onClick={() => setWeekState(defaultWeekState)}>
           Close the window
         </div>
       )}
-      {/* close week - setdate-und */}
+
       {action === 'confirm' && <div onClick={confirmWeek}>Confirm change</div>}
+
       {action === 'update' && (
         <div className="df">
           <div className="myButton" onClick={updateWeek}>

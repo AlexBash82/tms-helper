@@ -29,6 +29,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
   >()
 
   useEffect(() => {
+    console.log('I am try to get new week because date: ', dateOfMeet)
     getWeeks()
   }, [dateOfMeet])
 
@@ -157,6 +158,8 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
 
       if (prevWeeks.length) {
         setPreviousWeeks(prevWeeks)
+      } else {
+        setPreviousWeeks(undefined)
       }
       if (futureWeeks.length) {
         setFututureWeeks(futureWeeks)

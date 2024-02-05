@@ -10,3 +10,15 @@
   border: 1px solid blue;
   border-radius: 5px;
 }
+
+.listOfCand > *:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.Candidate {
+  cursor: pointer;
+}
+
+.Match-student {
+  color: green;
+}
