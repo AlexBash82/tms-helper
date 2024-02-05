@@ -55,7 +55,7 @@ const SingleInput: React.FC<IProps> = (props) => {
           //   )
           //   break
         }
-        console.log('filtered', filtered)
+        //console.log('filtered', filtered)
         setFoundByLetter(filtered)
       } else {
         console.error('Error searching users by lastname:', students.message)

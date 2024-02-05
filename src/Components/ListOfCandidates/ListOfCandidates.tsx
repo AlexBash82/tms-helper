@@ -211,6 +211,8 @@ const ListOfCandidates: React.FC<IProps> = ({
     return isSuits
   }
 
+  // функция для получения списка студентов из базы и обновления им стейта.
+  // Вызывается только если action === 'plan'
   const getUsersLatest = async () => {
     try {
       //формируем параметры для фильтрации студентов по task
@@ -286,25 +288,22 @@ const ListOfCandidates: React.FC<IProps> = ({
   }
 
   //для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - (должны) обновятся поля дат у студентов
-  const makeUpdate = async (studentName: string) => {
-    const student = await window.api.getOneUserByLFName(studentName)
-
-    if (student.success) {
-      try {
-        const updateWeek = {
-          dateOfMeet,
-          keyName: task,
-          newValue: studentName,
-        }
-        const resultWeek = await window.api.updateOneWeek(updateWeek)
-
-        if (resultWeek.success) {
-          getCurrentWeek()
-        }
-      } catch (error) {
-        console.error('Error updating item:', error)
+  const makeUpdate = async (studentData: IStudent) => {
+    try {
+      const updateWeek = {
+        dateOfMeet,
+        keyName: task,
+        newValue: { name: studentData.lastFirstName, id: studentData._id },
       }
+      const resultWeek = await window.api.updateOneWeek(updateWeek)
+
+      if (resultWeek.success) {
+        getCurrentWeek()
+      }
+    } catch (error) {
+      console.error('Error updating item:', error)
     }
+
     openAndChoose('')
   }
 
@@ -333,10 +332,7 @@ const ListOfCandidates: React.FC<IProps> = ({
           ))
         : action === 'update' &&
           suitsStudents.map((student) => (
-            <div
-              key={student.lastFirstName}
-              onClick={() => makeUpdate(student.lastFirstName)}
-            >
+            <div key={student._id} onClick={() => makeUpdate(student)}>
               {student.lastFirstName}
             </div>
           ))}

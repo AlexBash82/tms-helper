@@ -65,10 +65,10 @@ declare global {
       getAllStudents: () => Promise<ResultStudents>
       getUsersByLastname: (lastFirstName: string) => Promise<ResultStudents>
       updateOneUser: (personData: object) => Promise<ResultStudent>
+      getOneUserByLFName: (lastFirstName: string) => Promise<ResultStudent>
       //обновить типы функций что ниже
       writeOneUser: (personData: object) => Promise<Result>
       getUsersByLatest: (addParam: object) => Promise<Array<IStudent>>
-      getOneUserByLFName: (lastFirstName: string) => Promise<ResultMaleOrFemale>
       editOneUser: (data: object) => Promise<Result>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
 

@@ -86,12 +86,12 @@ const AddInfoByWeek: React.FC = () => {
     const [year, month, day] = inpDateOfMeet.split('-').map(Number)
     const [hour, minute] = timeEndOfMeet.split(':').map(Number)
 
-    const { startWeekTSt } = getStartAndEndWeek(year, month, day)
     const dateObject = new Date(year, month - 1, day, hour, minute)
     // Получаем метку времени даты выбранной в календаре и сейчас
     const timestampCal = dateObject.getTime()
     const timestampNow = Date.now()
 
+    const { startWeekTSt } = getStartAndEndWeek(year, month, day)
     //условие: если выбранная дата - это будущее
     if (timestampCal > timestampNow) {
       const isPlanned = true
@@ -186,7 +186,43 @@ const AddInfoByWeek: React.FC = () => {
 
   const updateWeek = async () => {
     //сравнить дату с графой в базе и если она свежее то обновить базу
-    console.log('test update')
+
+    // Получаем метку времени даты недели
+    const [year, month, day] = weekState.dateOfMeet.split('-').map(Number)
+    const [hour, minute] = timeEndOfMeet.split(':').map(Number)
+    const dateObject = new Date(year, month - 1, day, hour, minute)
+    const timestamp = dateObject.getTime()
+    //console.log('test-update timestamp', timestamp)
+
+    // копируем в новый обьект, только нужные для проверки ключи и зачения
+    const copiedObject = {}
+    for (const key in weekState) {
+      if (Object.prototype.hasOwnProperty.call(weekState, key)) {
+        const nestedObject = weekState[key]
+        if (
+          nestedObject &&
+          typeof nestedObject === 'object' &&
+          'name' in nestedObject
+        ) {
+          copiedObject[key] = nestedObject
+        }
+      }
+    }
+    console.log('copiedObject', copiedObject)
+
+    // проходим по ключам обьекта и сравниваем даты в базе и текущие
+    for (const key in copiedObject) {
+      console.log('in for', copiedObject[key].id)
+      const student = await window.api.getOneUserByLFName(
+        copiedObject[key].name
+      )
+      if (student.success) {
+        //const ddd = student.data[key]
+        console.log('key: ', key)
+        //___________нужно обновить поля в базе данных, чтобы онибыли унифицированы для сравнения
+        //поля в неделе должны быть схожими, что у студентаы
+      }
+    }
   }
 
   const deleteWeek = async () => {

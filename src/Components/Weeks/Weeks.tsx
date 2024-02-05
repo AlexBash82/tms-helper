@@ -3,8 +3,8 @@ import './Weeks.css'
 import { IWeek } from '../../interfaces'
 
 //три отрезка: прошлые недели, текущая и будущие
-//если есть прошлые не подтв недели, то отображать их (пропуски - пустые квадраты) красная рамка
-//если есть будущие недели, то отображать их (пропуски - пустые квадраты) зеленая/серая рамки
+//если есть прошлые не подтв недели, то отображаем их + красная рамка
+//если есть будущие недели, то отображаем их (пропуски - пустые квадраты) зеленая/серая рамки
 //сравнивать дату встречи в текущей недели с таймстемпом текущего времени для перевода
 //     в подтверждение выступлений
 //в центре квадрат с текущей неделей, для наглядности количества запланированных недель
@@ -29,7 +29,6 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
   >()
 
   useEffect(() => {
-    console.log('I am try to get new week because date: ', dateOfMeet)
     getWeeks()
   }, [dateOfMeet])
 
@@ -69,6 +68,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
     }
   }, [])
 
+  //функция для полуения данных из БД и формирования стейта недель: будущих, настоящей и прошедших
   const getWeeks = async () => {
     const weeksFromBD = await window.api.getAllWeeks()
 
@@ -83,6 +83,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
       }
 
       // Функция для получения таймстемпов начала понедельников будущих и прошлых 10 недель
+      // возвращает: { currentMoment, currentMonday, pastMondays, futureMondays }
       function getMondayTimestamps() {
         const now = new Date()
         const currentMonday = getMondayTimestamp(now)
@@ -141,7 +142,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
       })
 
       let futureWeeks: Array<IWeek | IEmptyWeek> = []
-
+      // забиваем futureWeeks данными из базы, а пропуски дефолтным значением
       timestamps.futureMondays.forEach((futureMondaysTSt) => {
         const result = futWeeks.find(
           (week) => week.startWeekTSt === futureMondaysTSt
