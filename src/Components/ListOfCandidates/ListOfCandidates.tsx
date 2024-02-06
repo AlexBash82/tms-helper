@@ -77,7 +77,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     if (task.includes('makePoint')) addParams.isNotBibleStudy = false
     if (task.includes('MC')) addParams.isSecondClassOnly = false
     if (task.includes('St')) addParams.isPortnerOnly = false
-    if (task.includes('chearManPoint')) addParams.isChairman = true
+    if (task.includes('chairmanPoint')) addParams.isChairman = true
     if (task.includes('firstSpeechPoint')) addParams.isFirstSpeech = true
     if (task.includes('gemsPoint')) addParams.isGems = true
     if (task.includes('secondChairmPoint')) addParams.isSecondChairm = true
@@ -164,7 +164,7 @@ const ListOfCandidates: React.FC<IProps> = ({
         isSuits = minValues.includes('smallExplaiSpeech')
         break
       case 'speechPointStSC':
-        isSuits = minValues.includes('smallSpeech')
+        isSuits = minValues.includes('speechPointStSC')
         break
       case 'startPointAsMC':
       case 'followPointAsMC':
@@ -178,8 +178,8 @@ const ListOfCandidates: React.FC<IProps> = ({
       case 'explainPointAsSC':
         isSuits = minValues.includes('smallSlave')
         break
-      case 'chearManPoint':
-        isSuits = minValues.includes('chairman')
+      case 'chairmanPoint':
+        isSuits = minValues.includes('chairmanPoint')
         break
       case 'firstSpeechPoint':
         isSuits = minValues.includes('firstSpeech')
@@ -195,7 +195,7 @@ const ListOfCandidates: React.FC<IProps> = ({
         isSuits = minValues.includes('liveAndServ')
         break
       case 'studyBibleInPoint':
-        isSuits = minValues.includes('studyBibleIn')
+        isSuits = minValues.includes('studyBibleInPoint')
         break
       case 'studyBibleInReaderPoint':
         isSuits = minValues.includes('studyBibleInReader')
@@ -204,7 +204,7 @@ const ListOfCandidates: React.FC<IProps> = ({
         isSuits = minValues.includes('endPrayer')
         break
       case 'secondChairmPoint':
-        isSuits = minValues.includes('secondChairm')
+        isSuits = minValues.includes('secondChairmPoint')
         break
     }
 

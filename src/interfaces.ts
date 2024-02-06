@@ -38,7 +38,7 @@ export interface IStudent {
 
   isSpeech: boolean
   speechPointStMC: number | null
-  smallSpeech: number | null
+  speechPointStSC: number | null
 
   isEndPrayer: boolean
   endPrayer: number | null
@@ -56,13 +56,13 @@ export interface IStudent {
   firstSpeech: number | null
 
   isStudyBibleIn: boolean
-  studyBibleIn: number | null
+  studyBibleInPoint: number | null
 
   isSecondChairm: boolean
-  secondChairm: number | null
+  secondChairmPoint: number | null
 
   isChairman: boolean
-  chairman: number | null
+  chairmanPoint: number | null
 }
 
 export interface IStudentCheckBox {
@@ -107,16 +107,16 @@ export interface IStudentDateToString {
   readPointStSC: string
 
   speechPointStMC: string
-  smallSpeech: string
+  speechPointStSC: string
 
   endPrayer: string
   studyBibleInReader: string
   gems: string
   liveAndServ: string
   firstSpeech: string
-  studyBibleIn: string
-  secondChairm: string
-  chairman: string
+  studyBibleInPoint: string
+  secondChairmPoint: string
+  chairmanPoint: string
 }
 
 export interface IWeek {
@@ -142,7 +142,7 @@ export interface IWeek {
   liveAndServThreeChBx: boolean
   secondChairmChBx: boolean
 
-  chearManPoint: { name: string; _id: string } | null
+  chairmanPoint: { name: string; _id: string } | null
   firstSpeechPoint: { name: string; _id: string } | null
   gemsPoint: { name: string; _id: string } | null
   lessonOnePoint: { name: string; _id: string } | null

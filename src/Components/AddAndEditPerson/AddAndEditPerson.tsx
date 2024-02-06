@@ -81,16 +81,16 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           'readPointStSC',
 
           'speechPointStMC',
-          'smallSpeech',
+          'speechPointStSC',
 
           'endPrayer',
           'studyBibleInReader',
           'gems',
           'liveAndServ',
           'firstSpeech',
-          'studyBibleIn',
-          'secondChairm',
-          'chairman',
+          'studyBibleInPoint',
+          'secondChairmPoint',
+          'chairmanPoint',
         ]
 
         const result = {}
@@ -115,16 +115,16 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
       //   smallSlave: getDateToSting(PropPerson, 'smallSlave', 'Din not perform'),
       //   latest: getDateToSting(PropPerson, 'latest', 'Din not perform'),
 
-      //   chairman: stampToDate(person.chairman)
-      //   secondChairm: stampToDate(person.secondChairm)
+      //   chairmanPoint: stampToDate(person.chairmanPoint)
+      //   secondChairmPoint: stampToDate(person.secondChairmPoint)
       //   firstSpeech: stampToDate(person.firstSpeech)
       //   gems: stampToDate(person.gems)
       //   readPointStMC: stampToDate(person.readPointStMC)
       //   readPointStSC: stampToDate(person.readPointStSC)
       //   speechPointStMC: stampToDate(person.speechPointStMC)
-      //   smallSpeech: stampToDate(person.smallSpeech)
+      //   speechPointStSC: stampToDate(person.speechPointStSC)
       //   liveAndServ: stampToDate(person.liveAndServ)
-      //   studyBibleIn: stampToDate(person.studyBibleIn)
+      //   studyBibleInPoint:stampToDate(person.studyBibleInPoint)
       //   studyBibleInReader: stampToDate(person.studyBibleInReader)
       //   endPrayer: stampToDate(person.endPrayer)
 
@@ -266,7 +266,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
 
           isSpeech: inputCheckBox.isSpeech,
           speechPointStMC: null,
-          smallSpeech: null,
+          speechPointStSC: null,
 
           isEndPrayer: inputCheckBox.isEndPrayer,
           endPrayer: null,
@@ -284,13 +284,13 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           firstSpeech: null,
 
           isStudyBibleIn: inputCheckBox.isStudyBibleIn,
-          studyBibleIn: null,
+          studyBibleInPoint: null,
 
           isSecondChairm: inputCheckBox.isSecondChairm,
-          secondChairm: null,
+          secondChairmPoint: null,
 
           isChairman: inputCheckBox.isChairman,
-          chairman: null,
+          chairmanPoint: null,
         }
         const result = await window.api.writeOneUser(defaultStudentData)
         alert(result.message)
@@ -345,7 +345,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
 
         isSpeech: inputCheckBox.isSpeech,
         speechPointStMC: editPropPerson.speechPointStMC || null,
-        smallSpeech: editPropPerson.smallSpeech || null,
+        speechPointStSC: editPropPerson.speechPointStSC || null,
 
         isEndPrayer: inputCheckBox.isEndPrayer,
         endPrayer: editPropPerson.endPrayer || null,
@@ -363,13 +363,13 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         firstSpeech: editPropPerson.firstSpeech || null,
 
         isStudyBibleIn: inputCheckBox.isStudyBibleIn,
-        studyBibleIn: editPropPerson.studyBibleIn || null,
+        studyBibleInPoint: editPropPerson.studyBibleInPoint || null,
 
         isSecondChairm: inputCheckBox.isSecondChairm,
-        secondChairm: editPropPerson.secondChairm || null,
+        secondChairmPoint: editPropPerson.secondChairmPoint || null,
 
         isChairman: inputCheckBox.isChairman,
-        chairman: editPropPerson.chairman || null,
+        chairmanPoint: editPropPerson.chairmanPoint || null,
       }
       //задание:
       //если в базе есть такое имя но id не совпадает, то не обновлять базу а сообщить об этом
@@ -528,10 +528,10 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           )}
           <div>portners - {editPropPerson.portners}</div>
           {editPropPerson.isChairman && (
-            <div>chairman - {studentDateToString?.chairman}</div>
+            <div>Chairman - {studentDateToString?.chairmanPoint}</div>
           )}
           {editPropPerson.isSecondChairm && (
-            <div>secondChairm - {studentDateToString?.secondChairm}</div>
+            <div>second Chairm - {studentDateToString?.secondChairmPoint}</div>
           )}
           {editPropPerson.isFirstSpeech && (
             <div>firstSpeech - {studentDateToString?.firstSpeech}</div>
@@ -548,14 +548,14 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           {editPropPerson.isSpeech && (
             <>
               <div>speech in main- {studentDateToString?.speechPointStMC}</div>
-              <div>speech in small- {studentDateToString?.smallSpeech}</div>
+              <div>speech in small- {studentDateToString?.speechPointStSC}</div>
             </>
           )}
           {editPropPerson.isLiveAndServ && (
             <div>liveAndServ - {studentDateToString?.liveAndServ}</div>
           )}
           {editPropPerson.isStudyBibleIn && (
-            <div>studyBibleIn - {studentDateToString?.studyBibleIn}</div>
+            <div>study Bible In - {studentDateToString?.studyBibleInPoint}</div>
           )}
           {editPropPerson.isStudyBibleInReader && (
             <div>

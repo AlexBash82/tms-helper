@@ -32,7 +32,7 @@ const AddInfoByWeek: React.FC = () => {
     liveAndServThreeChBx: false,
     secondChairmChBx: false,
 
-    chearManPoint: null,
+    chairmanPoint: null,
     firstSpeechPoint: null,
     gemsPoint: null,
     lessonOnePoint: null,
@@ -357,8 +357,8 @@ const AddInfoByWeek: React.FC = () => {
                       title={'Chearman'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.chearManPoint}
-                      task="chearManPoint"
+                      firstInput={weekState.chairmanPoint}
+                      task="chairmanPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
                       dateOfMeet={weekState.dateOfMeet}
