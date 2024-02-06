@@ -125,7 +125,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     //сравниваем название task и строки массива ключей и если совпадения есть, то isSuits присваиваем true
     switch (task) {
       case 'readPointStMC':
-        isSuits = minValues.includes('mainRead')
+        isSuits = minValues.includes('readPointStMC')
         break
       case 'startPointStMC':
         isSuits = minValues.includes('mainStarting')
@@ -143,10 +143,10 @@ const ListOfCandidates: React.FC<IProps> = ({
         isSuits = minValues.includes('mainExplainSpeech')
         break
       case 'speechPointStMC':
-        isSuits = minValues.includes('mainSpeech')
+        isSuits = minValues.includes('speechPointStMC')
         break
       case 'readPointStSC':
-        isSuits = minValues.includes('smallRead')
+        isSuits = minValues.includes('readPointStSC')
         break
       case 'startPointStSC':
         isSuits = minValues.includes('smallStarting')

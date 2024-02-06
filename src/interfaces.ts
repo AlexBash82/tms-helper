@@ -33,11 +33,11 @@ export interface IStudent {
   smallExplaiSpeech: number | null
 
   isRead: boolean
-  mainRead: number | null
-  smallRead: number | null
+  readPointStMC: number | null
+  readPointStSC: number | null
 
   isSpeech: boolean
-  mainSpeech: number | null
+  speechPointStMC: number | null
   smallSpeech: number | null
 
   isEndPrayer: boolean
@@ -103,10 +103,10 @@ export interface IStudentDateToString {
   mainExplainSpeech: string
   smallExplaiSpeech: string
 
-  mainRead: string
-  smallRead: string
+  readPointStMC: string
+  readPointStSC: string
 
-  mainSpeech: string
+  speechPointStMC: string
   smallSpeech: string
 
   endPrayer: string

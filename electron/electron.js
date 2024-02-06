@@ -301,7 +301,7 @@ ipcMain.handle('get-one-user-by-lfname', async (event, LFName) => {
         if (err) {
           reject(err)
         } else {
-          console.log('get one user, found', user)
+          //console.log('get one user, found', user)
           resolve(user)
         }
       })

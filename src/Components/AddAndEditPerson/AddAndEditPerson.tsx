@@ -77,10 +77,10 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           'mainExplainSpeech',
           'smallExplaiSpeech',
 
-          'mainRead',
-          'smallRead',
+          'readPointStMC',
+          'readPointStSC',
 
-          'mainSpeech',
+          'speechPointStMC',
           'smallSpeech',
 
           'endPrayer',
@@ -119,9 +119,9 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
       //   secondChairm: stampToDate(person.secondChairm)
       //   firstSpeech: stampToDate(person.firstSpeech)
       //   gems: stampToDate(person.gems)
-      //   mainRead: stampToDate(person.mainRead)
-      //   smallRead: stampToDate(person.smallRead)
-      //   mainSpeech: stampToDate(person.mainSpeech)
+      //   readPointStMC: stampToDate(person.readPointStMC)
+      //   readPointStSC: stampToDate(person.readPointStSC)
+      //   speechPointStMC: stampToDate(person.speechPointStMC)
       //   smallSpeech: stampToDate(person.smallSpeech)
       //   liveAndServ: stampToDate(person.liveAndServ)
       //   studyBibleIn: stampToDate(person.studyBibleIn)
@@ -261,11 +261,11 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           smallExplaiSpeech: null,
 
           isRead: inputCheckBox.isRead,
-          mainRead: null,
-          smallRead: null,
+          readPointStMC: null,
+          readPointStSC: null,
 
           isSpeech: inputCheckBox.isSpeech,
-          mainSpeech: null,
+          speechPointStMC: null,
           smallSpeech: null,
 
           isEndPrayer: inputCheckBox.isEndPrayer,
@@ -340,11 +340,11 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         smallExplaiSpeech: editPropPerson.smallExplaiSpeech || null,
 
         isRead: inputCheckBox.isRead,
-        mainRead: editPropPerson.mainRead || null,
-        smallRead: editPropPerson.smallRead || null,
+        readPointStMC: editPropPerson.readPointStMC || null,
+        readPointStSC: editPropPerson.readPointStSC || null,
 
         isSpeech: inputCheckBox.isSpeech,
-        mainSpeech: editPropPerson.mainSpeech || null,
+        speechPointStMC: editPropPerson.speechPointStMC || null,
         smallSpeech: editPropPerson.smallSpeech || null,
 
         isEndPrayer: inputCheckBox.isEndPrayer,
@@ -541,14 +541,14 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           )}
           {editPropPerson.isRead && (
             <>
-              <div>mainRead - {studentDateToString?.mainRead}</div>
-              <div>smallRead - {studentDateToString?.smallRead}</div>
+              <div>read in main- {studentDateToString?.readPointStMC}</div>
+              <div>read in small- {studentDateToString?.readPointStSC}</div>
             </>
           )}
           {editPropPerson.isSpeech && (
             <>
-              <div>mainSpeech - {studentDateToString?.mainSpeech}</div>
-              <div>smallSpeech - {studentDateToString?.smallSpeech}</div>
+              <div>speech in main- {studentDateToString?.speechPointStMC}</div>
+              <div>speech in small- {studentDateToString?.smallSpeech}</div>
             </>
           )}
           {editPropPerson.isLiveAndServ && (
