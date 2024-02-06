@@ -59,23 +59,23 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         const keyOfStudentDateToString = [
           'latest',
 
-          'mainSlave',
-          'smallSlave',
+          'assistantPointAsMC',
+          'assistantPointAsSC',
 
-          'mainStarting',
-          'smallStarting',
+          'startPointStMC',
+          'startPointStSC',
 
-          'mainFollowing',
-          'smallFollowing',
+          'followPointStMC',
+          'followPointStSC',
 
-          'mainMaking',
-          'smallMaking',
+          'makePointStMC',
+          'makePointStSC',
 
-          'mainExplaining',
-          'smallExplaining',
+          'explainPointStMC',
+          'explainPointStSC',
 
-          'mainExplainSpeech',
-          'smallExplaiSpeech',
+          'explainSpPointStMC',
+          'explainSpPointStSC',
 
           'readPointStMC',
           'readPointStSC',
@@ -83,11 +83,11 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           'speechPointStMC',
           'speechPointStSC',
 
-          'endPrayer',
-          'studyBibleInReader',
-          'gems',
-          'liveAndServ',
-          'firstSpeech',
+          'endPrayerPoint',
+          'studyBibleInReaderPoint',
+          'gemsPoint',
+          'liveAndServPoint',
+          'firstSpeechPoint',
           'studyBibleInPoint',
           'secondChairmPoint',
           'chairmanPoint',
@@ -103,30 +103,30 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
       const student = makeStudentDateToString()
 
       // const student: IStudentDateToString = {
-      //   mainStarting: getDateToSting(PropPerson, 'mainStarting', 'Din not perform'),
-      //   smallStarting: getDateToSting(PropPerson, 'smallStarting', 'Din not perform'),
-      //   mainFollowing: getDateToSting(PropPerson, 'mainFollowing', 'Din not perform'),
-      //   smallFollowing: getDateToSting(PropPerson, 'smallFollowing', 'Din not perform'),
-      //   mainMaking: getDateToSting(PropPerson, 'mainMaking', 'Din not perform'),
-      //   smallMaking: getDateToSting(PropPerson, 'smallMaking', 'Din not perform'),
-      //   mainExplaining: getDateToSting(PropPerson, 'mainExplaining', 'Din not perform'),
-      //   smallExplaining: getDateToSting(PropPerson, 'smallExplaining', 'Din not perform'),
-      //   mainSlave: getDateToSting(PropPerson, 'mainSlave', 'Din not perform'),
-      //   smallSlave: getDateToSting(PropPerson, 'smallSlave', 'Din not perform'),
+      //   startPointStMC: getDateToSting(PropPerson, 'startPointStMC', 'Din not perform'),
+      //   startPointStSC: getDateToSting(PropPerson, 'startPointStSC', 'Din not perform'),
+      //   followPointStMC: getDateToSting(PropPerson, 'followPointStMC', 'Din not perform'),
+      //   followPointStSC: getDateToSting(PropPerson, 'followPointStSC', 'Din not perform'),
+      //   makePointStMC: getDateToSting(PropPerson, 'makePointStMC', 'Din not perform'),
+      //   makePointStSC: getDateToSting(PropPerson, 'makePointStSC', 'Din not perform'),
+      //   explainPointStMC: getDateToSting(PropPerson, 'explainPointStMC', 'Din not perform'),
+      //   explainPointStSC: getDateToSting(PropPerson, 'explainPointStSC', 'Din not perform'),
+      //   assistantPointAsMC: getDateToSting(PropPerson, 'assistantPointAsMC', 'Din not perform'),
+      //   assistantPointAsSC: getDateToSting(PropPerson, 'assistantPointAsSC', 'Din not perform'),
       //   latest: getDateToSting(PropPerson, 'latest', 'Din not perform'),
 
       //   chairmanPoint: stampToDate(person.chairmanPoint)
       //   secondChairmPoint: stampToDate(person.secondChairmPoint)
-      //   firstSpeech: stampToDate(person.firstSpeech)
-      //   gems: stampToDate(person.gems)
+      //   firstSpeechPoint: stampToDate(person.firstSpeechPoint)
+      //   gemsPoint: stampToDate(person.gemsPoint)
       //   readPointStMC: stampToDate(person.readPointStMC)
       //   readPointStSC: stampToDate(person.readPointStSC)
       //   speechPointStMC: stampToDate(person.speechPointStMC)
       //   speechPointStSC: stampToDate(person.speechPointStSC)
-      //   liveAndServ: stampToDate(person.liveAndServ)
+      //   liveAndServPoint: stampToDate(person.liveAndServPoint)
       //   studyBibleInPoint:stampToDate(person.studyBibleInPoint)
-      //   studyBibleInReader: stampToDate(person.studyBibleInReader)
-      //   endPrayer: stampToDate(person.endPrayer)
+      //   studyBibleInReaderPoint: stampToDate(person.studyBibleInReaderPoint)
+      //   endPrayerPoint: stampToDate(person.endPrayerPoint)
 
       // }
       setStudentDateToString(student)
@@ -241,24 +241,24 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           isSecondClassOnly: inputCheckBox.isSecondClassOnly,
           isNotBibleStudy: inputCheckBox.isNotBibleStudy,
 
-          mainSlave: null,
-          smallSlave: null,
+          assistantPointAsMC: null,
+          assistantPointAsSC: null,
 
-          mainStarting: null,
-          smallStarting: null,
+          startPointStMC: null,
+          startPointStSC: null,
 
-          mainFollowing: null,
-          smallFollowing: null,
+          followPointStMC: null,
+          followPointStSC: null,
 
-          mainMaking: null,
-          smallMaking: null,
+          makePointStMC: null,
+          makePointStSC: null,
 
-          mainExplaining: null,
-          smallExplaining: null,
+          explainPointStMC: null,
+          explainPointStSC: null,
 
           isExplainSpeech: inputCheckBox.isExplainSpeech,
-          mainExplainSpeech: null,
-          smallExplaiSpeech: null,
+          explainSpPointStMC: null,
+          explainSpPointStSC: null,
 
           isRead: inputCheckBox.isRead,
           readPointStMC: null,
@@ -269,19 +269,19 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           speechPointStSC: null,
 
           isEndPrayer: inputCheckBox.isEndPrayer,
-          endPrayer: null,
+          endPrayerPoint: null,
 
           isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
-          studyBibleInReader: null,
+          studyBibleInReaderPoint: null,
 
           isGems: inputCheckBox.isGems,
-          gems: null,
+          gemsPoint: null,
 
           isLiveAndServ: inputCheckBox.isLiveAndServ,
-          liveAndServ: null,
+          liveAndServPoint: null,
 
           isFirstSpeech: inputCheckBox.isFirstSpeech,
-          firstSpeech: null,
+          firstSpeechPoint: null,
 
           isStudyBibleIn: inputCheckBox.isStudyBibleIn,
           studyBibleInPoint: null,
@@ -320,24 +320,24 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         isSecondClassOnly: inputCheckBox.isSecondClassOnly,
         isNotBibleStudy: inputCheckBox.isNotBibleStudy,
 
-        mainSlave: editPropPerson.mainSlave || null,
-        smallSlave: editPropPerson.smallSlave || null,
+        assistantPointAsMC: editPropPerson.assistantPointAsMC || null,
+        assistantPointAsSC: editPropPerson.assistantPointAsSC || null,
 
-        mainStarting: editPropPerson.mainStarting || null,
-        smallStarting: editPropPerson.smallStarting || null,
+        startPointStMC: editPropPerson.startPointStMC || null,
+        startPointStSC: editPropPerson.startPointStSC || null,
 
-        mainFollowing: editPropPerson.mainFollowing || null,
-        smallFollowing: editPropPerson.smallFollowing || null,
+        followPointStMC: editPropPerson.followPointStMC || null,
+        followPointStSC: editPropPerson.followPointStSC || null,
 
-        mainMaking: editPropPerson.mainMaking || null,
-        smallMaking: editPropPerson.smallMaking || null,
+        makePointStMC: editPropPerson.makePointStMC || null,
+        makePointStSC: editPropPerson.makePointStSC || null,
 
-        mainExplaining: editPropPerson.mainExplaining || null,
-        smallExplaining: editPropPerson.smallExplaining || null,
+        explainPointStMC: editPropPerson.explainPointStMC || null,
+        explainPointStSC: editPropPerson.explainPointStSC || null,
 
         isExplainSpeech: inputCheckBox.isExplainSpeech,
-        mainExplainSpeech: editPropPerson.mainExplainSpeech || null,
-        smallExplaiSpeech: editPropPerson.smallExplaiSpeech || null,
+        explainSpPointStMC: editPropPerson.explainSpPointStMC || null,
+        explainSpPointStSC: editPropPerson.explainSpPointStSC || null,
 
         isRead: inputCheckBox.isRead,
         readPointStMC: editPropPerson.readPointStMC || null,
@@ -348,19 +348,19 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         speechPointStSC: editPropPerson.speechPointStSC || null,
 
         isEndPrayer: inputCheckBox.isEndPrayer,
-        endPrayer: editPropPerson.endPrayer || null,
+        endPrayerPoint: editPropPerson.endPrayerPoint || null,
 
         isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
-        studyBibleInReader: editPropPerson.studyBibleInReader || null,
+        studyBibleInReaderPoint: editPropPerson.studyBibleInReaderPoint || null,
 
         isGems: inputCheckBox.isGems,
-        gems: editPropPerson.gems || null,
+        gemsPoint: editPropPerson.gemsPoint || null,
 
         isLiveAndServ: inputCheckBox.isLiveAndServ,
-        liveAndServ: editPropPerson.liveAndServ || null,
+        liveAndServPoint: editPropPerson.liveAndServPoint || null,
 
         isFirstSpeech: inputCheckBox.isFirstSpeech,
-        firstSpeech: editPropPerson.firstSpeech || null,
+        firstSpeechPoint: editPropPerson.firstSpeechPoint || null,
 
         isStudyBibleIn: inputCheckBox.isStudyBibleIn,
         studyBibleInPoint: editPropPerson.studyBibleInPoint || null,
@@ -511,16 +511,20 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         <div>
           <div>Another information about student</div>
           <div>latest - {studentDateToString?.latest}</div>
-          <div>mainStarting - {studentDateToString?.mainStarting}</div>
-          <div>smallStarting - {studentDateToString?.smallStarting}</div>
-          <div>mainFollowing - {studentDateToString?.mainFollowing}</div>
-          <div>smallFollowing - {studentDateToString?.smallFollowing}</div>
-          <div>mainMaking - {studentDateToString?.mainMaking}</div>
-          <div>smallMaking - {studentDateToString?.smallMaking}</div>
-          <div>mainExplaining - {studentDateToString?.mainExplaining}</div>
-          <div>smallExplaining - {studentDateToString?.smallExplaining}</div>
-          <div>mainSlave - {studentDateToString?.mainSlave}</div>
-          <div>smallSlave - {studentDateToString?.smallSlave}</div>
+          <div>startPointStMC - {studentDateToString?.startPointStMC}</div>
+          <div>startPointStSC - {studentDateToString?.startPointStSC}</div>
+          <div>followPointStMC - {studentDateToString?.followPointStMC}</div>
+          <div>followPointStSC - {studentDateToString?.followPointStSC}</div>
+          <div>makePointStMC - {studentDateToString?.makePointStMC}</div>
+          <div>makePointStSC - {studentDateToString?.makePointStSC}</div>
+          <div>explainPointStMC - {studentDateToString?.explainPointStMC}</div>
+          <div>explainPointStSC - {studentDateToString?.explainPointStSC}</div>
+          <div>
+            assistantPointAsMC - {studentDateToString?.assistantPointAsMC}
+          </div>
+          <div>
+            assistantPointAsSC - {studentDateToString?.assistantPointAsSC}
+          </div>
           {editPropPerson.plan ? (
             <div>student has planned</div>
           ) : (
@@ -534,10 +538,10 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
             <div>second Chairm - {studentDateToString?.secondChairmPoint}</div>
           )}
           {editPropPerson.isFirstSpeech && (
-            <div>firstSpeech - {studentDateToString?.firstSpeech}</div>
+            <div>first Speech - {studentDateToString?.firstSpeechPoint}</div>
           )}
           {editPropPerson.isGems && (
-            <div>gems - {studentDateToString?.gems}</div>
+            <div>Gems - {studentDateToString?.gemsPoint}</div>
           )}
           {editPropPerson.isRead && (
             <>
@@ -552,18 +556,19 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
             </>
           )}
           {editPropPerson.isLiveAndServ && (
-            <div>liveAndServ - {studentDateToString?.liveAndServ}</div>
+            <div>live and Serv - {studentDateToString?.liveAndServPoint}</div>
           )}
           {editPropPerson.isStudyBibleIn && (
             <div>study Bible In - {studentDateToString?.studyBibleInPoint}</div>
           )}
           {editPropPerson.isStudyBibleInReader && (
             <div>
-              studyBibleInReader - {studentDateToString?.studyBibleInReader}
+              studyBibleInReaderPoint -{' '}
+              {studentDateToString?.studyBibleInReaderPoint}
             </div>
           )}
           {editPropPerson.isEndPrayer && (
-            <div>endPrayer - {studentDateToString?.endPrayer}</div>
+            <div>end Prayer - {studentDateToString?.endPrayerPoint}</div>
           )}
         </div>
       )}

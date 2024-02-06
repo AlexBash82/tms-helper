@@ -13,24 +13,24 @@ export interface IStudent {
   isSecondClassOnly: boolean
   isNotBibleStudy: boolean
 
-  mainSlave: number | null
-  smallSlave: number | null
+  assistantPointAsMC: number | null
+  assistantPointAsSC: number | null
 
-  mainStarting: number | null
-  smallStarting: number | null
+  startPointStMC: number | null
+  startPointStSC: number | null
 
-  mainFollowing: number | null
-  smallFollowing: number | null
+  followPointStMC: number | null
+  followPointStSC: number | null
 
-  mainMaking: number | null
-  smallMaking: number | null
+  makePointStMC: number | null
+  makePointStSC: number | null
 
-  mainExplaining: number | null
-  smallExplaining: number | null
+  explainPointStMC: number | null
+  explainPointStSC: number | null
 
   isExplainSpeech: boolean
-  mainExplainSpeech: number | null
-  smallExplaiSpeech: number | null
+  explainSpPointStMC: number | null
+  explainSpPointStSC: number | null
 
   isRead: boolean
   readPointStMC: number | null
@@ -41,19 +41,19 @@ export interface IStudent {
   speechPointStSC: number | null
 
   isEndPrayer: boolean
-  endPrayer: number | null
+  endPrayerPoint: number | null
 
   isStudyBibleInReader: boolean
-  studyBibleInReader: number | null
+  studyBibleInReaderPoint: number | null
 
   isGems: boolean
-  gems: number | null
+  gemsPoint: number | null
 
   isLiveAndServ: boolean
-  liveAndServ: number | null
+  liveAndServPoint: number | null
 
   isFirstSpeech: boolean
-  firstSpeech: number | null
+  firstSpeechPoint: number | null
 
   isStudyBibleIn: boolean
   studyBibleInPoint: number | null
@@ -85,23 +85,23 @@ export interface IStudentCheckBox {
 export interface IStudentDateToString {
   latest: string
 
-  mainSlave: string
-  smallSlave: string
+  assistantPointAsMC: string
+  assistantPointAsSC: string
 
-  mainStarting: string
-  smallStarting: string
+  startPointStMC: string
+  startPointStSC: string
 
-  mainFollowing: string
-  smallFollowing: string
+  followPointStMC: string
+  followPointStSC: string
 
-  mainMaking: string
-  smallMaking: string
+  makePointStMC: string
+  makePointStSC: string
 
-  mainExplaining: string
-  smallExplaining: string
+  explainPointStMC: string
+  explainPointStSC: string
 
-  mainExplainSpeech: string
-  smallExplaiSpeech: string
+  explainSpPointStMC: string
+  explainSpPointStSC: string
 
   readPointStMC: string
   readPointStSC: string
@@ -109,11 +109,11 @@ export interface IStudentDateToString {
   speechPointStMC: string
   speechPointStSC: string
 
-  endPrayer: string
-  studyBibleInReader: string
-  gems: string
-  liveAndServ: string
-  firstSpeech: string
+  endPrayerPoint: string
+  studyBibleInReaderPoint: string
+  gemsPoint: string
+  liveAndServPoint: string
+  firstSpeechPoint: string
   studyBibleInPoint: string
   secondChairmPoint: string
   chairmanPoint: string

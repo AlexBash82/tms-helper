@@ -128,19 +128,19 @@ const ListOfCandidates: React.FC<IProps> = ({
         isSuits = minValues.includes('readPointStMC')
         break
       case 'startPointStMC':
-        isSuits = minValues.includes('mainStarting')
+        isSuits = minValues.includes('startPointStMC')
         break
       case 'followPointStMC':
-        isSuits = minValues.includes('mainFollowing')
+        isSuits = minValues.includes('followPointStMC')
         break
       case 'makePointStMC':
-        isSuits = minValues.includes('mainMaking')
+        isSuits = minValues.includes('makePointStMC')
         break
       case 'explainPointStMC':
-        isSuits = minValues.includes('mainExplaining')
+        isSuits = minValues.includes('explainPointStMC')
         break
       case 'explainSpPointStMC':
-        isSuits = minValues.includes('mainExplainSpeech')
+        isSuits = minValues.includes('explainSpPointStMC')
         break
       case 'speechPointStMC':
         isSuits = minValues.includes('speechPointStMC')
@@ -149,19 +149,19 @@ const ListOfCandidates: React.FC<IProps> = ({
         isSuits = minValues.includes('readPointStSC')
         break
       case 'startPointStSC':
-        isSuits = minValues.includes('smallStarting')
+        isSuits = minValues.includes('startPointStSC')
         break
       case 'followPointStSC':
-        isSuits = minValues.includes('smallFollowing')
+        isSuits = minValues.includes('followPointStSC')
         break
       case 'makePointStSC':
-        isSuits = minValues.includes('smallMaking')
+        isSuits = minValues.includes('makePointStSC')
         break
       case 'explainPointStSC':
-        isSuits = minValues.includes('smallExplaining')
+        isSuits = minValues.includes('explainPointStSC')
         break
       case 'explainSpPointStSC':
-        isSuits = minValues.includes('smallExplaiSpeech')
+        isSuits = minValues.includes('explainSpPointStSC')
         break
       case 'speechPointStSC':
         isSuits = minValues.includes('speechPointStSC')
@@ -170,38 +170,38 @@ const ListOfCandidates: React.FC<IProps> = ({
       case 'followPointAsMC':
       case 'makePointAsMC':
       case 'explainPointAsMC':
-        isSuits = minValues.includes('mainSlave')
+        isSuits = minValues.includes('assistantPointAsMC')
         break
       case 'startPointAsSC':
       case 'followPointAsSC':
       case 'makePointAsSC':
       case 'explainPointAsSC':
-        isSuits = minValues.includes('smallSlave')
+        isSuits = minValues.includes('assistantPointAsSC')
         break
       case 'chairmanPoint':
         isSuits = minValues.includes('chairmanPoint')
         break
       case 'firstSpeechPoint':
-        isSuits = minValues.includes('firstSpeech')
+        isSuits = minValues.includes('firstSpeechPoint')
         break
       case 'gemsPoint':
-        isSuits = minValues.includes('gems')
+        isSuits = minValues.includes('gemsPoint')
         break
       case 'lessonOnePoint':
       case 'lessonTwoPoint':
       case 'liveAndServPoint':
       case 'liveAndServTwoPoint':
       case 'liveAndServThreePoint':
-        isSuits = minValues.includes('liveAndServ')
+        isSuits = minValues.includes('liveAndServPoint')
         break
       case 'studyBibleInPoint':
         isSuits = minValues.includes('studyBibleInPoint')
         break
       case 'studyBibleInReaderPoint':
-        isSuits = minValues.includes('studyBibleInReader')
+        isSuits = minValues.includes('studyBibleInReaderPoint')
         break
       case 'endPrayerPoint':
-        isSuits = minValues.includes('endPrayer')
+        isSuits = minValues.includes('endPrayerPoint')
         break
       case 'secondChairmPoint':
         isSuits = minValues.includes('secondChairmPoint')

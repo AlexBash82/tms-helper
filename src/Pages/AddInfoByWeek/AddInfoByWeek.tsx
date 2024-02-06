@@ -376,7 +376,7 @@ const AddInfoByWeek: React.FC = () => {
                     />
 
                     <SingleInput
-                      title={'Spiritual gems'}
+                      title={'Spiritual gemsPoint'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
                       firstInput={weekState.gemsPoint}
