@@ -220,6 +220,8 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
 })
 
 //------------------------EDIT-ONE-USER---------------------------------------------
+// принимает editItem: { idStudent, newStudentData }
+// idStudent: sting, newStudentData: {key: newValue}
 
 ipcMain.handle('edit-one-user', async (event, editItem) => {
   try {
@@ -260,7 +262,11 @@ ipcMain.handle('edit-one-user', async (event, editItem) => {
 
     if (numUpdatedPerson) {
       usersDB.persistence.compactDatafile()
-      return { success: true, message: 'Student updated successfully' }
+      return {
+        success: true,
+        message: 'Student updated successfully',
+        data: updatedObject,
+      }
     }
   } catch (err) {
     console.error('edit-one-user error', err)

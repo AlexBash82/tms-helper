@@ -194,8 +194,8 @@ const AddInfoByWeek: React.FC = () => {
     const timestamp = dateObject.getTime()
     //console.log('test-update timestamp', timestamp)
 
-    // копируем в новый обьект, только нужные для проверки ключи и зачения
-    const copiedObject = {}
+    // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
+    const copyWeekState = {}
     for (const key in weekState) {
       if (Object.prototype.hasOwnProperty.call(weekState, key)) {
         const nestedObject = weekState[key]
@@ -204,23 +204,35 @@ const AddInfoByWeek: React.FC = () => {
           typeof nestedObject === 'object' &&
           'name' in nestedObject
         ) {
-          copiedObject[key] = nestedObject
+          copyWeekState[key] = nestedObject
         }
       }
     }
-    console.log('copiedObject', copiedObject)
+    console.log('copiedObject', copyWeekState)
 
-    // проходим по ключам обьекта и сравниваем даты в базе и текущие
-    for (const key in copiedObject) {
-      console.log('in for', copiedObject[key].id)
+    //___добавить перменную "успех" и если БД не удалось обновить, то добавить в нее студентов и сообщить об именах этох студентов
+    // проходим по ключам обьекта copyWeekState, получаем на каждый ключ: "name" - студента из БД
+    for (const key in copyWeekState) {
       const student = await window.api.getOneUserByLFName(
-        copiedObject[key].name
+        copyWeekState[key].name
       )
       if (student.success) {
-        //const ddd = student.data[key]
-        console.log('key: ', key)
-        //___________нужно обновить поля в базе данных, чтобы онибыли унифицированы для сравнения
-        //поля в неделе должны быть схожими, что у студентаы
+        console.log('1 week key: ', key, 'value: ', timestamp)
+
+        if (key in student.data) {
+          console.log('2 stud key: ', key, 'value: ', student.data[key])
+
+          if (student.data[key] < timestamp) {
+            const update = {
+              idStudent: student.data._id,
+              newStudentData: { [key]: timestamp },
+            }
+            const result = await window.api.editOneUser(update)
+            console.log('result', result.success)
+          }
+        } else {
+          //пройтись по тем полям что отличаются, например у партнеров
+        }
       }
     }
   }
