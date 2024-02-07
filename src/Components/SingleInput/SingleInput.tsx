@@ -40,7 +40,8 @@ const SingleInput: React.FC<IProps> = (props) => {
 
   // логика обработки введенных данных, экранирование символов
   const sanitizeInput = (input: string): string => {
-    return input.replace(/[\W_]+/g, '')
+    //return input.replace(/[\W_]+/g, '')
+    return input.replace(/[^a-zA-Z0-9а-яА-Я]/g, '')
   }
 
   const searchByLetter = async (inputLetters: string) => {
