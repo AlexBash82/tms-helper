@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ListOfCandidates.css'
 import { IStudent } from '../../interfaces'
+import { getTimeStamps } from '../../services/getTimeStamps'
 
-//повесить слушатель клика вне окошка на закрытие
 //добавить фильтрацию по колонкам: перый разговор, повтор, главный зал...
 //можно в виде перебора массива и если поле с таском самое старое то в начало массива
 //а если нет,то в конец массива
@@ -36,12 +36,17 @@ interface IAddParams {
   isEndPrayer?: boolean
 }
 
+interface IUpdateStudent {
+  idStudent: string
+  newStudentData: { plan: boolean; latest?: number }
+}
+
 const ListOfCandidates: React.FC<IProps> = ({
   openAndChoose,
   getCurrentWeek,
   presentValue,
   task,
-  dateOfMeet,
+  dateOfMeet, //example '2024-01-10'
   action,
   suitsStudents,
   inputIs,
@@ -49,13 +54,18 @@ const ListOfCandidates: React.FC<IProps> = ({
   const [students, setStudents] = useState<Array<IStudent>>([])
   const listRef = useRef<HTMLDivElement | null>(null)
 
+  const timeEndOfMeet = '21:45'
+
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
+      // проверяем: listRef.current - есть ли у нас ссылка на список?
+      // !listRef.current.contains(event.target as Node) - был ли клик вне списка?
+      //  inputIs === 'blur' - был ли клик вне родительского инпута?
       if (
         listRef.current &&
         !listRef.current.contains(event.target as Node) &&
         inputIs === 'blur' &&
-        action !== 'plan'
+        action !== 'plan' //нужно поменять div на input и удалить эту проверку----------------------
       ) {
         openAndChoose('')
       }
@@ -230,13 +240,11 @@ const ListOfCandidates: React.FC<IProps> = ({
     }
   }, [])
 
-  //эта функция полуает studentName: имя студента, у которого нужно в базе сделать plan: true
-  const makePlan = async (studentName: string) => {
+  // эта функция полуает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя студента, то в базе меняем поле plan: true на false
+  const makePlan = async (student: IStudent) => {
     //если в строке уже имеется студент: presentValue, то получаем его из базы
     if (presentValue) {
-      const presentUser = await window.api.getOneUserByLFName(
-        presentValue?.name
-      )
+      const presentUser = await window.api.getOneUserByLFName(presentValue.name)
 
       //проверяем у этого студента поле plan: true и меняем на false
       if (presentUser.success && presentUser.data?.plan) {
@@ -255,10 +263,10 @@ const ListOfCandidates: React.FC<IProps> = ({
     }
 
     //если вновь полученное имя отличается от предыдущего (если оно вообще есть), то меняем поле plan: true
-    if (studentName !== presentValue?.name) {
+    if (student.lastFirstName !== presentValue?.name) {
       try {
         const updateUser = {
-          studentName: studentName,
+          studentName: student.lastFirstName,
           keyName: 'plan',
           newValue: true,
         }
@@ -281,19 +289,19 @@ const ListOfCandidates: React.FC<IProps> = ({
           }
         }
       } catch (error) {
-        console.error('Error updating item:', error)
+        console.error('Error updating:', error)
       }
     }
     openAndChoose('')
   }
 
-  //для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - (должны) обновятся поля дат у студентов
-  const makeUpdate = async (studentData: IStudent) => {
+  // для заполнения базы данных датами выступлений у студентов, достаточно внести имена в поля недели. И после нажатия кнопки "сохранить" в AddInfoByWeek - произойдет обновление полей дат у студентов
+  const makeUpdate = async (student: IStudent) => {
     try {
       const updateWeek = {
         dateOfMeet,
         keyName: task,
-        newValue: { name: studentData.lastFirstName, id: studentData._id },
+        newValue: { name: student.lastFirstName, id: student._id },
       }
       const resultWeek = await window.api.updateOneWeek(updateWeek)
 
@@ -307,6 +315,58 @@ const ListOfCandidates: React.FC<IProps> = ({
     openAndChoose('')
   }
 
+  const absence = ['Absence for a reason', 'Absence for NO reason']
+
+  // Если пропустил без причины, то обновлем поле latest на дату недели (ставим в конец списка).
+  // Если пропустил по причине, то оставляем его в начале списка.
+  // В любом случае меняем plan: truе на false и удаляем имя из поля в БД недели.
+  const makeConfirm = async (reason: string) => {
+    if (presentValue) {
+      const presentUser = await window.api.getOneUserByLFName(presentValue.name)
+
+      if (presentUser.success) {
+        // формируем данные для обновления полей студента в БД
+        const updatePresent: IUpdateStudent = {
+          idStudent: presentUser.data._id,
+          newStudentData: { plan: false },
+        }
+
+        if (reason === 'Absence for NO reason') {
+          const { timestampInp } = getTimeStamps(dateOfMeet, timeEndOfMeet)
+          updatePresent.newStudentData.latest = timestampInp
+        }
+        console.log('makeConfirm', updatePresent)
+        // обновляем данные полей plan и, если нужно, latest
+        try {
+          const resultUser = await window.api.editOneUser(updatePresent)
+
+          //если обновить студента получилось, то обновляем данные в базе недели
+          if (resultUser.success) {
+            const updateWeek = {
+              dateOfMeet,
+              keyName: task,
+              newValue: null,
+            }
+            const resultWeek = await window.api.updateOneWeek(updateWeek)
+
+            if (resultWeek.success) {
+              alert(
+                `I have updated ${
+                  presentUser.data.lastFirstName
+                } as ${reason.toLowerCase()}`
+              )
+              openAndChoose('')
+              getCurrentWeek()
+            }
+          }
+        } catch (error) {
+          alert(`I have truoble : ${error}`)
+          //console.error('Error updating:', error)
+        }
+      }
+    }
+  }
+
   return (
     <div ref={listRef} className="listOfCand">
       {action === 'plan'
@@ -316,18 +376,15 @@ const ListOfCandidates: React.FC<IProps> = ({
                 oldestPerform(student) ? 'Match-student' : ''
               } `}
               key={student.lastFirstName}
-              onClick={() => makePlan(student.lastFirstName)}
+              onClick={() => makePlan(student)}
             >
               {student.lastFirstName}
             </div>
           ))
         : action === 'confirm'
-        ? suitsStudents.map((student) => (
-            <div
-              key={student.lastFirstName}
-              onClick={() => makePlan(student.lastFirstName)}
-            >
-              {student.lastFirstName}
+        ? absence.map((reason) => (
+            <div key={reason} onClick={() => makeConfirm(reason)}>
+              {reason}
             </div>
           ))
         : action === 'update' &&

@@ -78,6 +78,7 @@ const SingleInput: React.FC<IProps> = (props) => {
   }
 
   const focusOrBlur = (act: string, name: string) => {
+    console.log('focusOrBlur, act: ', act, ' name: ', name)
     if (act === 'focus') {
       setInputIs(act)
       openAndChoose(name)
@@ -90,10 +91,22 @@ const SingleInput: React.FC<IProps> = (props) => {
   return (
     <div className="inpDiv">
       <div className="inpTitle">{title}</div>
+
       {action === 'plan' ? (
         <div className="inp" onClick={() => openAndChoose(task)}>
           {firstInput?.name}
         </div>
+      ) : action === 'confirm' ? (
+        <input
+          className="inp"
+          placeholder="Did not plane"
+          type="text"
+          value={inputValue}
+          readOnly
+          //onChange={(e) => searchByLetter(e.target.value)}
+          onFocus={() => focusOrBlur('focus', task)}
+          onBlur={() => focusOrBlur('blur', '')}
+        />
       ) : (
         <input
           className="inp"
@@ -102,11 +115,13 @@ const SingleInput: React.FC<IProps> = (props) => {
           value={inputValue}
           onChange={(e) => searchByLetter(e.target.value)}
           onFocus={() => focusOrBlur('focus', task)}
-          // onBlur={() => focusOrBlur('blur', '')}
+          onBlur={() => focusOrBlur('blur', '')}
         />
       )}
       {openedList === task &&
-        (action === 'plan' || foundByLetter.length > 0) && (
+        (action === 'plan' ||
+          foundByLetter.length > 0 ||
+          action === 'confirm') && (
           <ListOfCandidates
             openAndChoose={openAndChoose}
             presentValue={firstInput}

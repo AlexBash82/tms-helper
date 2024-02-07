@@ -1,4 +1,8 @@
-export function getStartAndEndWeek(year: number, month: number, day: number) {
+//dateOfMeet - дата в формате '2024-01-10'
+export function getStartAndEndWeek(dateOfMeet: string): {
+  startWeekTSt: number
+} {
+  const [year, month, day] = dateOfMeet.split('-').map(Number)
   const date = new Date(year, month - 1, day) // Месяцы в JavaScript начинаются с 0
 
   // Получение первой секунды понедельника

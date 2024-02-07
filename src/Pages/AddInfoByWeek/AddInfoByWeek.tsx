@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './AddInfoByWeek.css'
-import { getStartAndEndWeek } from '../../services/logicDate'
+import { getStartAndEndWeek } from '../../services/getStartAndEndWeek'
+import { getTimeStamps } from '../../services/getTimeStamps'
 import Weeks from '../../Components/Weeks/Weeks'
 import SingleInput from '../../Components/SingleInput/SingleInput'
 import CoupleInputs from '../../Components/CoupleInputs/CoupleInputs'
@@ -89,17 +90,15 @@ const AddInfoByWeek: React.FC = () => {
 
   const makeAMeet = async (inpDateOfMeet: string) => {
     //inpDateOfMeet - дата выбранная пользователем в календаре
-    const [year, month, day] = inpDateOfMeet.split('-').map(Number)
-    const [hour, minute] = timeEndOfMeet.split(':').map(Number)
 
-    const dateObject = new Date(year, month - 1, day, hour, minute)
-    // Получаем метку времени даты выбранной в календаре и сейчас
-    const timestampCal = dateObject.getTime()
-    const timestampNow = Date.now()
+    const { timestampInp, timestampNow } = getTimeStamps(
+      inpDateOfMeet,
+      timeEndOfMeet
+    )
+    const { startWeekTSt } = getStartAndEndWeek(inpDateOfMeet)
 
-    const { startWeekTSt } = getStartAndEndWeek(year, month, day)
     //условие: если выбранная дата - это будущее
-    if (timestampCal > timestampNow) {
+    if (timestampInp > timestampNow) {
       const isPlanned = true
       const result = await writeDefaultWeekToDB(
         inpDateOfMeet,
@@ -114,7 +113,7 @@ const AddInfoByWeek: React.FC = () => {
     }
 
     //условие: если выбранная дата - это прошлое
-    if (timestampCal < timestampNow) {
+    if (timestampInp < timestampNow) {
       //проверяем есть ли эта неделя в планах и если есть полуачем ее
       const isWeekExist = await window.api.getOneWeek(inpDateOfMeet)
       if (isWeekExist.success) {
