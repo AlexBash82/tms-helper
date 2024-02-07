@@ -26,19 +26,29 @@ const SingleInput: React.FC<IProps> = (props) => {
     action,
   } = props
 
-  const [inputValue, setInputValue] = useState(firstInput?.name)
+  const [inputValue, setInputValue] = useState('')
   const [foundByLetter, setFoundByLetter] = useState<Array<IStudent>>([])
   const [inputIs, setInputIs] = useState('blur')
 
   useEffect(() => {
-    if (firstInput?.name !== inputValue) {
-      setInputValue(firstInput?.name)
+    if (!firstInput) {
+      setInputValue('')
+    } else if (firstInput.name !== inputValue) {
+      setInputValue(firstInput.name)
     }
   }, [firstInput])
 
-  const searchByLetter = async (inputLatters: string) => {
-    if (inputLatters.length > 0) {
-      const students = await window.api.getUsersByLastname(inputLatters)
+  // логика обработки введенных данных, экранирование символов
+  const sanitizeInput = (input: string): string => {
+    return input.replace(/[\W_]+/g, '')
+  }
+
+  const searchByLetter = async (inputLetters: string) => {
+    // Удаляем все не-буквенно-цифровые символы
+    const sanitizedInput = sanitizeInput(inputLetters)
+
+    if (sanitizedInput.length > 0) {
+      const students = await window.api.getUsersByLastname(sanitizedInput)
 
       if (students.success) {
         let filtered = students.data
@@ -64,7 +74,7 @@ const SingleInput: React.FC<IProps> = (props) => {
       setFoundByLetter([])
     }
 
-    setInputValue(inputLatters)
+    setInputValue(sanitizedInput)
   }
 
   const focusOrBlur = (act: string, name: string) => {
@@ -92,7 +102,7 @@ const SingleInput: React.FC<IProps> = (props) => {
           value={inputValue}
           onChange={(e) => searchByLetter(e.target.value)}
           onFocus={() => focusOrBlur('focus', task)}
-          onBlur={() => focusOrBlur('blur', '')}
+          // onBlur={() => focusOrBlur('blur', '')}
         />
       )}
       {openedList === task &&

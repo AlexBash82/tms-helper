@@ -6,7 +6,13 @@ import SingleInput from '../../Components/SingleInput/SingleInput'
 import CoupleInputs from '../../Components/CoupleInputs/CoupleInputs'
 import { IWeek } from '../../interfaces'
 
-//кнопку формирования бланка
+interface Amount {
+  keysOfCopyWeek: number
+  successUpdated: number
+  unSuccessUpdated: string[]
+}
+
+//----------------------------------------------------------------кнопку формирования бланка
 
 const AddInfoByWeek: React.FC = () => {
   const defaultWeekState = {
@@ -184,9 +190,8 @@ const AddInfoByWeek: React.FC = () => {
     console.log('test confirm')
   }
 
+  //сравниваем дату недели с графой соответствующего студента в базе и если дата недели свежее, то обновляем поля студента в базе
   const updateWeek = async () => {
-    //сравнить дату с графой в базе и если она свежее то обновить базу
-
     // Получаем метку времени даты недели
     const [year, month, day] = weekState.dateOfMeet.split('-').map(Number)
     const [hour, minute] = timeEndOfMeet.split(':').map(Number)
@@ -208,32 +213,81 @@ const AddInfoByWeek: React.FC = () => {
         }
       }
     }
-    console.log('copiedObject', copyWeekState)
+    //console.log('copiedObject', copyWeekState)
 
-    //___добавить перменную "успех" и если БД не удалось обновить, то добавить в нее студентов и сообщить об именах этох студентов
+    const amount: Amount = {
+      keysOfCopyWeek: 0,
+      successUpdated: 0,
+      unSuccessUpdated: [],
+    }
+
     // проходим по ключам обьекта copyWeekState, получаем на каждый ключ: "name" - студента из БД
-    for (const key in copyWeekState) {
+    for (const weeksKey in copyWeekState) {
+      amount.keysOfCopyWeek += 1
+
       const student = await window.api.getOneUserByLFName(
-        copyWeekState[key].name
+        copyWeekState[weeksKey].name
       )
       if (student.success) {
-        console.log('1 week key: ', key, 'value: ', timestamp)
-
-        if (key in student.data) {
-          console.log('2 stud key: ', key, 'value: ', student.data[key])
-
-          if (student.data[key] < timestamp) {
-            const update = {
-              idStudent: student.data._id,
-              newStudentData: { [key]: timestamp },
-            }
-            const result = await window.api.editOneUser(update)
-            console.log('result', result.success)
-          }
+        //формируем ключ для поиска в БД у студента, т.к. некоторые поля в БД недели отличаются
+        let key = ''
+        if (weeksKey in student.data) {
+          key = weeksKey
         } else {
-          //пройтись по тем полям что отличаются, например у партнеров
+          //находим те поля что отличаются и формируем key
+          if (weeksKey.includes('AsMC')) key = 'assistantPointAsMC'
+          if (weeksKey.includes('AsSC')) key = 'assistantPointAsSC'
+          if (weeksKey.includes('lesson')) key = 'liveAndServPoint'
+          if (weeksKey.includes('live')) key = 'liveAndServPoint'
+        }
+
+        //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
+        //console.log('2 stud key: ', key, 'value: ', student.data[key])
+
+        if (student.data[key] === null || student.data[key] < timestamp) {
+          const update = {
+            idStudent: student.data._id,
+            newStudentData: { [key]: timestamp },
+          }
+
+          if (student.data.latest === null || student.data.latest < timestamp)
+            update.newStudentData.latest = timestamp
+
+          const result = await window.api.editOneUser(update)
+
+          if (result.success) {
+            amount.successUpdated += 1
+            //console.log('3 stud key: ', key, 'value: ', result.data[key])
+          } else {
+            amount.unSuccessUpdated.push(student.data.lastFirstName)
+          }
         }
       }
+    }
+
+    if (amount.unSuccessUpdated.length) {
+      alert(`ERROR: I can not update: ${amount.unSuccessUpdated}`)
+    }
+
+    if (
+      amount.successUpdated > 0 &&
+      amount.successUpdated === amount.keysOfCopyWeek
+    ) {
+      alert('Every student was succesfully updated')
+    } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek > 0) {
+      alert('Everything is already updated')
+    } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek === 0) {
+      alert('I can not update empty fields')
+    } else {
+      alert(
+        `I just updated ${amount.successUpdated} of the ${amount.keysOfCopyWeek} student`
+      )
+    }
+
+    const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
+    if (result.success) {
+      setWeekState(defaultWeekState)
+      setAction(undefined)
     }
   }
 
