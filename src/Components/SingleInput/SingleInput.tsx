@@ -14,6 +14,23 @@ interface IProps {
   action: 'plan' | 'confirm' | 'update' | undefined
 }
 
+interface IAddParams {
+  isRead?: boolean
+  isSpeech?: boolean
+  isSecondClassOnly?: boolean
+  isPortnerOnly?: boolean
+  isNotBibleStudy?: boolean
+  isChairman?: boolean
+  isFirstSpeech?: boolean
+  isExplainSpeech?: boolean
+  isGems?: boolean
+  isSecondChairm?: boolean
+  isLiveAndServ?: boolean
+  isStudyBibleIn?: boolean
+  isStudyBibleInReader?: boolean
+  isEndPrayer?: boolean
+}
+
 const SingleInput: React.FC<IProps> = (props) => {
   const {
     title,
@@ -27,6 +44,7 @@ const SingleInput: React.FC<IProps> = (props) => {
   } = props
 
   const [inputValue, setInputValue] = useState('')
+  const [latestStudents, setLatestStudents] = useState<Array<IStudent>>([])
   const [foundByLetter, setFoundByLetter] = useState<Array<IStudent>>([])
   const [inputIs, setInputIs] = useState('blur')
 
@@ -37,6 +55,53 @@ const SingleInput: React.FC<IProps> = (props) => {
       setInputValue(firstInput.name)
     }
   }, [firstInput])
+
+  //в зависимости от содержания строки task - формируется объект для поиска полей студента по базе с дополнительными фильтрами
+  const addSearchParams = () => {
+    const addParams: IAddParams = {}
+
+    if (task.includes('readPoint')) addParams.isRead = true
+    if (task.includes('speechPoint')) addParams.isSpeech = true
+    if (task.includes('makePoint')) addParams.isNotBibleStudy = false
+    if (task.includes('MC')) addParams.isSecondClassOnly = false
+    if (task.includes('St')) addParams.isPortnerOnly = false
+    if (task.includes('chairmanPoint')) addParams.isChairman = true
+    if (task.includes('firstSpeechPoint')) addParams.isFirstSpeech = true
+    if (task.includes('explainSpPoint')) addParams.isExplainSpeech = true
+    if (task.includes('gemsPoint')) addParams.isGems = true
+    if (task.includes('secondChairmPoint')) addParams.isSecondChairm = true
+    if (task.includes('liveAndServPoint')) addParams.isLiveAndServ = true
+    if (task.includes('lessonOnePoint')) addParams.isLiveAndServ = true
+    if (task.includes('lessonTwoPoint')) addParams.isLiveAndServ = true
+    if (task.includes('studyBibleInPoint')) addParams.isStudyBibleIn = true
+    if (task.includes('studyBibleInReaderPoint'))
+      addParams.isStudyBibleInReader = true
+    if (task.includes('endPrayerPoint')) addParams.isEndPrayer = true
+
+    //console.log('search params: ', addParams)
+    //console.log('task: ', task)
+    return addParams
+  }
+
+  // функция для получения списка студентов из базы и обновления им стейта.
+  // Вызывается только если action === 'plan'
+  const getLatestStudent = async () => {
+    try {
+      //формируем параметры для фильтрации студентов по task
+      const addParam = addSearchParams()
+      const users = await window.api.getUsersByLatest(addParam)
+      console.log('users', users)
+      setLatestStudents(users)
+    } catch (error) {
+      console.error('Error fetching users:', error)
+    }
+  }
+
+  useEffect(() => {
+    if (action === 'plan') {
+      getLatestStudent()
+    }
+  }, [])
 
   // логика обработки введенных данных, экранирование символов
   const sanitizeInput = (input: string): string => {
@@ -93,9 +158,15 @@ const SingleInput: React.FC<IProps> = (props) => {
       <div className="inpTitle">{title}</div>
 
       {action === 'plan' ? (
-        <div className="inp" onClick={() => openAndChoose(task)}>
-          {firstInput?.name}
-        </div>
+        <input
+          className="inp"
+          placeholder="Did not plane"
+          type="text"
+          value={firstInput?.name}
+          readOnly
+          onFocus={() => focusOrBlur('focus', task)}
+          onBlur={() => focusOrBlur('blur', '')}
+        />
       ) : action === 'confirm' ? (
         <input
           className="inp"
@@ -103,7 +174,6 @@ const SingleInput: React.FC<IProps> = (props) => {
           type="text"
           value={inputValue}
           readOnly
-          //onChange={(e) => searchByLetter(e.target.value)}
           onFocus={() => focusOrBlur('focus', task)}
           onBlur={() => focusOrBlur('blur', '')}
         />
@@ -119,8 +189,8 @@ const SingleInput: React.FC<IProps> = (props) => {
         />
       )}
       {openedList === task &&
-        (action === 'plan' ||
-          foundByLetter.length > 0 ||
+        (latestStudents.length ||
+          foundByLetter.length ||
           action === 'confirm') && (
           <ListOfCandidates
             openAndChoose={openAndChoose}
@@ -129,7 +199,8 @@ const SingleInput: React.FC<IProps> = (props) => {
             getCurrentWeek={getCurrentWeek}
             action={action}
             dateOfMeet={dateOfMeet}
-            suitsStudents={foundByLetter}
+            foundByLetter={foundByLetter}
+            latestStudents={latestStudents}
             inputIs={inputIs}
           />
         )}

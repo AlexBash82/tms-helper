@@ -15,25 +15,10 @@ interface IProps {
   presentValue: { name: string; _id: string } | null
   task: string
   dateOfMeet: string
-  suitsStudents: Array<IStudent>
+  foundByLetter: Array<IStudent>
+  latestStudents: Array<IStudent>
   inputIs: string
   action: 'plan' | 'confirm' | 'update' | undefined
-}
-
-interface IAddParams {
-  isRead?: boolean
-  isSpeech?: boolean
-  isSecondClassOnly?: boolean
-  isPortnerOnly?: boolean
-  isNotBibleStudy?: boolean
-  isChairman?: boolean
-  isFirstSpeech?: boolean
-  isGems?: boolean
-  isSecondChairm?: boolean
-  isLiveAndServ?: boolean
-  isStudyBibleIn?: boolean
-  isStudyBibleInReader?: boolean
-  isEndPrayer?: boolean
 }
 
 interface IUpdateStudent {
@@ -48,14 +33,15 @@ const ListOfCandidates: React.FC<IProps> = ({
   task,
   dateOfMeet, //example '2024-01-10'
   action,
-  suitsStudents,
+  foundByLetter,
+  latestStudents,
   inputIs,
 }) => {
-  const [students, setStudents] = useState<Array<IStudent>>([])
   const listRef = useRef<HTMLDivElement | null>(null)
 
   const timeEndOfMeet = '21:45'
 
+  // вешаем слушатель на клик. Если вне родительского инпута и вне списка - закрываем список.
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
       // проверяем: listRef.current - есть ли у нас ссылка на список?
@@ -64,8 +50,7 @@ const ListOfCandidates: React.FC<IProps> = ({
       if (
         listRef.current &&
         !listRef.current.contains(event.target as Node) &&
-        inputIs === 'blur' &&
-        action !== 'plan' //нужно поменять div на input и удалить эту проверку----------------------
+        inputIs === 'blur'
       ) {
         openAndChoose('')
       }
@@ -77,32 +62,6 @@ const ListOfCandidates: React.FC<IProps> = ({
       document.removeEventListener('click', handleClick)
     }
   }, [inputIs])
-
-  //в зависимости от содержания строки task - формируется объект для поиска по базе с дополнительными фильтрами
-  const addSearchParams = () => {
-    const addParams: IAddParams = {}
-
-    if (task.includes('readPoint')) addParams.isRead = true
-    if (task.includes('speechPoint')) addParams.isSpeech = true
-    if (task.includes('makePoint')) addParams.isNotBibleStudy = false
-    if (task.includes('MC')) addParams.isSecondClassOnly = false
-    if (task.includes('St')) addParams.isPortnerOnly = false
-    if (task.includes('chairmanPoint')) addParams.isChairman = true
-    if (task.includes('firstSpeechPoint')) addParams.isFirstSpeech = true
-    if (task.includes('gemsPoint')) addParams.isGems = true
-    if (task.includes('secondChairmPoint')) addParams.isSecondChairm = true
-    if (task.includes('liveAndServPoint')) addParams.isLiveAndServ = true
-    if (task.includes('lessonOnePoint')) addParams.isLiveAndServ = true
-    if (task.includes('lessonTwoPoint')) addParams.isLiveAndServ = true
-    if (task.includes('studyBibleInPoint')) addParams.isStudyBibleIn = true
-    if (task.includes('studyBibleInReaderPoint'))
-      addParams.isStudyBibleInReader = true
-    if (task.includes('endPrayerPoint')) addParams.isEndPrayer = true
-
-    //console.log('search params: ', addParams)
-    //console.log('task: ', task)
-    return addParams
-  }
 
   //функция для поиска задания с которым студент не выступал дольше всего. Сравниваем его с task и возвращаем true или false
   const oldestPerform = (studentData: IStudent): boolean => {
@@ -220,25 +179,6 @@ const ListOfCandidates: React.FC<IProps> = ({
 
     return isSuits
   }
-
-  // функция для получения списка студентов из базы и обновления им стейта.
-  // Вызывается только если action === 'plan'
-  const getUsersLatest = async () => {
-    try {
-      //формируем параметры для фильтрации студентов по task
-      const addParam = addSearchParams()
-      const users = await window.api.getUsersByLatest(addParam)
-      setStudents(users)
-    } catch (error) {
-      console.error('Error fetching users:', error)
-    }
-  }
-
-  useEffect(() => {
-    if (action === 'plan') {
-      getUsersLatest()
-    }
-  }, [])
 
   // эта функция полуает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя студента, то в базе меняем поле plan: true на false
   const makePlan = async (student: IStudent) => {
@@ -371,12 +311,12 @@ const ListOfCandidates: React.FC<IProps> = ({
   return (
     <div ref={listRef} className="listOfCand">
       {action === 'plan'
-        ? students.map((student) => (
+        ? latestStudents.map((student) => (
             <div
               className={`Candidate ${
                 oldestPerform(student) ? 'Match-student' : ''
               } `}
-              key={student.lastFirstName}
+              key={student._id}
               onClick={() => makePlan(student)}
             >
               {student.lastFirstName}
@@ -389,7 +329,7 @@ const ListOfCandidates: React.FC<IProps> = ({
             </div>
           ))
         : action === 'update' &&
-          suitsStudents.map((student) => (
+          foundByLetter.map((student) => (
             <div key={student._id} onClick={() => makeUpdate(student)}>
               {student.lastFirstName}
             </div>
