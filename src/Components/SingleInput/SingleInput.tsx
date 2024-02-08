@@ -78,7 +78,7 @@ const SingleInput: React.FC<IProps> = (props) => {
   }
 
   const focusOrBlur = (act: string, name: string) => {
-    console.log('focusOrBlur, act: ', act, ' name: ', name)
+    //console.log('focusOrBlur, act: ', act, ' name: ', name)
     if (act === 'focus') {
       setInputIs(act)
       openAndChoose(name)

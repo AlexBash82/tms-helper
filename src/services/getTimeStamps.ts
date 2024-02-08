@@ -3,14 +3,14 @@
 export function getTimeStamps(
   dateOfMeet: string,
   timeEndOfMeet: string
-): { timestampInp: number; timestampNow: number } {
+): { timeStampInp: number; timestampNow: number } {
   const [year, month, day] = dateOfMeet.split('-').map(Number)
   const [hour, minute] = timeEndOfMeet.split(':').map(Number)
 
   const dateObject = new Date(year, month - 1, day, hour, minute)
   // Получаем метку времени даты выбранной в календаре и сейчас
-  const timestampInp = dateObject.getTime()
+  const timeStampInp = dateObject.getTime()
   const timestampNow = Date.now()
 
-  return { timestampInp, timestampNow }
+  return { timeStampInp, timestampNow }
 }

@@ -332,10 +332,11 @@ const ListOfCandidates: React.FC<IProps> = ({
         }
 
         if (reason === 'Absence for NO reason') {
-          const { timestampInp } = getTimeStamps(dateOfMeet, timeEndOfMeet)
-          updatePresent.newStudentData.latest = timestampInp
+          const { timeStampInp } = getTimeStamps(dateOfMeet, timeEndOfMeet)
+          updatePresent.newStudentData.latest = timeStampInp
         }
-        console.log('makeConfirm', updatePresent)
+        //console.log('makeConfirm', updatePresent)
+
         // обновляем данные полей plan и, если нужно, latest
         try {
           const resultUser = await window.api.editOneUser(updatePresent)

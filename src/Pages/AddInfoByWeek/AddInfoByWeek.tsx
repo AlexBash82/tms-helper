@@ -91,14 +91,14 @@ const AddInfoByWeek: React.FC = () => {
   const makeAMeet = async (inpDateOfMeet: string) => {
     //inpDateOfMeet - дата выбранная пользователем в календаре
 
-    const { timestampInp, timestampNow } = getTimeStamps(
+    const { timeStampInp, timestampNow } = getTimeStamps(
       inpDateOfMeet,
       timeEndOfMeet
     )
     const { startWeekTSt } = getStartAndEndWeek(inpDateOfMeet)
 
     //условие: если выбранная дата - это будущее
-    if (timestampInp > timestampNow) {
+    if (timeStampInp > timestampNow) {
       const isPlanned = true
       const result = await writeDefaultWeekToDB(
         inpDateOfMeet,
@@ -113,7 +113,7 @@ const AddInfoByWeek: React.FC = () => {
     }
 
     //условие: если выбранная дата - это прошлое
-    if (timestampInp < timestampNow) {
+    if (timeStampInp < timestampNow) {
       //проверяем есть ли эта неделя в планах и если есть полуачем ее
       const isWeekExist = await window.api.getOneWeek(inpDateOfMeet)
       if (isWeekExist.success) {
@@ -184,19 +184,10 @@ const AddInfoByWeek: React.FC = () => {
     }
   }
 
+  // меняем plan: trye на false у всех студентов в этой неделе, а также и внесим дату в поля задания и latest в БД студента. Удаляем неделю из БД.
   const confirmWeek = async () => {
-    //удалить план у всех и внести дату в соотв.графы
-    console.log('test confirm')
-  }
-
-  //сравниваем дату недели с графой соответствующего студента в базе и если дата недели свежее, то обновляем поля студента в базе
-  const updateWeek = async () => {
     // Получаем метку времени даты недели
-    const [year, month, day] = weekState.dateOfMeet.split('-').map(Number)
-    const [hour, minute] = timeEndOfMeet.split(':').map(Number)
-    const dateObject = new Date(year, month - 1, day, hour, minute)
-    const timestamp = dateObject.getTime()
-    //console.log('test-update timestamp', timestamp)
+    const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
 
     // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
     const copyWeekState = {}
@@ -214,6 +205,7 @@ const AddInfoByWeek: React.FC = () => {
     }
     //console.log('copiedObject', copyWeekState)
 
+    // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
       keysOfCopyWeek: 0,
       successUpdated: 0,
@@ -233,7 +225,7 @@ const AddInfoByWeek: React.FC = () => {
         if (weeksKey in student.data) {
           key = weeksKey
         } else {
-          //находим те поля что отличаются и формируем key
+          //находим те поля, что отличаются и формируем key
           if (weeksKey.includes('AsMC')) key = 'assistantPointAsMC'
           if (weeksKey.includes('AsSC')) key = 'assistantPointAsSC'
           if (weeksKey.includes('lesson')) key = 'liveAndServPoint'
@@ -243,14 +235,108 @@ const AddInfoByWeek: React.FC = () => {
         //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
         //console.log('2 stud key: ', key, 'value: ', student.data[key])
 
-        if (student.data[key] === null || student.data[key] < timestamp) {
+        const update = {
+          idStudent: student.data._id,
+          newStudentData: {
+            [key]: timeStampInp,
+            latest: timeStampInp,
+            plan: false,
+          },
+        }
+
+        const result = await window.api.editOneUser(update)
+
+        if (result.success) {
+          amount.successUpdated += 1
+          //console.log('3 stud key: ', key, 'value: ', result.data[key])
+        } else {
+          amount.unSuccessUpdated.push(student.data.lastFirstName)
+        }
+      }
+    }
+
+    if (amount.unSuccessUpdated.length) {
+      alert(`ERROR: I can not update: ${amount.unSuccessUpdated}`)
+    }
+
+    if (
+      amount.successUpdated > 0 &&
+      amount.successUpdated === amount.keysOfCopyWeek
+    ) {
+      alert('Every student was succesfully updated')
+    } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek === 0) {
+      alert('I can not update empty week')
+    }
+
+    const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
+    if (result.success) {
+      setWeekState(defaultWeekState)
+      setAction(undefined)
+    }
+  }
+
+  // сравниваем дату недели с графой соответствующего студента в базе и, если дата недели свежее, то обновляем поля студента в базе. Удаляем неделю из БД.
+  const updateWeek = async () => {
+    // Получаем метку времени даты недели
+    const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
+
+    // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
+    const copyWeekState = {}
+    for (const key in weekState) {
+      if (Object.prototype.hasOwnProperty.call(weekState, key)) {
+        const nestedObject = weekState[key]
+        if (
+          nestedObject &&
+          typeof nestedObject === 'object' &&
+          'name' in nestedObject
+        ) {
+          copyWeekState[key] = nestedObject
+        }
+      }
+    }
+    //console.log('copiedObject', copyWeekState)
+
+    // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
+    const amount: Amount = {
+      keysOfCopyWeek: 0,
+      successUpdated: 0,
+      unSuccessUpdated: [],
+    }
+
+    // проходим по ключам обьекта copyWeekState, получаем на каждый ключ: "name" - студента из БД
+    for (const weeksKey in copyWeekState) {
+      amount.keysOfCopyWeek += 1
+
+      const student = await window.api.getOneUserByLFName(
+        copyWeekState[weeksKey].name
+      )
+      if (student.success) {
+        //формируем ключ для поиска в БД у студента, т.к. некоторые поля в БД недели отличаются
+        let key = ''
+        if (weeksKey in student.data) {
+          key = weeksKey
+        } else {
+          //находим те поля, что отличаются и формируем key
+          if (weeksKey.includes('AsMC')) key = 'assistantPointAsMC'
+          if (weeksKey.includes('AsSC')) key = 'assistantPointAsSC'
+          if (weeksKey.includes('lesson')) key = 'liveAndServPoint'
+          if (weeksKey.includes('live')) key = 'liveAndServPoint'
+        }
+
+        //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
+        //console.log('2 stud key: ', key, 'value: ', student.data[key])
+
+        if (student.data[key] === null || student.data[key] < timeStampInp) {
           const update = {
             idStudent: student.data._id,
-            newStudentData: { [key]: timestamp },
+            newStudentData: { [key]: timeStampInp },
           }
 
-          if (student.data.latest === null || student.data.latest < timestamp)
-            update.newStudentData.latest = timestamp
+          if (
+            student.data.latest === null ||
+            student.data.latest < timeStampInp
+          )
+            update.newStudentData.latest = timeStampInp
 
           const result = await window.api.editOneUser(update)
 
@@ -281,6 +367,92 @@ const AddInfoByWeek: React.FC = () => {
       alert(
         `I just updated ${amount.successUpdated} of the ${amount.keysOfCopyWeek} student`
       )
+    }
+
+    const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
+    if (result.success) {
+      setWeekState(defaultWeekState)
+      setAction(undefined)
+    }
+  }
+
+  // меняем plan: trye на false у всех студентов в этой неделе. Удаляем неделю из БД.
+  const deletePlan = async () => {
+    // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
+    const copyWeekState = {}
+    for (const key in weekState) {
+      if (Object.prototype.hasOwnProperty.call(weekState, key)) {
+        const nestedObject = weekState[key]
+        if (
+          nestedObject &&
+          typeof nestedObject === 'object' &&
+          'name' in nestedObject
+        ) {
+          copyWeekState[key] = nestedObject
+        }
+      }
+    }
+    //console.log('copiedObject', copyWeekState)
+
+    // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
+    const amount: Amount = {
+      keysOfCopyWeek: 0,
+      successUpdated: 0,
+      unSuccessUpdated: [],
+    }
+
+    // проходим по ключам обьекта copyWeekState, получаем на каждый ключ: "name" - студента из БД
+    for (const weeksKey in copyWeekState) {
+      amount.keysOfCopyWeek += 1
+
+      const student = await window.api.getOneUserByLFName(
+        copyWeekState[weeksKey].name
+      )
+      if (student.success) {
+        //формируем ключ для поиска в БД у студента, т.к. некоторые поля в БД недели отличаются
+        let key = ''
+        if (weeksKey in student.data) {
+          key = weeksKey
+        } else {
+          //находим те поля, что отличаются и формируем key
+          if (weeksKey.includes('AsMC')) key = 'assistantPointAsMC'
+          if (weeksKey.includes('AsSC')) key = 'assistantPointAsSC'
+          if (weeksKey.includes('lesson')) key = 'liveAndServPoint'
+          if (weeksKey.includes('live')) key = 'liveAndServPoint'
+        }
+
+        //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
+        //console.log('2 stud key: ', key, 'value: ', student.data[key])
+
+        const update = {
+          idStudent: student.data._id,
+          newStudentData: {
+            plan: false,
+          },
+        }
+
+        const result = await window.api.editOneUser(update)
+
+        if (result.success) {
+          amount.successUpdated += 1
+          //console.log('3 stud key: ', key, 'value: ', result.data[key])
+        } else {
+          amount.unSuccessUpdated.push(student.data.lastFirstName)
+        }
+      }
+    }
+
+    if (amount.unSuccessUpdated.length) {
+      alert(`ERROR: I can not update: ${amount.unSuccessUpdated}`)
+    }
+
+    if (
+      amount.successUpdated > 0 &&
+      amount.successUpdated === amount.keysOfCopyWeek
+    ) {
+      alert('Every student was succesfully updated')
+    } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek === 0) {
+      alert('I can not update empty week')
     }
 
     const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
@@ -888,12 +1060,15 @@ const AddInfoByWeek: React.FC = () => {
       )}
 
       {action === 'plan' && weekState.dateOfMeet && (
-        <div onClick={() => setWeekState(defaultWeekState)}>
-          Close the window
+        <div className="df">
+          <div onClick={() => setWeekState(defaultWeekState)}>
+            Close the window
+          </div>{' '}
+          <div onClick={deletePlan}>Delete week</div>
         </div>
       )}
 
-      {action === 'confirm' && <div onClick={confirmWeek}>Confirm change</div>}
+      {action === 'confirm' && <div onClick={confirmWeek}>Confirm week</div>}
 
       {action === 'update' && (
         <div className="df">
