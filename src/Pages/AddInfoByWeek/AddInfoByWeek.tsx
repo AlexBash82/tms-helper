@@ -5,12 +5,20 @@ import { getTimeStamps } from '../../services/getTimeStamps'
 import Weeks from '../../Components/Weeks/Weeks'
 import SingleInput from '../../Components/SingleInput/SingleInput'
 import CoupleInputs from '../../Components/CoupleInputs/CoupleInputs'
-import { IWeek } from '../../interfaces'
+import { IWeek, IWeekCopy } from '../../interfaces'
 
 interface Amount {
   keysOfCopyWeek: number
   successUpdated: number
   unSuccessUpdated: string[]
+}
+
+interface IUpdateData {
+  idStudent: string
+  newStudentData: {
+    latest?: number
+    portners?: Array<{ name: string; _id: string }>
+  }
 }
 
 //----------------------------------------------------------------кнопку формирования бланка
@@ -184,7 +192,7 @@ const AddInfoByWeek: React.FC = () => {
     }
   }
 
-  // меняем plan: trye на false у всех студентов в этой неделе, а также и внесим дату в поля задания и latest в БД студента. Удаляем неделю из БД.
+  // меняем plan: trye на false у всех студентов в этой неделе, а также вносим дату в поля задания и в latest в БД студента. Удаляем неделю из БД.
   const confirmWeek = async () => {
     // Получаем метку времени даты недели
     const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
@@ -275,13 +283,13 @@ const AddInfoByWeek: React.FC = () => {
     }
   }
 
-  // сравниваем дату недели с графой соответствующего студента в базе и, если дата недели свежее, то обновляем поля студента в базе. Удаляем неделю из БД.
+  // сравниваем дату недели с графой соответствующего студента в базе и, если дата недели свежее, то обновляем поля студента в базе. Обновляем напарников студента. Удаляем неделю из БД.
   const updateWeek = async () => {
     // Получаем метку времени даты недели
     const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
 
     // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
-    const copyWeekState = {}
+    const copyWeekState: IWeekCopy = {}
     for (const key in weekState) {
       if (Object.prototype.hasOwnProperty.call(weekState, key)) {
         const nestedObject = weekState[key]
@@ -326,19 +334,87 @@ const AddInfoByWeek: React.FC = () => {
         //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
         //console.log('2 stud key: ', key, 'value: ', student.data[key])
 
-        if (student.data[key] === null || student.data[key] < timeStampInp) {
-          const update = {
-            idStudent: student.data._id,
-            newStudentData: { [key]: timeStampInp },
+        const updateData: IUpdateData = {
+          idStudent: student.data._id,
+          newStudentData: {},
+        }
+
+        //проверяем является ли task более свежим чем timeStampInp и добавляем в updateData.newStudentData
+        if (student.data[key] === null || student.data[key] < timeStampInp)
+          updateData.newStudentData[key] = timeStampInp
+
+        //проверяем является ли latest более свежим чем timeStampInp и добавляем в updateData.newStudentData
+        if (student.data.latest === null || student.data.latest < timeStampInp)
+          updateData.newStudentData.latest = timeStampInp
+
+        //проверям есть ли напарник у этого задания и добавляем в updateData.newStudentData
+        if (
+          weeksKey.includes('startPointSt') ||
+          weeksKey.includes('followPointSt') ||
+          weeksKey.includes('makePointSt') ||
+          weeksKey.includes('explainPointSt')
+        ) {
+          let searchPortner: { name: string; _id: string } | null = null
+
+          //присваеваем searchPortner имя напарника и его id из недели, если есть
+          switch (weeksKey) {
+            case 'startPointStMC':
+              copyWeekState.startPointAsMC &&
+                (searchPortner = copyWeekState.startPointAsMC)
+              break
+
+            case 'startPointStSC':
+              copyWeekState.startPointAsSC &&
+                (searchPortner = copyWeekState.startPointAsSC)
+              break
+
+            case 'followPointStMC':
+              copyWeekState.followPointAsMC &&
+                (searchPortner = copyWeekState.followPointAsMC)
+              break
+
+            case 'followPointStSC':
+              copyWeekState.followPointAsSC &&
+                (searchPortner = copyWeekState.followPointAsSC)
+              break
+
+            case 'makePointStMC':
+              copyWeekState.makePointAsMC &&
+                (searchPortner = copyWeekState.makePointAsMC)
+              break
+
+            case 'makePointStSC':
+              copyWeekState.makePointAsSC &&
+                (searchPortner = copyWeekState.makePointAsSC)
+              break
+
+            case 'explainPointStMC':
+              copyWeekState.explainPointAsMC &&
+                (searchPortner = copyWeekState.explainPointAsMC)
+              break
+
+            case 'explainPointStSC':
+              copyWeekState.explainPointAsSC &&
+                (searchPortner = copyWeekState.explainPointAsSC)
+              break
           }
 
-          if (
-            student.data.latest === null ||
-            student.data.latest < timeStampInp
-          )
-            update.newStudentData.latest = timeStampInp
+          //определяем есть ли у студента в массиве такой напарник и добавляем в updateData.newStudentData
+          if (searchPortner) {
+            const isPortnerExist = student.data.portners.find(
+              (portner) => portner._id === searchPortner?._id
+            )
 
-          const result = await window.api.editOneUser(update)
+            if (!isPortnerExist) {
+              student.data.portners.push(searchPortner)
+              updateData.newStudentData.portners = student.data.portners
+            }
+          }
+        }
+
+        //обовляем поля студента, если есть, что обновлять
+        if (Object.keys(updateData.newStudentData).length) {
+          const result = await window.api.editOneUser(updateData)
 
           if (result.success) {
             amount.successUpdated += 1

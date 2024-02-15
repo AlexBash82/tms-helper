@@ -5,7 +5,7 @@ export interface IStudent {
   dontUse: boolean
   comments: string
   plan: false
-  portners: Array<string>
+  portners: Array<{ name: string; _id: string }>
 
   latest: number | null
 
@@ -183,4 +183,48 @@ export interface IWeek {
 
   speechPointStMC: { name: string; _id: string } | null
   speechPointStSC: { name: string; _id: string } | null
+}
+
+export interface IWeekCopy {
+  chairmanPoint?: { name: string; _id: string } | null
+  firstSpeechPoint?: { name: string; _id: string } | null
+  gemsPoint?: { name: string; _id: string } | null
+  lessonOnePoint?: { name: string; _id: string } | null
+  lessonTwoPoint?: { name: string; _id: string } | null
+  liveAndServPoint?: { name: string; _id: string } | null
+  liveAndServTwoPoint?: { name: string; _id: string } | null
+  liveAndServThreePoint?: { name: string; _id: string } | null
+  studyBibleInPoint?: { name: string; _id: string } | null
+  studyBibleInReaderPoint?: { name: string; _id: string } | null
+  endPrayerPoint?: { name: string; _id: string } | null
+  secondChairmPoint?: { name: string; _id: string } | null
+
+  readPointStMC?: { name: string; _id: string } | null
+  readPointStSC?: { name: string; _id: string } | null
+
+  startPointStMC?: { name: string; _id: string } | null
+  startPointAsMC?: { name: string; _id: string } | null
+  startPointStSC?: { name: string; _id: string } | null
+  startPointAsSC?: { name: string; _id: string } | null
+
+  followPointStMC?: { name: string; _id: string } | null
+  followPointAsMC?: { name: string; _id: string } | null
+  followPointStSC?: { name: string; _id: string } | null
+  followPointAsSC?: { name: string; _id: string } | null
+
+  makePointStMC?: { name: string; _id: string } | null
+  makePointAsMC?: { name: string; _id: string } | null
+  makePointStSC?: { name: string; _id: string } | null
+  makePointAsSC?: { name: string; _id: string } | null
+
+  explainPointStMC?: { name: string; _id: string } | null
+  explainPointAsMC?: { name: string; _id: string } | null
+  explainPointStSC?: { name: string; _id: string } | null
+  explainPointAsSC?: { name: string; _id: string } | null
+
+  explainSpPointStMC?: { name: string; _id: string } | null
+  explainSpPointStSC?: { name: string; _id: string } | null
+
+  speechPointStMC?: { name: string; _id: string } | null
+  speechPointStSC?: { name: string; _id: string } | null
 }
