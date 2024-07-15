@@ -7,6 +7,7 @@ const isDev = require('electron-is-dev')
 let mainWindow
 let usersDB
 let weeksDB
+let settingsDB
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -62,8 +63,8 @@ function createWindow() {
   })
 }
 
+//--------------------------------Используем NeDB для создания базы данных в папке приложения--------------------
 function initializeDatabase() {
-  // Используем NeDB для создания базы данных в папке приложения
   usersDB = new Datastore({
     filename: path.join(app.getAppPath(), '../data/users.db'),
     //autoload: true,
@@ -87,6 +88,19 @@ function initializeDatabase() {
       // Обработка ошибок, если требуется
     } else {
       console.log('weeksDB has connected')
+    }
+  })
+
+  settingsDB = new Datastore({
+    filename: path.join(app.getAppPath(), '../data/settings.db'),
+    //autoload: true,
+  })
+  settingsDB.loadDatabase((err) => {
+    if (err) {
+      console.error('Error loading settings database:', err)
+      // Обработка ошибок, если требуется
+    } else {
+      console.log('settingsDB has connected')
     }
   })
 
@@ -221,7 +235,7 @@ ipcMain.handle('update-one-user', async (event, updatedItem) => {
 
 //------------------------EDIT-ONE-USER---------------------------------------------
 // принимает editItem: { idStudent, newStudentData }
-// idStudent: sting, newStudentData: {key: newValue}
+// idStudent: string; newStudentData: {key: newValue}
 
 ipcMain.handle('edit-one-user', async (event, editItem) => {
   try {
