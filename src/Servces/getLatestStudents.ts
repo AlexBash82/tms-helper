@@ -28,7 +28,7 @@ export function getLatestStudents(task: string) {
     return addParams
   }
 
-  // функция для получения списка студентов из базы и обновления им стейта.
+  // функция для получения списка студентов из базы
   // Вызывается только если action === 'plan'
   let latestStudents
   const getStudents = async () => {
@@ -39,8 +39,6 @@ export function getLatestStudents(task: string) {
       if (users.success) {
         console.log('users', users)
         latestStudents = users.data
-      } else {
-        latestStudents = []
       }
     } catch (error) {
       console.error('Error fetching users:', error)
