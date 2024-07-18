@@ -63,11 +63,12 @@ function createWindow() {
   })
 }
 
-//--------------------------------Используем NeDB для создания базы данных в папке приложения--------------------
+//------------------Используем NeDB для создания (если таковой нет) базы данных в папке приложения-------------
 function initializeDatabase() {
   usersDB = new Datastore({
     filename: path.join(app.getAppPath(), '../data/users.db'),
     //autoload: true,
+    //When uncommented, it will automatically load the database when the Datastore instance is created. This can be useful to ensure the database is ready for operations as soon as the instance is initialized. If this is not set, you need to call weeksDB.loadDatabase() manually to load the data.
   })
   usersDB.loadDatabase((err) => {
     if (err) {

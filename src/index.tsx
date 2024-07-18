@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
-import { IStudent, IWeek } from './interfaces'
+import { IAddParams, IStudent, IWeek } from './interfaces'
 
 type Result = {
   success: boolean
@@ -27,11 +27,6 @@ type SuccesResultAllWeeks = {
 type UnSuccessResultAllWeeks = {
   success: false
   message: string
-}
-type ResultMaleOrFemale = {
-  success: boolean
-  message: string
-  data?: IStudent
 }
 
 //новый формат типов
@@ -67,9 +62,9 @@ declare global {
       updateOneUser: (personData: object) => Promise<ResultStudent>
       getOneUserByLFName: (lastFirstName: string) => Promise<ResultStudent>
       editOneUser: (data: object) => Promise<ResultStudent>
+      getUsersByLatest: (addParam: IAddParams) => Promise<ResultStudents>
       //обновить типы функций что ниже
       writeOneUser: (personData: object) => Promise<Result>
-      getUsersByLatest: (addParam: object) => Promise<Array<IStudent>>
       deleteOneUser: (lastFirstName: string) => Promise<Result>
 
       writeNewWeek: (

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ListOfCandidates.css'
 import { IStudent } from '../../interfaces'
-import { getTimeStamps } from '../../services/getTimeStamps'
+import { getTimeStamps } from '../../Servces/getTimeStamps'
 
-//добавить фильтрацию по колонкам: перый разговор, повтор, главный зал...
 //можно в виде перебора массива и если поле с таском самое старое то в начало массива
 //а если нет,то в конец массива
 //а в самом массиве можно сделать среднее дефолтное значение - разделитель
-//при наведении на кандидата открывать еще одно окно с доп инф
+
+//при наведении на кандидата открывать еще одно окно с доп инф:
 
 interface IProps {
   openAndChoose: (arg: string) => void
@@ -67,20 +67,24 @@ const ListOfCandidates: React.FC<IProps> = ({
   const oldestPerform = (studentData: IStudent): boolean => {
     //формируем массивы из ключей, значение которых number или null - это ключи дат выступлений
     const nullFields: string[] = []
-    const numericFields = Object.keys(studentData).filter((key) => {
-      if (studentData[key] === null) {
+    const numericFields: string[] = Object.keys(studentData).filter((key) => {
+      if (studentData[key as keyof typeof studentData] === null) {
         nullFields.push(key)
         return false
       }
-      return typeof studentData[key] === 'number'
+      return typeof studentData[key as keyof typeof studentData] === 'number'
     })
 
     let minField: string = ''
     if (numericFields.length > 0) {
       //ищем поле с минимальным значением
       minField = numericFields.reduce((minField, currentField) => {
-        const currentValue = studentData[currentField]
-        const minValue = studentData[minField]
+        const currentValue = studentData[
+          currentField as keyof typeof studentData
+        ] as number
+        const minValue = studentData[
+          minField as keyof typeof studentData
+        ] as number
 
         return currentValue < minValue ? currentField : minField
       }, numericFields[0])
@@ -180,7 +184,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     return isSuits
   }
 
-  // эта функция полуает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя студента, то в базе меняем поле plan: true на false
+  // эта функция получает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя студента, то в базе меняем поле plan: true на false
   const makePlan = async (student: IStudent) => {
     //если в строке уже имеется студент: presentValue, то получаем его из базы
     if (presentValue) {
@@ -257,8 +261,8 @@ const ListOfCandidates: React.FC<IProps> = ({
 
   const absence = ['Absence for a reason', 'Absence for NO reason']
 
-  // Если пропустил без причины, то обновлем поле latest на дату недели (ставим в конец списка).
-  // Если пропустил по причине, то оставляем его в начале списка.
+  //План - Если пропустил без причины, то обновлем поле latest на дату недели (ставим в конец списка).
+  //План -  Если пропустил по причине, то оставляем его в начале списка.
   // В любом случае меняем plan: truе на false и удаляем имя из поля в БД недели.
   const makeConfirm = async (reason: string) => {
     if (presentValue) {

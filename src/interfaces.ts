@@ -228,3 +228,20 @@ export interface IWeekCopy {
   speechPointStMC?: { name: string; _id: string } | null
   speechPointStSC?: { name: string; _id: string } | null
 }
+
+export interface IAddParams {
+  isRead?: boolean
+  isSpeech?: boolean
+  isSecondClassOnly?: boolean
+  isPortnerOnly?: boolean
+  isNotBibleStudy?: boolean
+  isChairman?: boolean
+  isFirstSpeech?: boolean
+  isExplainSpeech?: boolean
+  isGems?: boolean
+  isSecondChairm?: boolean
+  isLiveAndServ?: boolean
+  isStudyBibleIn?: boolean
+  isStudyBibleInReader?: boolean
+  isEndPrayer?: boolean
+}

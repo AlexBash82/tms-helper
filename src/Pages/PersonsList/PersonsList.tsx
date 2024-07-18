@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import AddAndEditPerson from '../../Components/AddAndEditPerson/AddAndEditPerson'
-//import { IFemaleDB, IMaleDB } from '../../interfaces'
 import { IStudent } from '../../interfaces'
 import './PersonsList.css'
 

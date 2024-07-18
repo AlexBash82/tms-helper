@@ -12,6 +12,43 @@ import {
 //редактирование: после введения информации искать по ID и изменять (id т.к. имя можно поменять)
 //исключить возможность редактирования если студент.план = тру
 
+interface IResultToStr {
+  latest?: string
+
+  assistantPointAsMC?: string
+  assistantPointAsSC?: string
+
+  startPointStMC?: string
+  startPointStSC?: string
+
+  followPointStMC?: string
+  followPointStSC?: string
+
+  makePointStMC?: string
+  makePointStSC?: string
+
+  explainPointStMC?: string
+  explainPointStSC?: string
+
+  explainSpPointStMC?: string
+  explainSpPointStSC?: string
+
+  readPointStMC?: string
+  readPointStSC?: string
+
+  speechPointStMC?: string
+  speechPointStSC?: string
+
+  endPrayerPoint?: string
+  studyBibleInReaderPoint?: string
+  gemsPoint?: string
+  liveAndServPoint?: string
+  firstSpeechPoint?: string
+  studyBibleInPoint?: string
+  secondChairmPoint?: string
+  chairmanPoint?: string
+}
+
 interface IProps {
   PropPerson?: IStudent
   getAllStudents: () => void
@@ -93,9 +130,12 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           'chairmanPoint',
         ]
 
-        const result = {}
+        const result: IResultToStr = {}
         keyOfStudentDateToString.forEach((keyName) => {
-          result[keyName] = getStringOrDefault(PropPerson, keyName)
+          result[keyName as keyof typeof result] = getStringOrDefault(
+            PropPerson,
+            keyName
+          )
         })
         return result as IStudentDateToString
       }
@@ -140,8 +180,8 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
 
   //проверяем ниличие ключа в обьекте и возвращаем stampToString или дефолтное зачение
   const getStringOrDefault = (obj: IStudent, key: string) => {
-    if (key in obj && typeof obj[key] === 'number') {
-      return stampToString(obj[key] as number)
+    if (key in obj && typeof obj[key as keyof typeof obj] === 'number') {
+      return stampToString(obj[key as keyof typeof obj] as number)
     } else {
       return 'Din not perform'
     }
@@ -530,7 +570,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           ) : (
             <div>student is open to plan</div>
           )}
-          <div>portners - {editPropPerson.portners}</div>
+          <div>portner - one -{editPropPerson.portners[0]?.name}</div>
           {editPropPerson.isChairman && (
             <div>Chairman - {studentDateToString?.chairmanPoint}</div>
           )}

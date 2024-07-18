@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './SingleInput.css'
-import { IStudent } from '../../interfaces'
+import { IAddParams, IStudent } from '../../interfaces'
 import ListOfCandidates from '../ListOfCandidates/ListOfCandidates'
 
 interface IProps {
@@ -12,23 +12,6 @@ interface IProps {
   getCurrentWeek: () => void
   dateOfMeet: string
   action: 'plan' | 'confirm' | 'update' | undefined
-}
-
-interface IAddParams {
-  isRead?: boolean
-  isSpeech?: boolean
-  isSecondClassOnly?: boolean
-  isPortnerOnly?: boolean
-  isNotBibleStudy?: boolean
-  isChairman?: boolean
-  isFirstSpeech?: boolean
-  isExplainSpeech?: boolean
-  isGems?: boolean
-  isSecondChairm?: boolean
-  isLiveAndServ?: boolean
-  isStudyBibleIn?: boolean
-  isStudyBibleInReader?: boolean
-  isEndPrayer?: boolean
 }
 
 const SingleInput: React.FC<IProps> = (props) => {
@@ -56,6 +39,7 @@ const SingleInput: React.FC<IProps> = (props) => {
     }
   }, [firstInput])
 
+  //----------------------------------------вынести в services - getLatestStudents -------------------
   //в зависимости от содержания строки task - формируется объект для поиска полей студента по базе с дополнительными фильтрами
   const addSearchParams = () => {
     const addParams: IAddParams = {}
@@ -83,6 +67,7 @@ const SingleInput: React.FC<IProps> = (props) => {
     return addParams
   }
 
+  // план - подумать можно ли перенести (вынести) эту функцию, что бы обновлять, после назначения студента из списка
   // функция для получения списка студентов из базы и обновления им стейта.
   // Вызывается только если action === 'plan'
   const getLatestStudent = async () => {
@@ -90,8 +75,10 @@ const SingleInput: React.FC<IProps> = (props) => {
       //формируем параметры для фильтрации студентов по task
       const addParam = addSearchParams()
       const users = await window.api.getUsersByLatest(addParam)
-      console.log('users', users)
-      setLatestStudents(users)
+      if (users.success) {
+        console.log('users', users.data)
+        setLatestStudents(users.data)
+      }
     } catch (error) {
       console.error('Error fetching users:', error)
     }
@@ -102,6 +89,7 @@ const SingleInput: React.FC<IProps> = (props) => {
       getLatestStudent()
     }
   }, [])
+  //----------------------------------------------------------------------------------------------------
 
   // логика обработки введенных данных, экранирование символов
   const sanitizeInput = (input: string): string => {

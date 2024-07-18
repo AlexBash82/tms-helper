@@ -74,7 +74,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
 
     if (weeksFromBD.success) {
       // Функция для получения таймстемпа начала понедельника для конкретной недели
-      function getMondayTimestamp(date: Date) {
+      const getMondayTimestamp = (date: Date) => {
         const dayOfWeek = date.getDay() // Получаем день недели (0 - воскресенье, 1 - понедельник, и так далее)
         const diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) // Рассчитываем разницу для получения понедельника
         const monday = new Date(date.setDate(diff)) // Устанавливаем новую дату с учетом разницы
@@ -84,7 +84,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
 
       // Функция для получения таймстемпов начала понедельников будущих и прошлых 10 недель
       // возвращает: { currentMoment, currentMonday, pastMondays, futureMondays }
-      function getMondayTimestamps() {
+      const getMondayTimestamps = () => {
         const now = new Date()
         const currentMonday = getMondayTimestamp(now)
 
