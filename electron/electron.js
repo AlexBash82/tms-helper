@@ -363,7 +363,7 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
 
 ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
   try {
-    const filteredUsers = new Promise((resolve, reject) => {
+    const filteredUsers = await new Promise((resolve, reject) => {
       usersDB
         .find({ dontUse: false, plan: false, ...addParam })
         .sort({ latest: 1 })
@@ -376,10 +376,14 @@ ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
           }
         })
     })
-    return filteredUsers
+    return {
+      success: true,
+      message: 'I have found latest users',
+      data: filteredUsers,
+    }
   } catch (error) {
     console.error('get-sorted-users-by-latest error', error)
-    return []
+    return { success: false, message: 'I have notfound' }
   }
 })
 //-----------------------------------------------------------------------------------

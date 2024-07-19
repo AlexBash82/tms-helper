@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import './ListOfCandidates.css'
 import { IStudent } from '../../interfaces'
 import { getTimeStamps } from '../../Servces/getTimeStamps'
+import { getLatestStudents } from '../../Servces/getLatestStudents'
 
 //можно в виде перебора массива и если поле с таском самое старое то в начало массива
 //а если нет,то в конец массива
@@ -16,7 +17,6 @@ interface IProps {
   task: string
   dateOfMeet: string
   foundByLetter: Array<IStudent>
-  latestStudents: Array<IStudent>
   inputIs: string
   action: 'plan' | 'confirm' | 'update' | undefined
 }
@@ -34,13 +34,25 @@ const ListOfCandidates: React.FC<IProps> = ({
   dateOfMeet, //example '2024-01-10'
   action,
   foundByLetter,
-  latestStudents,
   inputIs,
 }) => {
   const listRef = useRef<HTMLDivElement | null>(null)
+  const [latestStudents, setLatestStudents] = useState<Array<IStudent>>([])
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      if (action === 'plan') {
+        const students = await getLatestStudents(task)
+        if (students) {
+          setLatestStudents(students)
+        }
+      }
+    }
+
+    fetchStudents()
+  }, [task, action])
 
   const timeEndOfMeet = '21:45'
-
   // вешаем слушатель на клик. Если вне родительского инпута и вне списка - закрываем список.
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
@@ -194,7 +206,7 @@ const ListOfCandidates: React.FC<IProps> = ({
       if (presentUser.success && presentUser.data?.plan) {
         try {
           const updatePresent = {
-            studentName: presentValue,
+            studentName: presentValue.name,
             keyName: 'plan',
             newValue: false,
           }
