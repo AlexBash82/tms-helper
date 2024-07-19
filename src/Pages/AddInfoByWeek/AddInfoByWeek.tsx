@@ -36,6 +36,9 @@ const AddInfoByWeek: React.FC = () => {
     dateOfMeet: '',
     isPlanned: false,
 
+    comment: '',
+    range: '',
+
     teachingChBx: false,
     trainingChBx: false,
     smallClassChBx: false,
@@ -538,7 +541,7 @@ const AddInfoByWeek: React.FC = () => {
       setAction(undefined)
     }
   }
-
+  //----DELETE PLAN------------------------------------------------------------------------------------------------
   // меняем plan: trye на false у всех студентов в этой неделе. Удаляем неделю из БД.
   const deletePlan = async () => {
     // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
@@ -574,18 +577,6 @@ const AddInfoByWeek: React.FC = () => {
         const student = await window.api.getOneUserByLFName(object.name)
 
         if (student.success) {
-          //формируем ключ для поиска в БД у студента, т.к. некоторые поля в БД недели отличаются
-          let key = weeksKey
-
-          //находим те поля, что отличаются и формируем key
-          if (weeksKey.includes('AsMC')) key = 'assistantPointAsMC'
-          if (weeksKey.includes('AsSC')) key = 'assistantPointAsSC'
-          if (weeksKey.includes('lesson')) key = 'liveAndServPoint'
-          if (weeksKey.includes('live')) key = 'liveAndServPoint'
-
-          //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
-          //console.log('2 stud key: ', key, 'value: ', student.data[key])
-
           const update = {
             idStudent: student.data._id,
             newStudentData: {
@@ -624,7 +615,7 @@ const AddInfoByWeek: React.FC = () => {
       setAction(undefined)
     }
   }
-
+  //-------DELETE WEEK---------------------------------------------------------------------------------------------
   const deleteWeek = async () => {
     console.log('delete weekState', weekState.dateOfMeet)
     if (weekState.dateOfMeet) {
@@ -636,6 +627,7 @@ const AddInfoByWeek: React.FC = () => {
       }
     }
   }
+  //---------------------------------------------------------------------------------------------------------------
 
   return (
     <div>

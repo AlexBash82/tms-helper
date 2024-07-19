@@ -1,5 +1,6 @@
 .allWeeks {
   display: flex;
+  flex-direction: column;
   justify-content: start;
   gap: 5px;
   width: 100%;
@@ -12,9 +13,10 @@
 }
 
 .oneWeek {
-  width: 80px;
-  height: 80px;
-  border: 1px solid blue;
+  width: 110px;
+  height: 50px;
+  border: 1px solid green;
+  background-color: rgb(152, 223, 130);
   border-radius: 5px;
   cursor: pointer;
 }
@@ -32,5 +34,6 @@
 }
 
 .active {
-  border-width: 2px;
+  border: 2px solid blue;
+  background-color: rgb(130, 133, 223);
 }

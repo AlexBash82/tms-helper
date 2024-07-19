@@ -1,24 +1,12 @@
 //App.tsx
 
-import React, { useState, useEffect } from 'react'
-import { Route, Link, Routes, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { Route, Link, Routes } from 'react-router-dom'
 import './App.css'
 import PersonsList from './Pages/PersonsList/PersonsList'
 import AddInfoByWeek from './Pages/AddInfoByWeek/AddInfoByWeek'
 
 const App: React.FC = () => {
-  //------нужно разобраться
-  //const navigate = useNavigate() // Получаем функцию для программного перехода
-  // useEffect(() => {
-  //   window.api.receive('navigate', (page) => {
-  //     navigate(`/${page}`) // Используем navigate для динамического перехода
-  //   })
-
-  //   return () => {
-  //     window.api.receive('navigate', () => {})
-  //   }
-  // }, [navigate])
-
   return (
     <div className="mainWindow">
       <nav>

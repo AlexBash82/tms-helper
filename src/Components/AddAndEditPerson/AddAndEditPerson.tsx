@@ -142,33 +142,6 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
 
       const student = makeStudentDateToString()
 
-      // const student: IStudentDateToString = {
-      //   startPointStMC: getDateToSting(PropPerson, 'startPointStMC', 'Din not perform'),
-      //   startPointStSC: getDateToSting(PropPerson, 'startPointStSC', 'Din not perform'),
-      //   followPointStMC: getDateToSting(PropPerson, 'followPointStMC', 'Din not perform'),
-      //   followPointStSC: getDateToSting(PropPerson, 'followPointStSC', 'Din not perform'),
-      //   makePointStMC: getDateToSting(PropPerson, 'makePointStMC', 'Din not perform'),
-      //   makePointStSC: getDateToSting(PropPerson, 'makePointStSC', 'Din not perform'),
-      //   explainPointStMC: getDateToSting(PropPerson, 'explainPointStMC', 'Din not perform'),
-      //   explainPointStSC: getDateToSting(PropPerson, 'explainPointStSC', 'Din not perform'),
-      //   assistantPointAsMC: getDateToSting(PropPerson, 'assistantPointAsMC', 'Din not perform'),
-      //   assistantPointAsSC: getDateToSting(PropPerson, 'assistantPointAsSC', 'Din not perform'),
-      //   latest: getDateToSting(PropPerson, 'latest', 'Din not perform'),
-
-      //   chairmanPoint: stampToDate(person.chairmanPoint)
-      //   secondChairmPoint: stampToDate(person.secondChairmPoint)
-      //   firstSpeechPoint: stampToDate(person.firstSpeechPoint)
-      //   gemsPoint: stampToDate(person.gemsPoint)
-      //   readPointStMC: stampToDate(person.readPointStMC)
-      //   readPointStSC: stampToDate(person.readPointStSC)
-      //   speechPointStMC: stampToDate(person.speechPointStMC)
-      //   speechPointStSC: stampToDate(person.speechPointStSC)
-      //   liveAndServPoint: stampToDate(person.liveAndServPoint)
-      //   studyBibleInPoint:stampToDate(person.studyBibleInPoint)
-      //   studyBibleInReaderPoint: stampToDate(person.studyBibleInReaderPoint)
-      //   endPrayerPoint: stampToDate(person.endPrayerPoint)
-
-      // }
       setStudentDateToString(student)
     }
   }, [PropPerson])

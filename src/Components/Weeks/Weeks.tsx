@@ -8,7 +8,6 @@ import { IWeek } from '../../interfaces'
 //сравнивать дату встречи в текущей недели с таймстемпом текущего времени для перевода
 //     в подтверждение выступлений
 //в центре квадрат с текущей неделей, для наглядности количества запланированных недель
-//при нажатии на неделю отправлять эту неделю на редактирование и подсвечивать...
 
 interface IProps {
   timeEndOfMeet: string
@@ -16,7 +15,14 @@ interface IProps {
   dateOfMeet: string
 }
 
-interface IEmptyWeek extends Pick<IWeek, 'dateOfMeet' | 'startWeekTSt'> {}
+//interface IEmptyWeek extends Pick<IWeek, 'dateOfMeet' | 'startWeekTSt'> {}
+interface IEmptyWeek {
+  startWeekTSt: number
+  dateOfMeet: string
+  range: string
+  comment: string
+  //осуществить функцию добавления в пустой неделе комментария типа прн или конгрес. Да их придется сохранять
+}
 
 const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
   const [previousWeeks, setPreviousWeeks] = useState<Array<IWeek> | undefined>()
@@ -67,6 +73,53 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
       }
     }
   }, [])
+
+  const formatWeekRange = (timestamp: number) => {
+    //по таймстемп понедельника вычисляет числа начала и конца недели и возвращает строку с этими числими и названием месяца
+    const daysOfWeek = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ]
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ]
+
+    const date = new Date(timestamp)
+
+    // Check if the given timestamp is Monday
+    if (date.getDay() !== 1) {
+      throw new Error('Timestamp does not correspond to a Monday.')
+    }
+
+    const mondayDate = date.getDate()
+    const mondayMonth = months[date.getMonth()]
+
+    const sundayDate = new Date(timestamp + 6 * 24 * 60 * 60 * 1000)
+    const sundayDay = sundayDate.getDate()
+    const sundayMonth = months[sundayDate.getMonth()]
+
+    if (mondayMonth === sundayMonth) {
+      return `${mondayDate} - ${sundayDay} ${mondayMonth}`
+    } else {
+      return `${mondayDate} ${mondayMonth} - ${sundayDay} ${sundayMonth}`
+    }
+  }
 
   //функция для полуения данных из БД и формирования стейта недель: будущих, настоящей и прошедших
   const getWeeks = async () => {
@@ -126,6 +179,8 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
         setCurrentWeek({
           dateOfMeet: '',
           startWeekTSt: timestamps.currentMonday,
+          range: '',
+          comment: '',
         })
       }
 
@@ -150,9 +205,12 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
         if (result) {
           futureWeeks.push(result)
         } else {
+          const str = formatWeekRange(futureMondaysTSt)
           futureWeeks.push({
             dateOfMeet: 'empty',
             startWeekTSt: futureMondaysTSt,
+            range: str,
+            comment: '',
           })
         }
       })
@@ -170,27 +228,38 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
 
   return (
     <div className="allWeeks">
-      {previousWeeks && (
+      {futureWeeks && (
         <div>
-          <div>past</div>
+          <div>future weeks</div>
           <div className="weeks">
-            {previousWeeks.map((week) => (
-              <div
-                className={`oneWeek orange ${
-                  dateOfMeet === week.dateOfMeet ? 'active' : ''
-                }`}
-                key={week.startWeekTSt}
-                onClick={() => makeAMeet(week.dateOfMeet)}
-              >
-                {week.dateOfMeet}
-              </div>
-            ))}
+            {futureWeeks.map((week) =>
+              week.dateOfMeet === 'empty' ? (
+                <div
+                  className="oneWeek gray"
+                  key={week.startWeekTSt}
+                  onClick={() => makeAMeet(week.dateOfMeet)}
+                >
+                  {week.range}
+                </div>
+              ) : (
+                <div
+                  className={`oneWeek ${
+                    dateOfMeet === week.dateOfMeet ? 'active' : ''
+                  }`}
+                  key={week.startWeekTSt}
+                  onClick={() => makeAMeet(week.dateOfMeet)}
+                >
+                  {week.dateOfMeet.slice(8)}
+                </div>
+              )
+            )}
           </div>
         </div>
       )}
+
       {currentWeek && (
         <div>
-          <div>current</div>
+          <div>current week</div>
           <div className="weeks">
             <div
               className={`oneWeek ${
@@ -204,14 +273,16 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
           </div>
         </div>
       )}
-      {futureWeeks && (
+
+      {previousWeeks && (
         <div>
-          <div>future</div>
+          <div>past weeks</div>
           <div className="weeks">
-            {futureWeeks.map((week) => (
+            {previousWeeks.map((week) => (
               <div
-                className={`oneWeek ${week.dateOfMeet === 'empty' ? 'gray' : ''}
-                   ${dateOfMeet === week.dateOfMeet ? 'active' : ''}`}
+                className={`oneWeek orange ${
+                  dateOfMeet === week.dateOfMeet ? 'active' : ''
+                }`}
                 key={week.startWeekTSt}
                 onClick={() => makeAMeet(week.dateOfMeet)}
               >

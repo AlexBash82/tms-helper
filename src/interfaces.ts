@@ -125,6 +125,9 @@ export interface IWeek {
   dateOfMeet: string
   isPlanned: boolean
 
+  comment: string
+  range: string
+
   teachingChBx: boolean
   trainingChBx: boolean
   smallClassChBx: boolean
