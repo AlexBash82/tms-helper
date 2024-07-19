@@ -196,7 +196,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     return isSuits
   }
 
-  // эта функция получает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя студента, то в базе меняем поле plan: true на false
+  // эта функция получает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя другого студента, то в базе ищем его и меняем поле plan: true на false
   const makePlan = async (student: IStudent) => {
     //если в строке уже имеется студент: presentValue, то получаем его из базы
     if (presentValue) {

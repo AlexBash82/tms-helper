@@ -97,7 +97,7 @@ const SingleInput: React.FC<IProps> = (props) => {
           className="inp"
           placeholder="Did not plane"
           type="text"
-          value={firstInput?.name}
+          value={inputValue}
           readOnly
           onFocus={() => focusOrBlur('focus', task)}
           onBlur={() => focusOrBlur('blur', '')}

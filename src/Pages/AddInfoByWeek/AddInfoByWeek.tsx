@@ -103,7 +103,7 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   const makeAMeet = async (inpDateOfMeet: string) => {
-    //inpDateOfMeet - дата выбранная пользователем в календаре
+    //inpDateOfMeet - дата выбранная пользователем в календаре или при нажатии на уже созданную неделю
 
     const { timeStampInp, timestampNow } = getTimeStamps(
       inpDateOfMeet,
@@ -163,7 +163,7 @@ const AddInfoByWeek: React.FC = () => {
     startWeekTSt: number,
     isPlanned: boolean
   ) => {
-    const newWeek = Object.assign(weekState, {
+    const newWeek = Object.assign(defaultWeekState, {
       dateOfMeet: inpDateOfMeet,
       startWeekTSt,
       isPlanned,
