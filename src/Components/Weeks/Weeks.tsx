@@ -24,6 +24,11 @@ interface IEmptyWeek {
   //осуществить функцию добавления в пустой неделе комментария типа прн или конгрес. Да их придется сохранять
 }
 
+interface IDaysList {
+  startWeekTSt: number
+  daysList: { title: string; dateOfMeet: string }[]
+}
+
 const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
   const [previousWeeks, setPreviousWeeks] = useState<Array<IWeek> | undefined>()
   const [currentWeek, setCurrentWeek] = useState<
@@ -33,6 +38,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
   const [futureWeeks, setFututureWeeks] = useState<
     Array<IWeek | IEmptyWeek> | undefined
   >()
+  const [openedDaysList, setOpenedDaysList] = useState<IDaysList | undefined>()
 
   useEffect(() => {
     getWeeks()
@@ -76,15 +82,6 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
 
   const formatWeekRange = (timestamp: number) => {
     //по таймстемп понедельника вычисляет числа начала и конца недели и возвращает строку с этими числими и названием месяца
-    const daysOfWeek = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ]
     const months = [
       'Jan',
       'Feb',
@@ -226,20 +223,73 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
     }
   }
 
+  const openDaysList = (startWeekTSt?: number) => {
+    if (startWeekTSt) {
+      const daysOfWeek = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ]
+      const mondayDate = new Date(startWeekTSt)
+      const weekDaysArr = []
+
+      for (let i = 0; i < 7; i++) {
+        const currentDate = new Date(mondayDate)
+        currentDate.setDate(mondayDate.getDate() + i)
+
+        const dayNumber = currentDate.getDate()
+        const dayOfWeek = daysOfWeek[i]
+
+        const title = `${dayNumber} ${dayOfWeek}`
+        const dateOfMeet = `${currentDate.getFullYear()}-${String(
+          currentDate.getMonth() + 1
+        ).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`
+
+        weekDaysArr.push({ title, dateOfMeet })
+      }
+      const list = {
+        startWeekTSt,
+        daysList: weekDaysArr,
+      }
+      setOpenedDaysList(list)
+    } else {
+      setOpenedDaysList(undefined)
+    }
+  }
+
   return (
     <div className="allWeeks">
       {futureWeeks && (
-        <div>
+        <div className="row">
           <div>future weeks</div>
           <div className="weeks">
             {futureWeeks.map((week) =>
               week.dateOfMeet === 'empty' ? (
                 <div
-                  className="oneWeek gray"
+                  className={`oneWeek gray ${
+                    week.startWeekTSt === openedDaysList?.startWeekTSt
+                      ? 'list'
+                      : ''
+                  }`}
                   key={week.startWeekTSt}
-                  onClick={() => makeAMeet(week.dateOfMeet)}
+                  onMouseEnter={() => openDaysList(week.startWeekTSt)}
+                  onMouseLeave={() => openDaysList()}
                 >
-                  {week.range}
+                  {week.startWeekTSt === openedDaysList?.startWeekTSt
+                    ? openedDaysList.daysList.map((day) => (
+                        <div
+                          className="weekDay"
+                          key={day.dateOfMeet}
+                          onClick={() => makeAMeet(day.dateOfMeet)}
+                        >
+                          {day.title}
+                        </div>
+                      ))
+                    : week.range}
                 </div>
               ) : (
                 <div
@@ -249,7 +299,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
                   key={week.startWeekTSt}
                   onClick={() => makeAMeet(week.dateOfMeet)}
                 >
-                  {week.dateOfMeet.slice(8)}
+                  {week.dateOfMeet}
                 </div>
               )
             )}
@@ -258,7 +308,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
       )}
 
       {currentWeek && (
-        <div>
+        <div className="row">
           <div>current week</div>
           <div className="weeks">
             <div
@@ -275,7 +325,7 @@ const Weeks: React.FC<IProps> = ({ timeEndOfMeet, makeAMeet, dateOfMeet }) => {
       )}
 
       {previousWeeks && (
-        <div>
+        <div className="row">
           <div>past weeks</div>
           <div className="weeks">
             {previousWeeks.map((week) => (

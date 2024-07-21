@@ -4,27 +4,46 @@
   justify-content: start;
   gap: 5px;
   width: 100%;
-  overflow-x: auto;
+}
+
+.row {
 }
 
 .weeks {
   display: flex;
   gap: 5px;
+  height: 50px;
 }
 
 .oneWeek {
   width: 110px;
   height: 50px;
   border: 1px solid green;
-  background-color: rgb(152, 223, 130);
-  border-radius: 5px;
+  background-color: rgb(152, 223, 130, 1);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: height 0.3s;
+}
+
+.list {
+  height: 140px;
+  background-color: rgb(9, 87, 9);
+  z-index: 10;
+}
+
+.weekDay {
   cursor: pointer;
 }
 
+.weekDay:hover {
+  color: rgb(196, 196, 196);
+  background-color: rgb(96, 96, 96);
+}
+
 .gray {
-  border: 1px solid gray;
-  color: gray;
-  background-color: rgba(128, 128, 128, 0.274);
+  border: 1px solid rgb(96, 96, 96);
+  color: rgb(96, 96, 96);
+  background-color: rgb(196, 196, 196);
   cursor: auto;
 }
 
