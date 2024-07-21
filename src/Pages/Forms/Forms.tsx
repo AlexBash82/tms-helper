@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './Forms.css'
 import { IWeek } from '../../interfaces'
+import BlankForm from './Components/BlankForm/BlankForm'
 
 interface IProps {}
 
@@ -28,6 +29,7 @@ const Forms: React.FC<IProps> = ({}) => {
       ) : (
         <></>
       )}
+      <BlankForm />
     </div>
   )
 }
