@@ -1216,10 +1216,18 @@ const AddInfoByWeek: React.FC = () => {
 
       {action === 'plan' && weekState.dateOfMeet && (
         <div className="df">
-          <div onClick={() => setWeekState(defaultWeekState)}>
-            Close the window
-          </div>{' '}
-          <div onClick={deletePlan}>Delete week</div>
+          <div
+            className="myButton"
+            onClick={() => setWeekState(defaultWeekState)}
+          >
+            Close window
+          </div>
+          <div className="myButton" onClick={deletePlan}>
+            Delete week
+          </div>
+          {/* <div className="myButton" onClick={() => console.log('hi')}>
+            Make Forms
+          </div> */}
         </div>
       )}
 
