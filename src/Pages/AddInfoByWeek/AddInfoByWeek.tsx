@@ -56,41 +56,44 @@ const AddInfoByWeek: React.FC = () => {
     liveAndServThreeChBx: false,
     secondChairmChBx: false,
 
-    chairmanPoint: null,
-    firstSpeechPoint: null,
-    gemsPoint: null,
-    lessonOnePoint: null,
-    lessonTwoPoint: null,
-    liveAndServPoint: null,
-    liveAndServTwoPoint: null,
-    liveAndServThreePoint: null,
-    studyBibleInPoint: null,
-    studyBibleInReaderPoint: null,
-    endPrayerPoint: null,
-    secondChairmPoint: null,
+    numbered: [],
+    randomly: [],
 
-    readPointStMC: null,
-    startPointStMC: null,
-    startPointAsMC: null,
-    followPointStMC: null,
-    followPointAsMC: null,
-    makePointStMC: null,
-    makePointAsMC: null,
-    explainPointStMC: null,
-    explainPointAsMC: null,
-    speechPointStMC: null,
-    readPointStSC: null,
-    startPointStSC: null,
-    startPointAsSC: null,
-    followPointStSC: null,
-    followPointAsSC: null,
-    makePointStSC: null,
-    makePointAsSC: null,
-    explainPointStSC: null,
-    explainPointAsSC: null,
-    explainSpPointStMC: null,
-    explainSpPointStSC: null,
-    speechPointStSC: null,
+    // chairmanPoint: null,
+    // firstSpeechPoint: null,
+    // gemsPoint: null,
+    // lessonOnePoint: null,
+    // lessonTwoPoint: null,
+    // liveAndServPoint: null,
+    // liveAndServTwoPoint: null,
+    // liveAndServThreePoint: null,
+    // studyBibleInPoint: null,
+    // studyBibleInReaderPoint: null,
+    // endPrayerPoint: null,
+    // secondChairmPoint: null,
+
+    // readPointStMC: null,
+    // startPointStMC: null,
+    // startPointAsMC: null,
+    // followPointStMC: null,
+    // followPointAsMC: null,
+    // makePointStMC: null,
+    // makePointAsMC: null,
+    // explainPointStMC: null,
+    // explainPointAsMC: null,
+    // speechPointStMC: null,
+    // readPointStSC: null,
+    // startPointStSC: null,
+    // startPointAsSC: null,
+    // followPointStSC: null,
+    // followPointAsSC: null,
+    // makePointStSC: null,
+    // makePointAsSC: null,
+    // explainPointStSC: null,
+    // explainPointAsSC: null,
+    // explainSpPointStMC: null,
+    // explainSpPointStSC: null,
+    // speechPointStSC: null,
   }
   const [weekState, setWeekState] = useState<IWeek>(defaultWeekState)
 
@@ -99,7 +102,7 @@ const AddInfoByWeek: React.FC = () => {
     'plan' | 'confirm' | 'update' | undefined
   >()
 
-  const timeEndOfMeet = '21:45' //--------------------------------------------------------------------
+  const timeEndOfMeet = '20:45' //--------------------------------------------------------------------
 
   const openAndChoose = (task: string) => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
@@ -210,21 +213,8 @@ const AddInfoByWeek: React.FC = () => {
     // Получаем метку времени даты недели
     const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
 
-    // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде object например {name: string, id: string}
-    const copyWeekState: IWeekCopy = {}
-    for (const key in weekState) {
-      if (Object.prototype.hasOwnProperty.call(weekState, key)) {
-        const nestedObject = weekState[key as keyof typeof weekState]
-        if (
-          nestedObject &&
-          typeof nestedObject === 'object' &&
-          'name' in nestedObject
-        ) {
-          copyWeekState[key as keyof typeof copyWeekState] = nestedObject
-        }
-      }
-    }
-    //console.log('copiedObject', copyWeekState)
+    // копируем из weekState в copyWeekState, содержание массивов numbered и randomly, то есть какие пункты и кто выполняет
+    const copyWeekState = [...weekState.numbered, ...weekState.randomly]
 
     // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
@@ -233,26 +223,24 @@ const AddInfoByWeek: React.FC = () => {
       unSuccessUpdated: [],
     }
 
-    // проходим по ключам обьекта copyWeekState, получаем на каждый ключ: "name" - студента из БД
-    for (const weeksKey in copyWeekState) {
+    // проходим по copyWeekState, получаем на каждый ход: "name" - студента из БД
+    for (const taskAndName of copyWeekState) {
       amount.keysOfCopyWeek += 1
 
-      const object = copyWeekState[weeksKey as keyof typeof copyWeekState]
+      const task = Object.keys(taskAndName)[0]
+      const name = taskAndName[task].name
 
-      if (object && object.name) {
-        const student = await window.api.getOneUserByLFName(object.name)
+      if (task && name) {
+        const student = await window.api.getOneUserByLFName(name)
         if (student.success) {
           //формируем ключ для поиска в БД у студента, т.к. некоторые поля в БД недели отличаются
-          let key = weeksKey
+          let key = task
 
           //находим те поля, что отличаются и формируем key
-          if (weeksKey.includes('AsMC')) key = 'assistantPointAsMC'
-          if (weeksKey.includes('AsSC')) key = 'assistantPointAsSC'
-          if (weeksKey.includes('lesson')) key = 'liveAndServPoint'
-          if (weeksKey.includes('live')) key = 'liveAndServPoint'
-
-          //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
-          //console.log('2 stud key: ', key, 'value: ', student.data[key])
+          if (task.includes('AsMC')) key = 'assistantPointAsMC'
+          if (task.includes('AsSC')) key = 'assistantPointAsSC'
+          if (task.includes('lesson')) key = 'liveAndServPoint'
+          if (task.includes('live')) key = 'liveAndServPoint'
 
           const updateData: IUpdateData = {
             idStudent: student.data._id,
@@ -265,53 +253,62 @@ const AddInfoByWeek: React.FC = () => {
 
           //проверям есть ли напарник у этого задания и добавляем в updateData.newStudentData
           if (
-            weeksKey.includes('startPointSt') ||
-            weeksKey.includes('followPointSt') ||
-            weeksKey.includes('makePointSt') ||
-            weeksKey.includes('explainPointSt')
+            task.includes('startPointSt') ||
+            task.includes('followPointSt') ||
+            task.includes('makePointSt') ||
+            task.includes('explainPointSt')
           ) {
-            let searchPortner: { name: string; _id: string } | null = null
+            let searchPortner: { name: string; _id: string } | undefined =
+              undefined
 
             //присваеваем searchPortner имя напарника и его id из недели, если есть
-            switch (weeksKey) {
+            switch (task) {
               case 'startPointStMC':
-                copyWeekState.startPointAsMC &&
-                  (searchPortner = copyWeekState.startPointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'startPointAsMC'
+                )?.['startPointAsMC']
                 break
 
               case 'startPointStSC':
-                copyWeekState.startPointAsSC &&
-                  (searchPortner = copyWeekState.startPointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'startPointAsSC'
+                )?.['startPointAsSC']
                 break
 
               case 'followPointStMC':
-                copyWeekState.followPointAsMC &&
-                  (searchPortner = copyWeekState.followPointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'followPointAsMC'
+                )?.['followPointAsMC']
                 break
 
               case 'followPointStSC':
-                copyWeekState.followPointAsSC &&
-                  (searchPortner = copyWeekState.followPointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'followPointAsSC'
+                )?.['followPointAsSC']
                 break
 
               case 'makePointStMC':
-                copyWeekState.makePointAsMC &&
-                  (searchPortner = copyWeekState.makePointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'makePointAsMC'
+                )?.['makePointAsMC']
                 break
 
               case 'makePointStSC':
-                copyWeekState.makePointAsSC &&
-                  (searchPortner = copyWeekState.makePointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'makePointAsSC'
+                )?.['makePointAsSC']
                 break
 
               case 'explainPointStMC':
-                copyWeekState.explainPointAsMC &&
-                  (searchPortner = copyWeekState.explainPointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'explainPointAsMC'
+                )?.['explainPointAsMC']
                 break
 
               case 'explainPointStSC':
-                copyWeekState.explainPointAsSC &&
-                  (searchPortner = copyWeekState.explainPointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'explainPointAsSC'
+                )?.['explainPointAsSC']
                 break
             }
 
@@ -348,9 +345,13 @@ const AddInfoByWeek: React.FC = () => {
       amount.successUpdated > 0 &&
       amount.successUpdated === amount.keysOfCopyWeek
     ) {
-      alert('Every student was succesfully updated')
+      alert(
+        `All ${amount.successUpdated} student${
+          amount.successUpdated === 1 ? '' : 's'
+        } was succesfully updated`
+      )
     } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek === 0) {
-      alert('I can not update empty week')
+      alert('I deleted empty week')
     }
 
     const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
@@ -361,29 +362,17 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   //---UPDATE WEEK-------------------------------------------------------------------------------------------------
+  // заполнение базы выступлений уже прошедшими неделями
   // сравниваем дату недели с графой соответствующего студента в базе и, если дата недели свежее, то
-  // ...то обновляем поля студента в базе.
+  // ...то обновляем в базе поле даты выступления студента.
   // обновляем напарников студента.
   // Удаляем неделю из БД.
   const updateWeek = async () => {
     // Получаем метку времени даты недели
     const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
 
-    // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
-    const copyWeekState: IWeekCopy = {}
-    for (const key in weekState) {
-      if (Object.prototype.hasOwnProperty.call(weekState, key)) {
-        const nestedObject = weekState[key as keyof typeof weekState]
-        if (
-          nestedObject &&
-          typeof nestedObject === 'object' &&
-          'name' in nestedObject
-        ) {
-          copyWeekState[key as keyof typeof copyWeekState] = nestedObject
-        }
-      }
-    }
-    //console.log('copiedObject', copyWeekState)
+    // копируем из weekState в copyWeekState, содержание массивов numbered и randomly, то есть какие пункты и кто выполняет
+    const copyWeekState = [...weekState.numbered, ...weekState.randomly]
 
     // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
@@ -392,29 +381,25 @@ const AddInfoByWeek: React.FC = () => {
       unSuccessUpdated: [],
     }
 
-    // проходим по ключам обьекта copyWeekState, получаем на каждый ключ: "name" - студента из БД
-    // пример copyWeekState: {  speechPointStMC?: { name: string; _id: string } | null
-    //                          speechPointStSC?: { name: string; _id: string } | null }
-    for (const weeksKey in copyWeekState) {
+    // проходим по copyWeekState, получаем на каждый ход: "name" - студента из БД
+    for (const taskAndName of copyWeekState) {
       amount.keysOfCopyWeek += 1
 
-      const object = copyWeekState[weeksKey as keyof typeof copyWeekState]
+      const task = Object.keys(taskAndName)[0]
+      const name = taskAndName[task].name
 
-      if (object && object.name) {
-        const student = await window.api.getOneUserByLFName(object.name)
+      if (task && name) {
+        const student = await window.api.getOneUserByLFName(name)
         if (student.success) {
           //т.к. некоторые поля в БД недели отличаются от полей в БД студента
           //формируем ключ для поиска у студента нужного поля
 
-          let key = weeksKey
+          let key = task
           //находим те поля, что отличаются и формируем key
-          if (weeksKey.includes('AsMC')) key = 'assistantPointAsMC'
-          if (weeksKey.includes('AsSC')) key = 'assistantPointAsSC'
-          if (weeksKey.includes('lesson')) key = 'liveAndServPoint'
-          if (weeksKey.includes('live')) key = 'liveAndServPoint'
-
-          //console.log('1 weeksKey: ', weeksKey, 'value: ', timestamp)
-          //console.log('2 stud key: ', key, 'value: ', student.data[key])
+          if (task.includes('AsMC')) key = 'assistantPointAsMC'
+          if (task.includes('AsSC')) key = 'assistantPointAsSC'
+          if (task.includes('lesson')) key = 'liveAndServPoint'
+          if (task.includes('live')) key = 'liveAndServPoint'
 
           const updateData: IUpdateData = {
             idStudent: student.data._id,
@@ -438,57 +423,66 @@ const AddInfoByWeek: React.FC = () => {
 
           //проверям есть ли напарник у этого задания и добавляем в updateData.newStudentData
           if (
-            weeksKey.includes('startPointSt') ||
-            weeksKey.includes('followPointSt') ||
-            weeksKey.includes('makePointSt') ||
-            weeksKey.includes('explainPointSt')
+            task.includes('startPointSt') ||
+            task.includes('followPointSt') ||
+            task.includes('makePointSt') ||
+            task.includes('explainPointSt')
           ) {
-            let searchPortner: { name: string; _id: string } | null = null
+            let searchPortner: { name: string; _id: string } | undefined =
+              undefined
 
             //присваеваем searchPortner имя напарника и его id из недели, если есть
-            switch (weeksKey) {
+            switch (task) {
               case 'startPointStMC':
-                copyWeekState.startPointAsMC &&
-                  (searchPortner = copyWeekState.startPointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'startPointAsMC'
+                )?.['startPointAsMC']
                 break
 
               case 'startPointStSC':
-                copyWeekState.startPointAsSC &&
-                  (searchPortner = copyWeekState.startPointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'startPointAsSC'
+                )?.['startPointAsSC']
                 break
 
               case 'followPointStMC':
-                copyWeekState.followPointAsMC &&
-                  (searchPortner = copyWeekState.followPointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'followPointAsMC'
+                )?.['followPointAsMC']
                 break
 
               case 'followPointStSC':
-                copyWeekState.followPointAsSC &&
-                  (searchPortner = copyWeekState.followPointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'followPointAsSC'
+                )?.['followPointAsSC']
                 break
 
               case 'makePointStMC':
-                copyWeekState.makePointAsMC &&
-                  (searchPortner = copyWeekState.makePointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'makePointAsMC'
+                )?.['makePointAsMC']
                 break
 
               case 'makePointStSC':
-                copyWeekState.makePointAsSC &&
-                  (searchPortner = copyWeekState.makePointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'makePointAsSC'
+                )?.['makePointAsSC']
                 break
 
               case 'explainPointStMC':
-                copyWeekState.explainPointAsMC &&
-                  (searchPortner = copyWeekState.explainPointAsMC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'explainPointAsMC'
+                )?.['explainPointAsMC']
                 break
 
               case 'explainPointStSC':
-                copyWeekState.explainPointAsSC &&
-                  (searchPortner = copyWeekState.explainPointAsSC)
+                searchPortner = copyWeekState.find(
+                  (obj) => Object.keys(obj)[0] === 'explainPointAsSC'
+                )?.['explainPointAsSC']
                 break
             }
 
-            //определяем есть ли у студента в массиве такой напарник и добавляем в updateData.newStudentData
+            //ищем у студента в массиве этого напарника и если нет добавляем в updateData.newStudentData
             if (searchPortner) {
               const isPortnerExist = student.data.portners.find(
                 (portner) => portner._id === searchPortner?._id
@@ -524,14 +518,20 @@ const AddInfoByWeek: React.FC = () => {
       amount.successUpdated > 0 &&
       amount.successUpdated === amount.keysOfCopyWeek
     ) {
-      alert('Every student was succesfully updated')
+      alert(
+        `All ${amount.successUpdated} student${
+          amount.successUpdated === 1 ? '' : 's'
+        } was succesfully updated`
+      )
     } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek > 0) {
       alert('Everything is already updated')
     } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek === 0) {
-      alert('I can not update empty fields')
+      alert('I deleted empty week')
     } else {
       alert(
-        `I just updated ${amount.successUpdated} of the ${amount.keysOfCopyWeek} student`
+        `I just updated ${amount.successUpdated} of the ${
+          amount.keysOfCopyWeek
+        } student${amount.keysOfCopyWeek === 1 ? '' : 's'}`
       )
     }
 
@@ -544,21 +544,8 @@ const AddInfoByWeek: React.FC = () => {
   //----DELETE PLAN------------------------------------------------------------------------------------------------
   // меняем plan: trye на false у всех студентов в этой неделе. Удаляем неделю из БД.
   const deletePlan = async () => {
-    // копируем из weekState в copyWeekState, только нужные ключи и зачения, т.е. те, что имеют значения в виде {name: string, id: string}
-    const copyWeekState: IWeekCopy = {}
-    for (const key in weekState) {
-      if (Object.prototype.hasOwnProperty.call(weekState, key)) {
-        const nestedObject = weekState[key as keyof typeof weekState]
-        if (
-          nestedObject &&
-          typeof nestedObject === 'object' &&
-          'name' in nestedObject
-        ) {
-          copyWeekState[key as keyof typeof copyWeekState] = nestedObject
-        }
-      }
-    }
-    //console.log('copiedObject', copyWeekState)
+    // копируем из weekState в copyWeekState, содержание массивов numbered и randomly, то есть какие пункты и кто выполняет
+    const copyWeekState = [...weekState.numbered, ...weekState.randomly]
 
     // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
@@ -567,24 +554,24 @@ const AddInfoByWeek: React.FC = () => {
       unSuccessUpdated: [],
     }
 
-    // проходим по ключам обьекта copyWeekState, получаем на каждый ключ: "name" - студента из БД
-    for (const weeksKey in copyWeekState) {
+    // проходим по copyWeekState, получаем на каждый ход: "name" - студента из БД
+    for (const taskAndName of copyWeekState) {
       amount.keysOfCopyWeek += 1
 
-      const object = copyWeekState[weeksKey as keyof typeof copyWeekState]
+      const task = Object.keys(taskAndName)[0]
+      const name = taskAndName[task].name
 
-      if (object && object.name) {
-        const student = await window.api.getOneUserByLFName(object.name)
-
+      if (task && name) {
+        const student = await window.api.getOneUserByLFName(name)
         if (student.success) {
-          const update = {
+          const updateData = {
             idStudent: student.data._id,
             newStudentData: {
               plan: false,
             },
           }
 
-          const result = await window.api.editOneUser(update)
+          const result = await window.api.editOneUser(updateData)
 
           if (result.success) {
             amount.successUpdated += 1
@@ -604,9 +591,13 @@ const AddInfoByWeek: React.FC = () => {
       amount.successUpdated > 0 &&
       amount.successUpdated === amount.keysOfCopyWeek
     ) {
-      alert('Every student was succesfully updated')
+      alert(
+        `All ${amount.successUpdated} student${
+          amount.successUpdated === 1 ? '' : 's'
+        } was succesfully updated`
+      )
     } else if (amount.successUpdated === 0 && amount.keysOfCopyWeek === 0) {
-      alert('I can not update empty week')
+      alert('I deleted empty week')
     }
 
     const result = await window.api.deleteOneWeek(weekState.dateOfMeet)
@@ -628,6 +619,20 @@ const AddInfoByWeek: React.FC = () => {
     }
   }
   //---------------------------------------------------------------------------------------------------------------
+
+  const getNumbTask = (title: string) => {
+    const result = weekState.numbered.find(
+      (obj) => Object.keys(obj)[0] === title
+    )?.[title]
+    return result
+  }
+
+  const getRandomTask = (title: string) => {
+    const result = weekState.randomly.find(
+      (obj) => Object.keys(obj)[0] === title
+    )?.[title]
+    return result
+  }
 
   return (
     <div>
@@ -749,7 +754,7 @@ const AddInfoByWeek: React.FC = () => {
                       title={'Chearman'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.chairmanPoint}
+                      firstInput={getRandomTask('chairmanPoint')}
                       task="chairmanPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
@@ -760,7 +765,7 @@ const AddInfoByWeek: React.FC = () => {
                       title={'First speech'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.firstSpeechPoint}
+                      firstInput={getNumbTask('firstSpeechPoint')}
                       task="firstSpeechPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
@@ -771,7 +776,7 @@ const AddInfoByWeek: React.FC = () => {
                       title={'Spiritual gemsPoint'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.gemsPoint}
+                      firstInput={getNumbTask('gemsPoint')}
                       task="gemsPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
@@ -783,7 +788,7 @@ const AddInfoByWeek: React.FC = () => {
                         title={'Second class'}
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={weekState.secondChairmPoint}
+                        firstInput={getRandomTask('secondChairmPoint')}
                         task="secondChairmPoint"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
@@ -798,7 +803,7 @@ const AddInfoByWeek: React.FC = () => {
                         title={'Lesson one'}
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={weekState.lessonOnePoint}
+                        firstInput={getNumbTask('lessonOnePoint')}
                         task="lessonOnePoint"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
@@ -811,7 +816,7 @@ const AddInfoByWeek: React.FC = () => {
                         title={'Lesson two'}
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={weekState.lessonTwoPoint}
+                        firstInput={getNumbTask('lessonTwoPoint')}
                         task="lessonTwoPoint"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
@@ -825,7 +830,7 @@ const AddInfoByWeek: React.FC = () => {
                       title={'Live and Serving'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.liveAndServPoint}
+                      firstInput={getNumbTask('liveAndServPoint')}
                       task="liveAndServPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
@@ -837,7 +842,7 @@ const AddInfoByWeek: React.FC = () => {
                         title={'Live and Serving second'}
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={weekState.liveAndServTwoPoint}
+                        firstInput={getNumbTask('liveAndServTwoPoint')}
                         task="liveAndServTwoPoint"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
@@ -850,7 +855,7 @@ const AddInfoByWeek: React.FC = () => {
                         title={'Live and Serving third'}
                         openAndChoose={openAndChoose}
                         openedList={openedList}
-                        firstInput={weekState.liveAndServThreePoint}
+                        firstInput={getNumbTask('liveAndServThreePoint')}
                         task="liveAndServThreePoint"
                         getCurrentWeek={getCurrentWeek}
                         action={action}
@@ -864,7 +869,7 @@ const AddInfoByWeek: React.FC = () => {
                       title={'Study Bible in'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.studyBibleInPoint}
+                      firstInput={getNumbTask('studyBibleInPoint')}
                       task="studyBibleInPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
@@ -875,7 +880,7 @@ const AddInfoByWeek: React.FC = () => {
                       title={'Study Bible Reader'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.studyBibleInReaderPoint}
+                      firstInput={getRandomTask('studyBibleInReaderPoint')}
                       task="studyBibleInReaderPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
@@ -886,7 +891,7 @@ const AddInfoByWeek: React.FC = () => {
                       title={'End prayer'}
                       openAndChoose={openAndChoose}
                       openedList={openedList}
-                      firstInput={weekState.endPrayerPoint}
+                      firstInput={getRandomTask('endPrayerPoint')}
                       task="endPrayerPoint"
                       getCurrentWeek={getCurrentWeek}
                       action={action}
@@ -1000,7 +1005,7 @@ const AddInfoByWeek: React.FC = () => {
                   title={'Bible Reading'}
                   openAndChoose={openAndChoose}
                   openedList={openedList}
-                  firstInput={weekState.readPointStMC}
+                  firstInput={getNumbTask('readPointStMC')}
                   task="readPointStMC"
                   getCurrentWeek={getCurrentWeek}
                   action={action}
@@ -1012,7 +1017,7 @@ const AddInfoByWeek: React.FC = () => {
                     title={'Starting a Conversation'}
                     openAndChoose={openAndChoose}
                     openedList={openedList}
-                    firstInput={weekState.startPointStMC}
+                    firstInput={getNumbTask('startPointStMC')}
                     firstTask="startPointStMC"
                     getCurrentWeek={getCurrentWeek}
                     secondInput={weekState.startPointAsMC}

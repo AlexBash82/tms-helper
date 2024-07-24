@@ -13,7 +13,7 @@ import { getLatestStudents } from '../../Servces/getLatestStudents'
 interface IProps {
   openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
-  presentValue: { name: string; _id: string } | null
+  presentValue: { name: string; _id: string } | undefined
   task: string
   dateOfMeet: string
   foundByLetter: Array<IStudent>
