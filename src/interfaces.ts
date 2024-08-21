@@ -145,7 +145,8 @@ export interface IWeek {
   liveAndServThreeChBx: boolean
   secondChairmChBx: boolean
 
-  numbered: Array<{ [key: string]: { name: string; _id: string } }> | []
+  numberedST: Array<{ [key: string]: { name: string; _id: string } }> | []
+  numberedAS: Array<{ [key: string]: { name: string; _id: string } }> | []
   randomly: Array<{ [key: string]: { name: string; _id: string } }> | []
 
   // chairmanPoint: { name: string; _id: string } | null

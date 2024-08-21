@@ -1,5 +1,5 @@
 import React from 'react'
-import { IStudentCheckBox } from '../../interfaces'
+import { IStudentCheckBox } from '../../../../interfaces'
 
 interface IProps {
   setInputCheckBox: (arg0: IStudentCheckBox) => void

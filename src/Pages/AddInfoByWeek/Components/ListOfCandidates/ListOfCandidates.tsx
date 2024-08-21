@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ListOfCandidates.css'
-import { IStudent } from '../../interfaces'
-import { getTimeStamps } from '../../Servces/getTimeStamps'
-import { getLatestStudents } from '../../Servces/getLatestStudents'
+import { IStudent } from '../../../../interfaces'
+import { getTimeStamps } from '../../../../Servces/getTimeStamps'
+import { getLatestStudents } from '../../../../Servces/getLatestStudents'
 
 //можно в виде перебора массива и если поле с таском самое старое то в начало массива
 //а если нет,то в конец массива

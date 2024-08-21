@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './SingleInput.css'
-import { IAddParams, IStudent } from '../../interfaces'
+import { IAddParams, IStudent } from '../../../../interfaces'
 import ListOfCandidates from '../ListOfCandidates/ListOfCandidates'
 
 interface IProps {

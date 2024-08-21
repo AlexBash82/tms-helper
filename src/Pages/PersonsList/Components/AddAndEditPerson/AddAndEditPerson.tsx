@@ -4,7 +4,7 @@ import {
   IStudent,
   IStudentDateToString,
   IStudentCheckBox,
-} from '../../interfaces'
+} from '../../../../interfaces'
 
 //исключить возможность добавления одноименных пользователей--ok--------------
 //исключить возможность пробела в начале, в конце, и более одного между-----

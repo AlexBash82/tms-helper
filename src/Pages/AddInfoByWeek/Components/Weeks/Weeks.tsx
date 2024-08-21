@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Weeks.css'
-import { IWeek } from '../../interfaces'
+import { IWeek } from '../../../../interfaces'
 
 //три отрезка: прошлые недели, текущая и будущие
 //если есть прошлые не подтв недели, то отображаем их + красная рамка

@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import './AddInfoByWeek.css'
 import { getStartAndEndWeek } from '../../Servces/getStartAndEndWeek'
 import { getTimeStamps } from '../../Servces/getTimeStamps'
-import Weeks from '../../Components/Weeks/Weeks'
-import SingleInput from '../../Components/SingleInput/SingleInput'
-import CoupleInputs from '../../Components/CoupleInputs/CoupleInputs'
+import Weeks from './Components/Weeks/Weeks'
+import SingleInput from './Components/SingleInput/SingleInput'
+import CoupleInputs from './Components/CoupleInputs/CoupleInputs'
 import { IWeek, IWeekCopy } from '../../interfaces'
 
 interface Amount {
