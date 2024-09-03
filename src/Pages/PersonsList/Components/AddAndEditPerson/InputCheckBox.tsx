@@ -16,15 +16,15 @@ const inputCheckBox: React.FC<IProps> = ({
     isPortnerOnly,
     isSecondClassOnly,
     isNotBibleStudy,
-    isExplainSpeech,
-    isRead,
-    isSpeech,
+    isExplainTalk,
+    isBibleReading,
+    isTalk,
     isEndPrayer,
-    isStudyBibleInReader,
+    isCongBibleStudyReader,
     isGems,
-    isLiveAndServ,
+    isLivingAsChr,
     isFirstSpeech,
-    isStudyBibleIn,
+    isCongBibleStudy,
     isSecondChairm,
     isChairman,
   } = inputCheckBox
@@ -68,30 +68,33 @@ const inputCheckBox: React.FC<IProps> = ({
         <>
           <input
             type="checkbox"
-            checked={isExplainSpeech}
+            checked={isExplainTalk}
             onChange={(e) =>
               setInputCheckBox({
                 ...inputCheckBox,
-                isExplainSpeech: !isExplainSpeech,
+                isExplainTalk: !isExplainTalk,
               })
             }
           />
           -Explain - speech
           <input
             type="checkbox"
-            checked={isRead}
+            checked={isBibleReading}
             onChange={(e) =>
-              setInputCheckBox({ ...inputCheckBox, isRead: !isRead })
+              setInputCheckBox({
+                ...inputCheckBox,
+                isBibleReading: !isBibleReading,
+              })
             }
           />
           -Read Bible
           <input
             type="checkbox"
-            checked={isSpeech}
+            checked={isTalk}
             onChange={(e) =>
               setInputCheckBox({
                 ...inputCheckBox,
-                isSpeech: !isSpeech,
+                isTalk: !isTalk,
               })
             }
           />
@@ -106,11 +109,11 @@ const inputCheckBox: React.FC<IProps> = ({
           -Prayer in the end
           <input
             type="checkbox"
-            checked={isStudyBibleInReader}
+            checked={isCongBibleStudyReader}
             onChange={(e) =>
               setInputCheckBox({
                 ...inputCheckBox,
-                isStudyBibleInReader: !isStudyBibleInReader,
+                isCongBibleStudyReader: !isCongBibleStudyReader,
               })
             }
           />
@@ -125,11 +128,11 @@ const inputCheckBox: React.FC<IProps> = ({
           -Spiritual Gems
           <input
             type="checkbox"
-            checked={isLiveAndServ}
+            checked={isLivingAsChr}
             onChange={(e) =>
               setInputCheckBox({
                 ...inputCheckBox,
-                isLiveAndServ: !isLiveAndServ,
+                isLivingAsChr: !isLivingAsChr,
               })
             }
           />
@@ -147,11 +150,11 @@ const inputCheckBox: React.FC<IProps> = ({
           -First speach
           <input
             type="checkbox"
-            checked={isStudyBibleIn}
+            checked={isCongBibleStudy}
             onChange={(e) =>
               setInputCheckBox({
                 ...inputCheckBox,
-                isStudyBibleIn: !isStudyBibleIn,
+                isCongBibleStudy: !isCongBibleStudy,
               })
             }
           />

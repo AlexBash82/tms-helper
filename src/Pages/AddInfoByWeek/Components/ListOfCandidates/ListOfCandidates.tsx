@@ -109,8 +109,8 @@ const ListOfCandidates: React.FC<IProps> = ({
     let isSuits = false
     //сравниваем название task и строки массива ключей и если совпадения есть, то isSuits присваиваем true
     switch (task) {
-      case 'readPointStMC':
-        isSuits = minValues.includes('readPointStMC')
+      case 'bibleReadingPointStMC':
+        isSuits = minValues.includes('bibleReadingPointStMC')
         break
       case 'startPointStMC':
         isSuits = minValues.includes('startPointStMC')
@@ -124,14 +124,14 @@ const ListOfCandidates: React.FC<IProps> = ({
       case 'explainPointStMC':
         isSuits = minValues.includes('explainPointStMC')
         break
-      case 'explainSpPointStMC':
-        isSuits = minValues.includes('explainSpPointStMC')
+      case 'explainTalkPointStMC':
+        isSuits = minValues.includes('explainTalkPointStMC')
         break
-      case 'speechPointStMC':
-        isSuits = minValues.includes('speechPointStMC')
+      case 'talkPointStMC':
+        isSuits = minValues.includes('talkPointStMC')
         break
-      case 'readPointStSC':
-        isSuits = minValues.includes('readPointStSC')
+      case 'bibleReadingPointStSC':
+        isSuits = minValues.includes('bibleReadingPointStSC')
         break
       case 'startPointStSC':
         isSuits = minValues.includes('startPointStSC')
@@ -145,11 +145,11 @@ const ListOfCandidates: React.FC<IProps> = ({
       case 'explainPointStSC':
         isSuits = minValues.includes('explainPointStSC')
         break
-      case 'explainSpPointStSC':
-        isSuits = minValues.includes('explainSpPointStSC')
+      case 'explainTalkPointStSC':
+        isSuits = minValues.includes('explainTalkPointStSC')
         break
-      case 'speechPointStSC':
-        isSuits = minValues.includes('speechPointStSC')
+      case 'talkPointStSC':
+        isSuits = minValues.includes('talkPointStSC')
         break
       case 'startPointAsMC':
       case 'followPointAsMC':
@@ -166,24 +166,24 @@ const ListOfCandidates: React.FC<IProps> = ({
       case 'chairmanPoint':
         isSuits = minValues.includes('chairmanPoint')
         break
-      case 'firstSpeechPoint':
-        isSuits = minValues.includes('firstSpeechPoint')
+      case 'firstTalkPoint':
+        isSuits = minValues.includes('firstTalkPoint')
         break
       case 'gemsPoint':
         isSuits = minValues.includes('gemsPoint')
         break
       case 'lessonOnePoint':
       case 'lessonTwoPoint':
-      case 'liveAndServPoint':
+      case 'livingAsChrPoint':
       case 'liveAndServTwoPoint':
       case 'liveAndServThreePoint':
-        isSuits = minValues.includes('liveAndServPoint')
+        isSuits = minValues.includes('livingAsChrPoint')
         break
-      case 'studyBibleInPoint':
-        isSuits = minValues.includes('studyBibleInPoint')
+      case 'congBibleStudyPoint':
+        isSuits = minValues.includes('congBibleStudyPoint')
         break
-      case 'studyBibleInReaderPoint':
-        isSuits = minValues.includes('studyBibleInReaderPoint')
+      case 'congBibleStudyReaderPoint':
+        isSuits = minValues.includes('congBibleStudyReaderPoint')
         break
       case 'endPrayerPoint':
         isSuits = minValues.includes('endPrayerPoint')

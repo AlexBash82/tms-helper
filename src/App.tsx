@@ -6,6 +6,7 @@ import './App.css'
 import PersonsList from './Pages/PersonsList/PersonsList'
 import AddInfoByWeek from './Pages/AddInfoByWeek/AddInfoByWeek'
 import Forms from './Pages/Forms/Forms'
+import Epub from './Pages/Epub/Epub'
 
 const App: React.FC = () => {
   return (
@@ -13,7 +14,10 @@ const App: React.FC = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">AddInfoByWeek</Link>
+            <Link to="/">Epub</Link>
+          </li>
+          <li>
+            <Link to="/addInfo">AddInfoByWeek</Link>
           </li>
           <li>
             <Link to="/personsList">Persons List</Link>
@@ -25,7 +29,8 @@ const App: React.FC = () => {
       </nav>
 
       <Routes>
-        <Route path="/" element={<AddInfoByWeek />} />
+        <Route path="/" element={<Epub />} />{' '}
+        <Route path="/addInfo" element={<AddInfoByWeek />} />
         <Route path="/personsList" element={<PersonsList />} />
         <Route path="/forms" element={<Forms />} />
       </Routes>

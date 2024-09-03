@@ -30,21 +30,21 @@ interface IResultToStr {
   explainPointStMC?: string
   explainPointStSC?: string
 
-  explainSpPointStMC?: string
-  explainSpPointStSC?: string
+  explainTalkPointStMC?: string
+  explainTalkPointStSC?: string
 
-  readPointStMC?: string
-  readPointStSC?: string
+  bibleReadingPointStMC?: string
+  bibleReadingPointStSC?: string
 
-  speechPointStMC?: string
-  speechPointStSC?: string
+  talkPointStMC?: string
+  talkPointStSC?: string
 
   endPrayerPoint?: string
-  studyBibleInReaderPoint?: string
+  congBibleStudyReaderPoint?: string
   gemsPoint?: string
-  liveAndServPoint?: string
-  firstSpeechPoint?: string
-  studyBibleInPoint?: string
+  livingAsChrPoint?: string
+  firstTalkPoint?: string
+  congBibleStudyPoint?: string
   secondChairmPoint?: string
   chairmanPoint?: string
 }
@@ -59,15 +59,15 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
     isPortnerOnly: false,
     isSecondClassOnly: false,
     isNotBibleStudy: false,
-    isExplainSpeech: false,
-    isRead: false,
-    isSpeech: false,
+    isExplainTalk: false,
+    isBibleReading: false,
+    isTalk: false,
     isEndPrayer: false,
-    isStudyBibleInReader: false,
+    isCongBibleStudyReader: false,
     isGems: false,
-    isLiveAndServ: false,
+    isLivingAsChr: false,
     isFirstSpeech: false,
-    isStudyBibleIn: false,
+    isCongBibleStudy: false,
     isSecondChairm: false,
     isChairman: false,
   }
@@ -111,21 +111,21 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           'explainPointStMC',
           'explainPointStSC',
 
-          'explainSpPointStMC',
-          'explainSpPointStSC',
+          'explainTalkPointStMC',
+          'explainTalkPointStSC',
 
-          'readPointStMC',
-          'readPointStSC',
+          'bibleReadingPointStMC',
+          'bibleReadingPointStSC',
 
-          'speechPointStMC',
-          'speechPointStSC',
+          'talkPointStMC',
+          'talkPointStSC',
 
           'endPrayerPoint',
-          'studyBibleInReaderPoint',
+          'congBibleStudyReaderPoint',
           'gemsPoint',
-          'liveAndServPoint',
-          'firstSpeechPoint',
-          'studyBibleInPoint',
+          'livingAsChrPoint',
+          'firstTalkPoint',
+          'congBibleStudyPoint',
           'secondChairmPoint',
           'chairmanPoint',
         ]
@@ -191,15 +191,15 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         isPortnerOnly: editPropPerson.isPortnerOnly || false,
         isSecondClassOnly: editPropPerson.isSecondClassOnly || false,
         isNotBibleStudy: editPropPerson.isNotBibleStudy || false,
-        isExplainSpeech: editPropPerson.isExplainSpeech || false,
-        isRead: editPropPerson.isRead || false,
-        isSpeech: editPropPerson.isSpeech || false,
+        isExplainTalk: editPropPerson.isExplainTalk || false,
+        isBibleReading: editPropPerson.isBibleReading || false,
+        isTalk: editPropPerson.isTalk || false,
         isEndPrayer: editPropPerson.isEndPrayer || false,
-        isStudyBibleInReader: editPropPerson.isStudyBibleInReader || false,
+        isCongBibleStudyReader: editPropPerson.isCongBibleStudyReader || false,
         isGems: editPropPerson.isGems || false,
-        isLiveAndServ: editPropPerson.isLiveAndServ || false,
+        isLivingAsChr: editPropPerson.isLivingAsChr || false,
         isFirstSpeech: editPropPerson.isFirstSpeech || false,
-        isStudyBibleIn: editPropPerson.isStudyBibleIn || false,
+        isCongBibleStudy: editPropPerson.isCongBibleStudy || false,
         isSecondChairm: editPropPerson.isSecondChairm || false,
         isChairman: editPropPerson.isChairman || false,
       }
@@ -269,35 +269,35 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           explainPointStMC: null,
           explainPointStSC: null,
 
-          isExplainSpeech: inputCheckBox.isExplainSpeech,
-          explainSpPointStMC: null,
-          explainSpPointStSC: null,
+          isExplainTalk: inputCheckBox.isExplainTalk,
+          explainTalkPointStMC: null,
+          explainTalkPointStSC: null,
 
-          isRead: inputCheckBox.isRead,
-          readPointStMC: null,
-          readPointStSC: null,
+          isBibleReading: inputCheckBox.isBibleReading,
+          bibleReadingPointStMC: null,
+          bibleReadingPointStSC: null,
 
-          isSpeech: inputCheckBox.isSpeech,
-          speechPointStMC: null,
-          speechPointStSC: null,
+          isTalk: inputCheckBox.isTalk,
+          talkPointStMC: null,
+          talkPointStSC: null,
 
           isEndPrayer: inputCheckBox.isEndPrayer,
           endPrayerPoint: null,
 
-          isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
-          studyBibleInReaderPoint: null,
+          isCongBibleStudyReader: inputCheckBox.isCongBibleStudyReader,
+          congBibleStudyReaderPoint: null,
 
           isGems: inputCheckBox.isGems,
           gemsPoint: null,
 
-          isLiveAndServ: inputCheckBox.isLiveAndServ,
-          liveAndServPoint: null,
+          isLivingAsChr: inputCheckBox.isLivingAsChr,
+          livingAsChrPoint: null,
 
           isFirstSpeech: inputCheckBox.isFirstSpeech,
-          firstSpeechPoint: null,
+          firstTalkPoint: null,
 
-          isStudyBibleIn: inputCheckBox.isStudyBibleIn,
-          studyBibleInPoint: null,
+          isCongBibleStudy: inputCheckBox.isCongBibleStudy,
+          congBibleStudyPoint: null,
 
           isSecondChairm: inputCheckBox.isSecondChairm,
           secondChairmPoint: null,
@@ -348,35 +348,36 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         explainPointStMC: editPropPerson.explainPointStMC || null,
         explainPointStSC: editPropPerson.explainPointStSC || null,
 
-        isExplainSpeech: inputCheckBox.isExplainSpeech,
-        explainSpPointStMC: editPropPerson.explainSpPointStMC || null,
-        explainSpPointStSC: editPropPerson.explainSpPointStSC || null,
+        isExplainTalk: inputCheckBox.isExplainTalk,
+        explainTalkPointStMC: editPropPerson.explainTalkPointStMC || null,
+        explainTalkPointStSC: editPropPerson.explainTalkPointStSC || null,
 
-        isRead: inputCheckBox.isRead,
-        readPointStMC: editPropPerson.readPointStMC || null,
-        readPointStSC: editPropPerson.readPointStSC || null,
+        isBibleReading: inputCheckBox.isBibleReading,
+        bibleReadingPointStMC: editPropPerson.bibleReadingPointStMC || null,
+        bibleReadingPointStSC: editPropPerson.bibleReadingPointStSC || null,
 
-        isSpeech: inputCheckBox.isSpeech,
-        speechPointStMC: editPropPerson.speechPointStMC || null,
-        speechPointStSC: editPropPerson.speechPointStSC || null,
+        isTalk: inputCheckBox.isTalk,
+        talkPointStMC: editPropPerson.talkPointStMC || null,
+        talkPointStSC: editPropPerson.talkPointStSC || null,
 
         isEndPrayer: inputCheckBox.isEndPrayer,
         endPrayerPoint: editPropPerson.endPrayerPoint || null,
 
-        isStudyBibleInReader: inputCheckBox.isStudyBibleInReader,
-        studyBibleInReaderPoint: editPropPerson.studyBibleInReaderPoint || null,
+        isCongBibleStudyReader: inputCheckBox.isCongBibleStudyReader,
+        congBibleStudyReaderPoint:
+          editPropPerson.congBibleStudyReaderPoint || null,
 
         isGems: inputCheckBox.isGems,
         gemsPoint: editPropPerson.gemsPoint || null,
 
-        isLiveAndServ: inputCheckBox.isLiveAndServ,
-        liveAndServPoint: editPropPerson.liveAndServPoint || null,
+        isLivingAsChr: inputCheckBox.isLivingAsChr,
+        livingAsChrPoint: editPropPerson.livingAsChrPoint || null,
 
         isFirstSpeech: inputCheckBox.isFirstSpeech,
-        firstSpeechPoint: editPropPerson.firstSpeechPoint || null,
+        firstTalkPoint: editPropPerson.firstTalkPoint || null,
 
-        isStudyBibleIn: inputCheckBox.isStudyBibleIn,
-        studyBibleInPoint: editPropPerson.studyBibleInPoint || null,
+        isCongBibleStudy: inputCheckBox.isCongBibleStudy,
+        congBibleStudyPoint: editPropPerson.congBibleStudyPoint || null,
 
         isSecondChairm: inputCheckBox.isSecondChairm,
         secondChairmPoint: editPropPerson.secondChairmPoint || null,
@@ -551,33 +552,39 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
             <div>second Chairm - {studentDateToString?.secondChairmPoint}</div>
           )}
           {editPropPerson.isFirstSpeech && (
-            <div>first Speech - {studentDateToString?.firstSpeechPoint}</div>
+            <div>first Speech - {studentDateToString?.firstTalkPoint}</div>
           )}
           {editPropPerson.isGems && (
             <div>Gems - {studentDateToString?.gemsPoint}</div>
           )}
-          {editPropPerson.isRead && (
+          {editPropPerson.isBibleReading && (
             <>
-              <div>read in main- {studentDateToString?.readPointStMC}</div>
-              <div>read in small- {studentDateToString?.readPointStSC}</div>
+              <div>
+                read in main- {studentDateToString?.bibleReadingPointStMC}
+              </div>
+              <div>
+                read in small- {studentDateToString?.bibleReadingPointStSC}
+              </div>
             </>
           )}
-          {editPropPerson.isSpeech && (
+          {editPropPerson.isTalk && (
             <>
-              <div>speech in main- {studentDateToString?.speechPointStMC}</div>
-              <div>speech in small- {studentDateToString?.speechPointStSC}</div>
+              <div>speech in main- {studentDateToString?.talkPointStMC}</div>
+              <div>speech in small- {studentDateToString?.talkPointStSC}</div>
             </>
           )}
-          {editPropPerson.isLiveAndServ && (
-            <div>live and Serv - {studentDateToString?.liveAndServPoint}</div>
+          {editPropPerson.isLivingAsChr && (
+            <div>live and Serv - {studentDateToString?.livingAsChrPoint}</div>
           )}
-          {editPropPerson.isStudyBibleIn && (
-            <div>study Bible In - {studentDateToString?.studyBibleInPoint}</div>
-          )}
-          {editPropPerson.isStudyBibleInReader && (
+          {editPropPerson.isCongBibleStudy && (
             <div>
-              studyBibleInReaderPoint -{' '}
-              {studentDateToString?.studyBibleInReaderPoint}
+              study Bible In - {studentDateToString?.congBibleStudyPoint}
+            </div>
+          )}
+          {editPropPerson.isCongBibleStudyReader && (
+            <div>
+              congBibleStudyReaderPoint -{' '}
+              {studentDateToString?.congBibleStudyReaderPoint}
             </div>
           )}
           {editPropPerson.isEndPrayer && (

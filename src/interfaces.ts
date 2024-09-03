@@ -28,35 +28,35 @@ export interface IStudent {
   explainPointStMC: number | null
   explainPointStSC: number | null
 
-  isExplainSpeech: boolean
-  explainSpPointStMC: number | null
-  explainSpPointStSC: number | null
+  isExplainTalk: boolean
+  explainTalkPointStMC: number | null
+  explainTalkPointStSC: number | null
 
-  isRead: boolean
-  readPointStMC: number | null
-  readPointStSC: number | null
+  isBibleReading: boolean
+  bibleReadingPointStMC: number | null
+  bibleReadingPointStSC: number | null
 
-  isSpeech: boolean
-  speechPointStMC: number | null
-  speechPointStSC: number | null
+  isTalk: boolean
+  talkPointStMC: number | null
+  talkPointStSC: number | null
 
   isEndPrayer: boolean
   endPrayerPoint: number | null
 
-  isStudyBibleInReader: boolean
-  studyBibleInReaderPoint: number | null
+  isCongBibleStudyReader: boolean
+  congBibleStudyReaderPoint: number | null
 
   isGems: boolean
   gemsPoint: number | null
 
-  isLiveAndServ: boolean
-  liveAndServPoint: number | null
+  isLivingAsChr: boolean
+  livingAsChrPoint: number | null
 
   isFirstSpeech: boolean
-  firstSpeechPoint: number | null
+  firstTalkPoint: number | null
 
-  isStudyBibleIn: boolean
-  studyBibleInPoint: number | null
+  isCongBibleStudy: boolean
+  congBibleStudyPoint: number | null
 
   isSecondChairm: boolean
   secondChairmPoint: number | null
@@ -69,15 +69,15 @@ export interface IStudentCheckBox {
   isPortnerOnly: boolean
   isSecondClassOnly: boolean
   isNotBibleStudy: boolean
-  isExplainSpeech: boolean
-  isRead: boolean
-  isSpeech: boolean
+  isExplainTalk: boolean
+  isBibleReading: boolean
+  isTalk: boolean
   isEndPrayer: boolean
-  isStudyBibleInReader: boolean
+  isCongBibleStudyReader: boolean
   isGems: boolean
-  isLiveAndServ: boolean
+  isLivingAsChr: boolean
   isFirstSpeech: boolean
-  isStudyBibleIn: boolean
+  isCongBibleStudy: boolean
   isSecondChairm: boolean
   isChairman: boolean
 }
@@ -100,23 +100,27 @@ export interface IStudentDateToString {
   explainPointStMC: string
   explainPointStSC: string
 
-  explainSpPointStMC: string
-  explainSpPointStSC: string
+  explainTalkPointStMC: string
+  explainTalkPointStSC: string
 
-  readPointStMC: string
-  readPointStSC: string
+  bibleReadingPointStMC: string
+  bibleReadingPointStSC: string
 
-  speechPointStMC: string
-  speechPointStSC: string
+  talkPointStMC: string
+  talkPointStSC: string
 
   endPrayerPoint: string
-  studyBibleInReaderPoint: string
+  congBibleStudyReaderPoint: string
   gemsPoint: string
-  liveAndServPoint: string
-  firstSpeechPoint: string
-  studyBibleInPoint: string
+  livingAsChrPoint: string
+  firstTalkPoint: string
+  congBibleStudyPoint: string
   secondChairmPoint: string
   chairmanPoint: string
+}
+
+interface IOneStudent {
+  [key: string]: { name: string; _id: string } | undefined
 }
 
 export interface IWeek {
@@ -130,40 +134,43 @@ export interface IWeek {
 
   teachingChBx: boolean
   trainingChBx: boolean
-  smallClassChBx: boolean
-
-  startingPointChBx: boolean
-  followingPointChBx: boolean
-  makingPointChBx: boolean
-  explainingPointChBx: boolean
-  explainingSpPointChBx: boolean
-  speechPointChBx: boolean
-
-  lessonOneChBx: boolean
-  lessonTwoChBx: boolean
-  liveAndServTwoChBx: boolean
-  liveAndServThreeChBx: boolean
+  secondClassChBx: boolean
   secondChairmChBx: boolean
 
-  numberedST: Array<{ [key: string]: { name: string; _id: string } }> | []
-  numberedAS: Array<{ [key: string]: { name: string; _id: string } }> | []
-  randomly: Array<{ [key: string]: { name: string; _id: string } }> | []
+  // startPointChBx: boolean
+  // followPointChBx: boolean
+  // makePointChBx: boolean
+  // explainPointChBx: boolean
+  // explainTalkPointChBx: boolean
+  // talkPointChBx: boolean
+
+  // lessonOneChBx: boolean
+  // lessonTwoChBx: boolean
+  // liveAndServTwoChBx: boolean
+  // liveAndServThreeChBx: boolean
+
+  orderedList: IOneStudent[]
+  orderedStMC: IOneStudent[]
+  orderedStSC: IOneStudent[] | []
+  orderedAsMC: IOneStudent[] | []
+  orderedAsSC: IOneStudent[] | []
+  unorderedList: IOneStudent[]
 
   // chairmanPoint: { name: string; _id: string } | null
-  // firstSpeechPoint: { name: string; _id: string } | null
+  // firstTalkPoint: { name: string; _id: string } | null
   // gemsPoint: { name: string; _id: string } | null
   // lessonOnePoint: { name: string; _id: string } | null
   // lessonTwoPoint: { name: string; _id: string } | null
-  // liveAndServPoint: { name: string; _id: string } | null
+  // livingAsChrPoint: { name: string; _id: string } | null
   // liveAndServTwoPoint: { name: string; _id: string } | null
   // liveAndServThreePoint: { name: string; _id: string } | null
-  // studyBibleInPoint: { name: string; _id: string } | null
-  // studyBibleInReaderPoint: { name: string; _id: string } | null
+  // congBibleStudyPoint: { name: string; _id: string } | null
+  // congBibleStudyReaderPoint: { name: string; _id: string } | null
   // endPrayerPoint: { name: string; _id: string } | null
   // secondChairmPoint: { name: string; _id: string } | null
 
-  // readPointStMC: { name: string; _id: string } | null
-  // readPointStSC: { name: string; _id: string } | null
+  // bibleReadingPointStMC: { name: string; _id: string } | null
+  // bibleReadingPointStSC: { name: string; _id: string } | null
 
   // startPointStMC: { name: string; _id: string } | null
   // startPointAsMC: { name: string; _id: string } | null
@@ -185,29 +192,29 @@ export interface IWeek {
   // explainPointStSC: { name: string; _id: string } | null
   // explainPointAsSC: { name: string; _id: string } | null
 
-  // explainSpPointStMC: { name: string; _id: string } | null
-  // explainSpPointStSC: { name: string; _id: string } | null
+  // explainTalkPointStMC: { name: string; _id: string } | null
+  // explainTalkPointStSC: { name: string; _id: string } | null
 
-  // speechPointStMC: { name: string; _id: string } | null
-  // speechPointStSC: { name: string; _id: string } | null
+  // talkPointStMC: { name: string; _id: string } | null
+  // talkPointStSC: { name: string; _id: string } | null
 }
 
 export interface IWeekCopy {
   // chairmanPoint?: { name: string; _id: string } | null
-  // firstSpeechPoint?: { name: string; _id: string } | null
+  // firstTalkPoint?: { name: string; _id: string } | null
   // gemsPoint?: { name: string; _id: string } | null
   // lessonOnePoint?: { name: string; _id: string } | null
   // lessonTwoPoint?: { name: string; _id: string } | null
-  // liveAndServPoint?: { name: string; _id: string } | null
+  // livingAsChrPoint?: { name: string; _id: string } | null
   // liveAndServTwoPoint?: { name: string; _id: string } | null
   // liveAndServThreePoint?: { name: string; _id: string } | null
-  // studyBibleInPoint?: { name: string; _id: string } | null
-  // studyBibleInReaderPoint?: { name: string; _id: string } | null
+  // congBibleStudyPoint?: { name: string; _id: string } | null
+  // congBibleStudyReaderPoint?: { name: string; _id: string } | null
   // endPrayerPoint?: { name: string; _id: string } | null
   // secondChairmPoint?: { name: string; _id: string } | null
 
-  // readPointStMC?: { name: string; _id: string } | null
-  // readPointStSC?: { name: string; _id: string } | null
+  // bibleReadingPointStMC?: { name: string; _id: string } | null
+  // bibleReadingPointStSC?: { name: string; _id: string } | null
 
   // startPointStMC?: { name: string; _id: string } | null
   // startPointAsMC?: { name: string; _id: string } | null
@@ -229,29 +236,29 @@ export interface IWeekCopy {
   // explainPointStSC?: { name: string; _id: string } | null
   // explainPointAsSC?: { name: string; _id: string } | null
 
-  // explainSpPointStMC?: { name: string; _id: string } | null
-  // explainSpPointStSC?: { name: string; _id: string } | null
+  // explainTalkPointStMC?: { name: string; _id: string } | null
+  // explainTalkPointStSC?: { name: string; _id: string } | null
 
-  // speechPointStMC?: { name: string; _id: string } | null
-  // speechPointStSC?: { name: string; _id: string } | null
+  // talkPointStMC?: { name: string; _id: string } | null
+  // talkPointStSC?: { name: string; _id: string } | null
 
   numbered: [{ [key: string]: { name: string; _id: string } | null }]
   randomly: [{ [key: string]: { name: string; _id: string } | null }]
 }
 
 export interface IAddParams {
-  isRead?: boolean
-  isSpeech?: boolean
+  isBibleReading?: boolean
+  isTalk?: boolean
   isSecondClassOnly?: boolean
   isPortnerOnly?: boolean
   isNotBibleStudy?: boolean
   isChairman?: boolean
   isFirstSpeech?: boolean
-  isExplainSpeech?: boolean
+  isExplainTalk?: boolean
   isGems?: boolean
   isSecondChairm?: boolean
-  isLiveAndServ?: boolean
-  isStudyBibleIn?: boolean
-  isStudyBibleInReader?: boolean
+  isLivingAsChr?: boolean
+  isCongBibleStudy?: boolean
+  isCongBibleStudyReader?: boolean
   isEndPrayer?: boolean
 }

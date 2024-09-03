@@ -4,23 +4,23 @@ export async function getLatestStudents(
   task: string
 ): Promise<IStudent[] | undefined> {
   const taskMappings = [
-    { keyword: 'readPoint', param: { isRead: true } },
-    { keyword: 'speechPoint', param: { isSpeech: true } },
+    { keyword: 'readPoint', param: { isBibleReading: true } },
+    { keyword: 'speechPoint', param: { isTalk: true } },
     { keyword: 'makePoint', param: { isNotBibleStudy: false } },
     { keyword: 'MC', param: { isSecondClassOnly: false } },
     { keyword: 'St', param: { isPortnerOnly: false } },
     { keyword: 'chairmanPoint', param: { isChairman: true } },
-    { keyword: 'firstSpeechPoint', param: { isFirstSpeech: true } },
-    { keyword: 'explainSpPoint', param: { isExplainSpeech: true } },
+    { keyword: 'firstTalkPoint', param: { isFirstSpeech: true } },
+    { keyword: 'explainSpPoint', param: { isExplainTalk: true } },
     { keyword: 'gemsPoint', param: { isGems: true } },
     { keyword: 'secondChairmPoint', param: { isSecondChairm: true } },
-    { keyword: 'liveAndServPoint', param: { isLiveAndServ: true } },
-    { keyword: 'lessonOnePoint', param: { isLiveAndServ: true } },
-    { keyword: 'lessonTwoPoint', param: { isLiveAndServ: true } },
-    { keyword: 'studyBibleInPoint', param: { isStudyBibleIn: true } },
+    { keyword: 'livingAsChrPoint', param: { isLivingAsChr: true } },
+    { keyword: 'lessonOnePoint', param: { isLivingAsChr: true } },
+    { keyword: 'lessonTwoPoint', param: { isLivingAsChr: true } },
+    { keyword: 'congBibleStudyPoint', param: { isCongBibleStudy: true } },
     {
-      keyword: 'studyBibleInReaderPoint',
-      param: { isStudyBibleInReader: true },
+      keyword: 'congBibleStudyReaderPoint',
+      param: { isCongBibleStudyReader: true },
     },
     { keyword: 'endPrayerPoint', param: { isEndPrayer: true } },
   ]
