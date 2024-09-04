@@ -30,6 +30,16 @@ interface IUpdateData {
 //----------------------------------------------------------------сделать кнопку формирования бланка
 
 const AddInfoByWeek: React.FC = () => {
+  const allTitles: { [key: string]: string } = {
+    firstTalkPoint: 'First Talk',
+    gemsPoint: 'Spiritual Gems',
+    livingAsChrPoint: 'Living as christian',
+    congBibleStudyPoint: 'Congregation Bible Study',
+    chairmanPoint: 'Chairman',
+    congBibleStudyReaderPoint: 'Cong. Bible St. reader',
+    endPrayerPoint: 'Prayer',
+  }
+
   const defaultWeekState = {
     _id: undefined,
     startWeekTSt: 0,
@@ -728,39 +738,52 @@ const AddInfoByWeek: React.FC = () => {
                 <div>
                   <div>Teaching points </div>
                   <div className="df">
-                    {/* тут нужно пройтись по массиву orderedList и вывести на каждый шаг SingleInput с номером шага но с учетом что после шага 2 нужно увеличить номер задания на динну массива orderedStMC  */}
-                    <SingleInput
-                      title={'Chearman'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getRandomTask('chairmanPoint')}
-                      task="chairmanPoint"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
+                    {weekState.orderedList.map((person, index) => {
+                      const key = Object.keys(person)[0]
+                      const newTitle = allTitles[key]
+                      let number = 1
+                      if (index < 2) {
+                        number += index
+                      } else {
+                        number += index + weekState.orderedStMC.length
+                      }
+                      const title = `${number}-${newTitle}`
+                      return (
+                        <SingleInput
+                          key={index}
+                          title={title}
+                          openAndChoose={openAndChoose}
+                          openedList={openedList}
+                          firstInput={person.name}
+                          task={key}
+                          getCurrentWeek={getCurrentWeek}
+                          action={action}
+                          dateOfMeet={weekState.dateOfMeet}
+                        />
+                      )
+                    })}
+                  </div>
+                  <div className="df">
+                    {weekState.unorderedList.map((person, index) => {
+                      const key = Object.keys(person)[0]
+                      const newTitle = allTitles[key]
 
-                    <SingleInput
-                      title={'First Talk'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getNumbStTask('firstTalkPoint')}
-                      task="firstTalkPoint"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
-
-                    <SingleInput
-                      title={'Spiritual Gems'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getNumbStTask('gemsPoint')}
-                      task="gemsPoint"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
+                      return (
+                        <SingleInput
+                          key={index}
+                          title={newTitle}
+                          openAndChoose={openAndChoose}
+                          openedList={openedList}
+                          firstInput={person.name}
+                          task={key}
+                          getCurrentWeek={getCurrentWeek}
+                          action={action}
+                          dateOfMeet={weekState.dateOfMeet}
+                        />
+                      )
+                    })}
+                  </div>
+                  {/* 
 
                     {weekState.secondChairmChBx && (
                       <SingleInput
@@ -774,366 +797,320 @@ const AddInfoByWeek: React.FC = () => {
                         dateOfMeet={weekState.dateOfMeet}
                       />
                     )}
-                  </div>
 
-                  <div className="df">
-                    <SingleInput
-                      title={'Living As Christian'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getNumbStTask('livingAsChrPoint')}
-                      task="livingAsChrPoint"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
-                  </div>
-
-                  <div className="df">
-                    <SingleInput
-                      title={'Congregation Bible Study'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getNumbStTask('congBibleStudyPoint')}
-                      task="congBibleStudyPoint"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
-
-                    <SingleInput
-                      title={'Congregation Bible Study reader'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getRandomTask('congBibleStudyReaderPoint')}
-                      task="congBibleStudyReaderPoint"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
-
-                    <SingleInput
-                      title={'End prayer'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getRandomTask('endPrayerPoint')}
-                      task="endPrayerPoint"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
-                  </div>
+                       /> */}
                 </div>
               )}
             </div>
           )}
           {/*---------------------------Training--------------------------- */}
           {weekState.trainingChBx && (
-            <div className="df">
-              <div>
-                <div>Choose</div>
+            <></>
+            // <div className="df">
+            //   <div>
+            //     <div>Choose</div>
 
-                <div className="df">
-                  <input type="checkbox" checked={true} readOnly />
-                  <div> - Bible Reading</div>
-                </div>
+            //     <div className="df">
+            //       <input type="checkbox" checked={true} readOnly />
+            //       <div> - Bible Reading</div>
+            //     </div>
 
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.startPointChBx}
-                    onChange={(e) =>
-                      makeChangeChBx(
-                        'startPointChBx',
-                        !weekState.startPointChBx
-                      )
-                    }
-                  />
-                  <div> - Starting a Conversation</div>
-                </div>
+            //     <div className="df">
+            //       <input
+            //         type="checkbox"
+            //         checked={weekState.startPointChBx}
+            //         onChange={(e) =>
+            //           makeChangeChBx(
+            //             'startPointChBx',
+            //             !weekState.startPointChBx
+            //           )
+            //         }
+            //       />
+            //       <div> - Starting a Conversation</div>
+            //     </div>
 
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.followPointChBx}
-                    onChange={(e) =>
-                      makeChangeChBx(
-                        'followPointChBx',
-                        !weekState.followPointChBx
-                      )
-                    }
-                  />
-                  <div> - Following Up</div>
-                </div>
+            //     <div className="df">
+            //       <input
+            //         type="checkbox"
+            //         checked={weekState.followPointChBx}
+            //         onChange={(e) =>
+            //           makeChangeChBx(
+            //             'followPointChBx',
+            //             !weekState.followPointChBx
+            //           )
+            //         }
+            //       />
+            //       <div> - Following Up</div>
+            //     </div>
 
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.makePointChBx}
-                    onChange={(e) =>
-                      makeChangeChBx('makePointChBx', !weekState.makePointChBx)
-                    }
-                  />
-                  <div> - Making Disciples</div>
-                </div>
+            //     <div className="df">
+            //       <input
+            //         type="checkbox"
+            //         checked={weekState.makePointChBx}
+            //         onChange={(e) =>
+            //           makeChangeChBx('makePointChBx', !weekState.makePointChBx)
+            //         }
+            //       />
+            //       <div> - Making Disciples</div>
+            //     </div>
 
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.explainTalkPointChBx}
-                    onChange={(e) =>
-                      makeChangeChBx(
-                        'explainTalkPointChBx',
-                        !weekState.explainTalkPointChBx
-                      )
-                    }
-                  />
-                  <div> - Explaining as Speech</div>
-                </div>
+            //     <div className="df">
+            //       <input
+            //         type="checkbox"
+            //         checked={weekState.explainTalkPointChBx}
+            //         onChange={(e) =>
+            //           makeChangeChBx(
+            //             'explainTalkPointChBx',
+            //             !weekState.explainTalkPointChBx
+            //           )
+            //         }
+            //       />
+            //       <div> - Explaining as Speech</div>
+            //     </div>
 
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.explainPointChBx}
-                    onChange={(e) =>
-                      makeChangeChBx(
-                        'explainPointChBx',
-                        !weekState.explainPointChBx
-                      )
-                    }
-                  />
-                  <div> - Explaining Your Beliefs</div>
-                </div>
+            //     <div className="df">
+            //       <input
+            //         type="checkbox"
+            //         checked={weekState.explainPointChBx}
+            //         onChange={(e) =>
+            //           makeChangeChBx(
+            //             'explainPointChBx',
+            //             !weekState.explainPointChBx
+            //           )
+            //         }
+            //       />
+            //       <div> - Explaining Your Beliefs</div>
+            //     </div>
 
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.talkPointChBx}
-                    onChange={(e) =>
-                      makeChangeChBx('talkPointChBx', !weekState.talkPointChBx)
-                    }
-                  />
-                  <div> - Talk</div>
-                </div>
-              </div>
-              {/*---------------------------Main class--------------------------- */}
-              <div>
-                <div>Training points main class</div>
+            //     <div className="df">
+            //       <input
+            //         type="checkbox"
+            //         checked={weekState.talkPointChBx}
+            //         onChange={(e) =>
+            //           makeChangeChBx('talkPointChBx', !weekState.talkPointChBx)
+            //         }
+            //       />
+            //       <div> - Talk</div>
+            //     </div>
+            //   </div>
+            //   {/*---------------------------Main class--------------------------- */}
+            //   <div>
+            //     <div>Training points main class</div>
 
-                <SingleInput
-                  title={'Bible Reading'}
-                  openAndChoose={openAndChoose}
-                  openedList={openedList}
-                  firstInput={getNumbStTask('bibleReadingPointStMC')}
-                  task="bibleReadingPointStMC"
-                  getCurrentWeek={getCurrentWeek}
-                  action={action}
-                  dateOfMeet={weekState.dateOfMeet}
-                />
+            //     <SingleInput
+            //       title={'Bible Reading'}
+            //       openAndChoose={openAndChoose}
+            //       openedList={openedList}
+            //       firstInput={getNumbStTask('bibleReadingPointStMC')}
+            //       task="bibleReadingPointStMC"
+            //       getCurrentWeek={getCurrentWeek}
+            //       action={action}
+            //       dateOfMeet={weekState.dateOfMeet}
+            //     />
 
-                {weekState.startPointChBx && (
-                  <CoupleInputs
-                    title={'Starting a Conversation'}
-                    openAndChoose={openAndChoose}
-                    openedList={openedList}
-                    firstInput={getNumbStTask('startPointStMC')}
-                    firstTask="startPointStMC"
-                    getCurrentWeek={getCurrentWeek}
-                    secondInput={getNumbAsTask('startPointAsMC')}
-                    secondTask="startPointAsMC"
-                    action={action}
-                    dateOfMeet={weekState.dateOfMeet}
-                  />
-                )}
+            //     {weekState.startPointChBx && (
+            //       <CoupleInputs
+            //         title={'Starting a Conversation'}
+            //         openAndChoose={openAndChoose}
+            //         openedList={openedList}
+            //         firstInput={getNumbStTask('startPointStMC')}
+            //         firstTask="startPointStMC"
+            //         getCurrentWeek={getCurrentWeek}
+            //         secondInput={getNumbAsTask('startPointAsMC')}
+            //         secondTask="startPointAsMC"
+            //         action={action}
+            //         dateOfMeet={weekState.dateOfMeet}
+            //       />
+            //     )}
 
-                {weekState.followPointChBx && (
-                  <CoupleInputs
-                    title="Following Up"
-                    openAndChoose={openAndChoose}
-                    openedList={openedList}
-                    firstInput={getNumbStTask('followPointStMC')}
-                    firstTask="followPointStMC"
-                    getCurrentWeek={getCurrentWeek}
-                    secondInput={getNumbAsTask('followPointAsMC')}
-                    secondTask="followPointAsMC"
-                    action={action}
-                    dateOfMeet={weekState.dateOfMeet}
-                  />
-                )}
+            //     {weekState.followPointChBx && (
+            //       <CoupleInputs
+            //         title="Following Up"
+            //         openAndChoose={openAndChoose}
+            //         openedList={openedList}
+            //         firstInput={getNumbStTask('followPointStMC')}
+            //         firstTask="followPointStMC"
+            //         getCurrentWeek={getCurrentWeek}
+            //         secondInput={getNumbAsTask('followPointAsMC')}
+            //         secondTask="followPointAsMC"
+            //         action={action}
+            //         dateOfMeet={weekState.dateOfMeet}
+            //       />
+            //     )}
 
-                {weekState.makePointChBx && (
-                  <CoupleInputs
-                    title="Making Disciples"
-                    openAndChoose={openAndChoose}
-                    openedList={openedList}
-                    firstInput={getNumbStTask('makePointStMC')}
-                    firstTask="makePointStMC"
-                    getCurrentWeek={getCurrentWeek}
-                    secondInput={getNumbAsTask('makePointAsMC')}
-                    secondTask="makePointAsMC"
-                    action={action}
-                    dateOfMeet={weekState.dateOfMeet}
-                  />
-                )}
+            //     {weekState.makePointChBx && (
+            //       <CoupleInputs
+            //         title="Making Disciples"
+            //         openAndChoose={openAndChoose}
+            //         openedList={openedList}
+            //         firstInput={getNumbStTask('makePointStMC')}
+            //         firstTask="makePointStMC"
+            //         getCurrentWeek={getCurrentWeek}
+            //         secondInput={getNumbAsTask('makePointAsMC')}
+            //         secondTask="makePointAsMC"
+            //         action={action}
+            //         dateOfMeet={weekState.dateOfMeet}
+            //       />
+            //     )}
 
-                {weekState.explainTalkPointChBx && (
-                  <SingleInput
-                    title={'Explaining as Speech'}
-                    openAndChoose={openAndChoose}
-                    openedList={openedList}
-                    firstInput={getNumbStTask('explainTalkPointStMC')}
-                    task="explainTalkPointStMC"
-                    getCurrentWeek={getCurrentWeek}
-                    action={action}
-                    dateOfMeet={weekState.dateOfMeet}
-                  />
-                )}
+            //     {weekState.explainTalkPointChBx && (
+            //       <SingleInput
+            //         title={'Explaining as Speech'}
+            //         openAndChoose={openAndChoose}
+            //         openedList={openedList}
+            //         firstInput={getNumbStTask('explainTalkPointStMC')}
+            //         task="explainTalkPointStMC"
+            //         getCurrentWeek={getCurrentWeek}
+            //         action={action}
+            //         dateOfMeet={weekState.dateOfMeet}
+            //       />
+            //     )}
 
-                {weekState.explainPointChBx && (
-                  <CoupleInputs
-                    title="Explaining Your Beliefs"
-                    openAndChoose={openAndChoose}
-                    openedList={openedList}
-                    firstInput={getNumbStTask('explainPointStMC')}
-                    firstTask="explainPointStMC"
-                    getCurrentWeek={getCurrentWeek}
-                    secondInput={getNumbAsTask('explainPointAsMC')}
-                    secondTask="explainPointAsMC"
-                    action={action}
-                    dateOfMeet={weekState.dateOfMeet}
-                  />
-                )}
+            //     {weekState.explainPointChBx && (
+            //       <CoupleInputs
+            //         title="Explaining Your Beliefs"
+            //         openAndChoose={openAndChoose}
+            //         openedList={openedList}
+            //         firstInput={getNumbStTask('explainPointStMC')}
+            //         firstTask="explainPointStMC"
+            //         getCurrentWeek={getCurrentWeek}
+            //         secondInput={getNumbAsTask('explainPointAsMC')}
+            //         secondTask="explainPointAsMC"
+            //         action={action}
+            //         dateOfMeet={weekState.dateOfMeet}
+            //       />
+            //     )}
 
-                {weekState.talkPointChBx && (
-                  <SingleInput
-                    title={'Talk'}
-                    openAndChoose={openAndChoose}
-                    openedList={openedList}
-                    firstInput={getNumbStTask('talkPointStMC')}
-                    task="talkPointStMC"
-                    getCurrentWeek={getCurrentWeek}
-                    action={action}
-                    dateOfMeet={weekState.dateOfMeet}
-                  />
-                )}
-              </div>
-              {/*---------------------------Small class--------------------------- */}
-              <div>
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.secondClassChBx}
-                    onChange={(e) =>
-                      makeChangeChBx(
-                        'secondClassChBx',
-                        !weekState.secondClassChBx
-                      )
-                    }
-                  />
-                  <div>- Training points small class</div>
-                </div>
-                {weekState.secondClassChBx && (
-                  <div>
-                    <SingleInput
-                      title={'Bible Reading'}
-                      openAndChoose={openAndChoose}
-                      openedList={openedList}
-                      firstInput={getNumbStTask('bibleReadingPointStSC')}
-                      task="bibleReadingPointStSC"
-                      getCurrentWeek={getCurrentWeek}
-                      action={action}
-                      dateOfMeet={weekState.dateOfMeet}
-                    />
+            //     {weekState.talkPointChBx && (
+            //       <SingleInput
+            //         title={'Talk'}
+            //         openAndChoose={openAndChoose}
+            //         openedList={openedList}
+            //         firstInput={getNumbStTask('talkPointStMC')}
+            //         task="talkPointStMC"
+            //         getCurrentWeek={getCurrentWeek}
+            //         action={action}
+            //         dateOfMeet={weekState.dateOfMeet}
+            //       />
+            //     )}
+            //   </div>
+            //   {/*---------------------------Second class--------------------------- */}
+            //   <div>
+            //     <div className="df">
+            //       <input
+            //         type="checkbox"
+            //         checked={weekState.secondClassChBx}
+            //         onChange={(e) =>
+            //           makeChangeChBx(
+            //             'secondClassChBx',
+            //             !weekState.secondClassChBx
+            //           )
+            //         }
+            //       />
+            //       <div>- Training points second class</div>
+            //     </div>
+            //     {weekState.secondClassChBx && (
+            //       <div>
+            //         <SingleInput
+            //           title={'Bible Reading'}
+            //           openAndChoose={openAndChoose}
+            //           openedList={openedList}
+            //           firstInput={getNumbStTask('bibleReadingPointStSC')}
+            //           task="bibleReadingPointStSC"
+            //           getCurrentWeek={getCurrentWeek}
+            //           action={action}
+            //           dateOfMeet={weekState.dateOfMeet}
+            //         />
 
-                    {weekState.startPointChBx && (
-                      <CoupleInputs
-                        title="Starting a Conversation"
-                        openAndChoose={openAndChoose}
-                        openedList={openedList}
-                        firstInput={getNumbStTask('startPointStSC')}
-                        firstTask="startPointStSC"
-                        getCurrentWeek={getCurrentWeek}
-                        secondInput={getNumbAsTask('startPointAsSC')}
-                        secondTask="startPointAsSC"
-                        action={action}
-                        dateOfMeet={weekState.dateOfMeet}
-                      />
-                    )}
+            //         {weekState.startPointChBx && (
+            //           <CoupleInputs
+            //             title="Starting a Conversation"
+            //             openAndChoose={openAndChoose}
+            //             openedList={openedList}
+            //             firstInput={getNumbStTask('startPointStSC')}
+            //             firstTask="startPointStSC"
+            //             getCurrentWeek={getCurrentWeek}
+            //             secondInput={getNumbAsTask('startPointAsSC')}
+            //             secondTask="startPointAsSC"
+            //             action={action}
+            //             dateOfMeet={weekState.dateOfMeet}
+            //           />
+            //         )}
 
-                    {weekState.followPointChBx && (
-                      <CoupleInputs
-                        title="Following Up"
-                        openAndChoose={openAndChoose}
-                        openedList={openedList}
-                        firstInput={getNumbStTask('followPointStSC')}
-                        firstTask="followPointStSC"
-                        getCurrentWeek={getCurrentWeek}
-                        secondInput={getNumbAsTask('followPointAsSC')}
-                        secondTask="followPointAsSC"
-                        action={action}
-                        dateOfMeet={weekState.dateOfMeet}
-                      />
-                    )}
+            //         {weekState.followPointChBx && (
+            //           <CoupleInputs
+            //             title="Following Up"
+            //             openAndChoose={openAndChoose}
+            //             openedList={openedList}
+            //             firstInput={getNumbStTask('followPointStSC')}
+            //             firstTask="followPointStSC"
+            //             getCurrentWeek={getCurrentWeek}
+            //             secondInput={getNumbAsTask('followPointAsSC')}
+            //             secondTask="followPointAsSC"
+            //             action={action}
+            //             dateOfMeet={weekState.dateOfMeet}
+            //           />
+            //         )}
 
-                    {weekState.makePointChBx && (
-                      <CoupleInputs
-                        title="Making Disciples"
-                        openAndChoose={openAndChoose}
-                        openedList={openedList}
-                        firstInput={getNumbStTask('makePointStSC')}
-                        firstTask="makePointStSC"
-                        getCurrentWeek={getCurrentWeek}
-                        secondInput={getNumbAsTask('makePointAsSC')}
-                        secondTask="makePointAsSC"
-                        action={action}
-                        dateOfMeet={weekState.dateOfMeet}
-                      />
-                    )}
+            //         {weekState.makePointChBx && (
+            //           <CoupleInputs
+            //             title="Making Disciples"
+            //             openAndChoose={openAndChoose}
+            //             openedList={openedList}
+            //             firstInput={getNumbStTask('makePointStSC')}
+            //             firstTask="makePointStSC"
+            //             getCurrentWeek={getCurrentWeek}
+            //             secondInput={getNumbAsTask('makePointAsSC')}
+            //             secondTask="makePointAsSC"
+            //             action={action}
+            //             dateOfMeet={weekState.dateOfMeet}
+            //           />
+            //         )}
 
-                    {weekState.explainTalkPointChBx && (
-                      <SingleInput
-                        title={'Explaining as Speech'}
-                        openAndChoose={openAndChoose}
-                        openedList={openedList}
-                        firstInput={getNumbStTask('explainTalkPointStSC')}
-                        task="explainTalkPointStSC"
-                        getCurrentWeek={getCurrentWeek}
-                        action={action}
-                        dateOfMeet={weekState.dateOfMeet}
-                      />
-                    )}
+            //         {weekState.explainTalkPointChBx && (
+            //           <SingleInput
+            //             title={'Explaining as Speech'}
+            //             openAndChoose={openAndChoose}
+            //             openedList={openedList}
+            //             firstInput={getNumbStTask('explainTalkPointStSC')}
+            //             task="explainTalkPointStSC"
+            //             getCurrentWeek={getCurrentWeek}
+            //             action={action}
+            //             dateOfMeet={weekState.dateOfMeet}
+            //           />
+            //         )}
 
-                    {weekState.explainPointChBx && (
-                      <CoupleInputs
-                        title="Explaining Your Beliefs"
-                        openAndChoose={openAndChoose}
-                        openedList={openedList}
-                        firstInput={getNumbStTask('explainPointStSC')}
-                        firstTask="explainPointStSC"
-                        getCurrentWeek={getCurrentWeek}
-                        secondInput={getNumbAsTask('explainPointAsSC')}
-                        secondTask="explainPointAsSC"
-                        action={action}
-                        dateOfMeet={weekState.dateOfMeet}
-                      />
-                    )}
+            //         {weekState.explainPointChBx && (
+            //           <CoupleInputs
+            //             title="Explaining Your Beliefs"
+            //             openAndChoose={openAndChoose}
+            //             openedList={openedList}
+            //             firstInput={getNumbStTask('explainPointStSC')}
+            //             firstTask="explainPointStSC"
+            //             getCurrentWeek={getCurrentWeek}
+            //             secondInput={getNumbAsTask('explainPointAsSC')}
+            //             secondTask="explainPointAsSC"
+            //             action={action}
+            //             dateOfMeet={weekState.dateOfMeet}
+            //           />
+            //         )}
 
-                    {weekState.talkPointChBx && (
-                      <SingleInput
-                        title="Talk"
-                        openAndChoose={openAndChoose}
-                        openedList={openedList}
-                        firstInput={getNumbStTask('talkPointStSC')}
-                        task="talkPointStSC"
-                        getCurrentWeek={getCurrentWeek}
-                        action={action}
-                        dateOfMeet={weekState.dateOfMeet}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+            //         {weekState.talkPointChBx && (
+            //           <SingleInput
+            //             title="Talk"
+            //             openAndChoose={openAndChoose}
+            //             openedList={openedList}
+            //             firstInput={getNumbStTask('talkPointStSC')}
+            //             task="talkPointStSC"
+            //             getCurrentWeek={getCurrentWeek}
+            //             action={action}
+            //             dateOfMeet={weekState.dateOfMeet}
+            //           />
+            //         )}
+            //       </div>
+            //     )}
+            //   </div>
+            // </div>
           )}
         </div>
       )}

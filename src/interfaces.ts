@@ -120,7 +120,7 @@ export interface IStudentDateToString {
 }
 
 interface IOneStudent {
-  [key: string]: { name: string; _id: string } | undefined
+  [key: string]: { name: string; _id: string; status: string } | undefined
 }
 
 export interface IWeek {
