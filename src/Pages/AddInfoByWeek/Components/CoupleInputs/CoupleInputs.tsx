@@ -6,9 +6,9 @@ interface IProps {
   title: string
   openAndChoose: (arg: string) => void
   openedList: string | undefined
-  firstInput: { name: string; _id: string } | undefined
+  firstInput: { name: string; _id: string; status: string } | null
   firstTask: string
-  secondInput: { name: string; _id: string } | undefined
+  secondInput: { name: string; _id: string; status: string } | null
   secondTask: string
   getCurrentWeek: () => void
   dateOfMeet: string

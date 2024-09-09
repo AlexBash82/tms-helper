@@ -5,6 +5,7 @@ export interface IStudent {
   dontUse: boolean
   comments: string
   plan: false
+  status: 'free' | 'planed' | 'sent' | 'accepted' | 'rejected'
   portners: Array<{ name: string; _id: string }>
 
   latest: number | null
@@ -59,7 +60,7 @@ export interface IStudent {
   congBibleStudyPoint: number | null
 
   isSecondChairm: boolean
-  secondChairmPoint: number | null
+  secondChairmanPoint: number | null
 
   isChairman: boolean
   chairmanPoint: number | null
@@ -115,12 +116,17 @@ export interface IStudentDateToString {
   livingAsChrPoint: string
   firstTalkPoint: string
   congBibleStudyPoint: string
-  secondChairmPoint: string
+  secondChairmanPoint: string
   chairmanPoint: string
 }
 
-interface IOneStudent {
-  [key: string]: { name: string; _id: string; status: string } | undefined
+export interface IFieldsOneSt {
+  name: string
+  _id: string
+}
+
+export interface IOneStudent {
+  [key: string]: IFieldsOneSt | null
 }
 
 export interface IWeek {
@@ -135,7 +141,6 @@ export interface IWeek {
   teachingChBx: boolean
   trainingChBx: boolean
   secondClassChBx: boolean
-  secondChairmChBx: boolean
 
   // startPointChBx: boolean
   // followPointChBx: boolean
@@ -151,9 +156,9 @@ export interface IWeek {
 
   orderedList: IOneStudent[]
   orderedStMC: IOneStudent[]
-  orderedStSC: IOneStudent[] | []
-  orderedAsMC: IOneStudent[] | []
-  orderedAsSC: IOneStudent[] | []
+  orderedStSC: IOneStudent[]
+  orderedAsMC: IOneStudent[]
+  orderedAsSC: IOneStudent[]
   unorderedList: IOneStudent[]
 
   // chairmanPoint: { name: string; _id: string } | null
@@ -167,7 +172,7 @@ export interface IWeek {
   // congBibleStudyPoint: { name: string; _id: string } | null
   // congBibleStudyReaderPoint: { name: string; _id: string } | null
   // endPrayerPoint: { name: string; _id: string } | null
-  // secondChairmPoint: { name: string; _id: string } | null
+  // secondChairmanPoint: { name: string; _id: string } | null
 
   // bibleReadingPointStMC: { name: string; _id: string } | null
   // bibleReadingPointStSC: { name: string; _id: string } | null
@@ -211,7 +216,7 @@ export interface IWeekCopy {
   // congBibleStudyPoint?: { name: string; _id: string } | null
   // congBibleStudyReaderPoint?: { name: string; _id: string } | null
   // endPrayerPoint?: { name: string; _id: string } | null
-  // secondChairmPoint?: { name: string; _id: string } | null
+  // secondChairmanPoint?: { name: string; _id: string } | null
 
   // bibleReadingPointStMC?: { name: string; _id: string } | null
   // bibleReadingPointStSC?: { name: string; _id: string } | null
@@ -242,8 +247,12 @@ export interface IWeekCopy {
   // talkPointStMC?: { name: string; _id: string } | null
   // talkPointStSC?: { name: string; _id: string } | null
 
-  numbered: [{ [key: string]: { name: string; _id: string } | null }]
-  randomly: [{ [key: string]: { name: string; _id: string } | null }]
+  orderedList: IOneStudent[]
+  orderedStMC: IOneStudent[]
+  orderedStSC: IOneStudent[]
+  orderedAsMC: IOneStudent[]
+  orderedAsSC: IOneStudent[]
+  unorderedList: IOneStudent[]
 }
 
 export interface IAddParams {

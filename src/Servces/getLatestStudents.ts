@@ -13,7 +13,7 @@ export async function getLatestStudents(
     { keyword: 'firstTalkPoint', param: { isFirstSpeech: true } },
     { keyword: 'explainSpPoint', param: { isExplainTalk: true } },
     { keyword: 'gemsPoint', param: { isGems: true } },
-    { keyword: 'secondChairmPoint', param: { isSecondChairm: true } },
+    { keyword: 'secondChairmanPoint', param: { isSecondChairm: true } },
     { keyword: 'livingAsChrPoint', param: { isLivingAsChr: true } },
     { keyword: 'lessonOnePoint', param: { isLivingAsChr: true } },
     { keyword: 'lessonTwoPoint', param: { isLivingAsChr: true } },

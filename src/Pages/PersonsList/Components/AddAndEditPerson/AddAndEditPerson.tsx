@@ -45,7 +45,7 @@ interface IResultToStr {
   livingAsChrPoint?: string
   firstTalkPoint?: string
   congBibleStudyPoint?: string
-  secondChairmPoint?: string
+  secondChairmanPoint?: string
   chairmanPoint?: string
 }
 
@@ -126,7 +126,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           'livingAsChrPoint',
           'firstTalkPoint',
           'congBibleStudyPoint',
-          'secondChairmPoint',
+          'secondChairmanPoint',
           'chairmanPoint',
         ]
 
@@ -246,6 +246,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           dontUse: dontUse,
           comments: comments,
           plan: false,
+          status: 'free',
           portners: [],
 
           latest: null,
@@ -300,7 +301,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           congBibleStudyPoint: null,
 
           isSecondChairm: inputCheckBox.isSecondChairm,
-          secondChairmPoint: null,
+          secondChairmanPoint: null,
 
           isChairman: inputCheckBox.isChairman,
           chairmanPoint: null,
@@ -325,6 +326,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         dontUse: dontUse,
         comments: comments,
         plan: editPropPerson.plan,
+        status: editPropPerson.status,
         portners: editPropPerson.portners,
 
         latest: editPropPerson.latest || null,
@@ -380,7 +382,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         congBibleStudyPoint: editPropPerson.congBibleStudyPoint || null,
 
         isSecondChairm: inputCheckBox.isSecondChairm,
-        secondChairmPoint: editPropPerson.secondChairmPoint || null,
+        secondChairmanPoint: editPropPerson.secondChairmanPoint || null,
 
         isChairman: inputCheckBox.isChairman,
         chairmanPoint: editPropPerson.chairmanPoint || null,
@@ -549,7 +551,9 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
             <div>Chairman - {studentDateToString?.chairmanPoint}</div>
           )}
           {editPropPerson.isSecondChairm && (
-            <div>second Chairm - {studentDateToString?.secondChairmPoint}</div>
+            <div>
+              second Chairm - {studentDateToString?.secondChairmanPoint}
+            </div>
           )}
           {editPropPerson.isFirstSpeech && (
             <div>first Speech - {studentDateToString?.firstTalkPoint}</div>

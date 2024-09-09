@@ -12,25 +12,21 @@ const App: React.FC = () => {
   return (
     <div className="mainWindow">
       <nav>
-        <ul>
-          <li>
-            <Link to="/">Epub</Link>
-          </li>
-          <li>
-            <Link to="/addInfo">AddInfoByWeek</Link>
-          </li>
-          <li>
+        <div className="df">
+          <div>
+            <Link to="/">AddInfoByWeek</Link>
+          </div>
+          <div>
             <Link to="/personsList">Persons List</Link>
-          </li>
-          <li>
+          </div>
+          <div>
             <Link to="/forms">Forms</Link>
-          </li>
-        </ul>
+          </div>
+        </div>
       </nav>
 
       <Routes>
-        <Route path="/" element={<Epub />} />{' '}
-        <Route path="/addInfo" element={<AddInfoByWeek />} />
+        <Route path="/" element={<AddInfoByWeek />} />
         <Route path="/personsList" element={<PersonsList />} />
         <Route path="/forms" element={<Forms />} />
       </Routes>

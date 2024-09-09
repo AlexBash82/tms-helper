@@ -7,7 +7,7 @@ interface IProps {
   title: string
   openAndChoose: (arg: string) => void
   openedList: string | undefined
-  firstInput: { name: string; _id: string } | undefined
+  firstInput: { name: string; _id: string } | null
   task: string
   getCurrentWeek: () => void
   dateOfMeet: string
@@ -53,18 +53,18 @@ const SingleInput: React.FC<IProps> = (props) => {
       if (students.success) {
         let filtered = students.data
 
-        switch (task.slice(0, -9)) {
-          case 'read':
-            filtered = students.data.filter(
-              (student) => student.gender === 'Male'
-            )
-            break
-          // case 'speech':
-          //   filtered = students.data.filter(
-          //     (student) => student. === ''
-          //   )
-          //   break
-        }
+        // switch (task.slice(0, -9)) {
+        //   case 'read':
+        //     filtered = students.data.filter(
+        //       (student) => student.gender === 'Male'
+        //     )
+        //     break
+        // case 'speech':
+        //   filtered = students.data.filter(
+        //     (student) => student. === ''
+        //   )
+        //   break
+        // }
         //console.log('filtered', filtered)
         setFoundByLetter(filtered)
       } else {

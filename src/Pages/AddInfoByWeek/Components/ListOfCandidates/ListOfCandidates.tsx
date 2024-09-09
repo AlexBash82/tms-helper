@@ -13,7 +13,7 @@ import { getLatestStudents } from '../../../../Servces/getLatestStudents'
 interface IProps {
   openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
-  presentValue: { name: string; _id: string } | undefined
+  presentValue: { name: string; _id: string } | null
   task: string
   dateOfMeet: string
   foundByLetter: Array<IStudent>
@@ -188,8 +188,8 @@ const ListOfCandidates: React.FC<IProps> = ({
       case 'endPrayerPoint':
         isSuits = minValues.includes('endPrayerPoint')
         break
-      case 'secondChairmPoint':
-        isSuits = minValues.includes('secondChairmPoint')
+      case 'secondChairmanPoint':
+        isSuits = minValues.includes('secondChairmanPoint')
         break
     }
 
@@ -229,6 +229,10 @@ const ListOfCandidates: React.FC<IProps> = ({
         const resultUser = await window.api.updateOneUser(updateUser)
 
         //если обновить студента получилось, то обновляем данные в базе недели
+        //----------------------------------------------------------------------------------
+        //---------переписать логику: получать здесь имя массива и индекс элемента и
+        //---------и обновлять в базе данных по имень массива и индексу елмента т.е.
+        //---------переписать логику в базе данных
         if (resultUser.success) {
           const updateWeek = {
             dateOfMeet,
@@ -236,6 +240,7 @@ const ListOfCandidates: React.FC<IProps> = ({
             newValue: {
               name: resultUser.data.lastFirstName,
               _id: resultUser.data._id,
+              status: 'planned',
             },
           }
           const resultWeek = await window.api.updateOneWeek(updateWeek)

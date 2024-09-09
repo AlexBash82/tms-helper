@@ -412,7 +412,8 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
       }
     }
 
-    const insertWeek = await new Promise((resolve, reject) => {
+    const insertedWeek = await new Promise((resolve, reject) => {
+      console.log('got in db', weekData)
       weeksDB.insert(weekData, (err, newDoc) => {
         if (err) {
           console.log('write-new-week error-insert: ', err)
@@ -422,11 +423,12 @@ ipcMain.handle('write-new-week', async (event, weekData) => {
         }
       })
     })
-    if (insertWeek) {
+    if (insertedWeek) {
+      console.log('result of insert', insertedWeek)
       return {
         success: true,
         message: 'The week has succesfully inserted',
-        data: insertWeek,
+        data: insertedWeek,
       }
     }
   } catch (error) {

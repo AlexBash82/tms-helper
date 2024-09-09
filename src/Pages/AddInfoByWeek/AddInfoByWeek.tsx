@@ -6,6 +6,7 @@ import Weeks from './Components/Weeks/Weeks'
 import SingleInput from './Components/SingleInput/SingleInput'
 import CoupleInputs from './Components/CoupleInputs/CoupleInputs'
 import { IWeek, IWeekCopy } from '../../interfaces'
+import _ from 'lodash'
 
 interface Amount {
   keysOfCopyWeek: number
@@ -38,9 +39,10 @@ const AddInfoByWeek: React.FC = () => {
     chairmanPoint: 'Chairman',
     congBibleStudyReaderPoint: 'Cong. Bible St. reader',
     endPrayerPoint: 'Prayer',
+    secondChairmanPoint: 'Second Class Chairman',
   }
 
-  const defaultWeekState = {
+  const defaultWeekState: IWeek = {
     _id: undefined,
     startWeekTSt: 0,
     dateOfMeet: '',
@@ -49,10 +51,9 @@ const AddInfoByWeek: React.FC = () => {
     comment: '',
     range: '',
 
-    teachingChBx: false,
-    trainingChBx: false,
-    secondClassChBx: false,
-    secondChairmChBx: false,
+    teachingChBx: true,
+    trainingChBx: true,
+    secondClassChBx: true,
 
     // startPointChBx: false,
     // followPointChBx: false,
@@ -67,26 +68,28 @@ const AddInfoByWeek: React.FC = () => {
     // liveAndServThreeChBx: false,
 
     orderedList: [
-      { firstTalkPoint: undefined },
-      { gemsPoint: undefined },
-      { livingAsChrPoint: undefined },
-      { congBibleStudyPoint: undefined },
+      { firstTalkPoint: null },
+      { gemsPoint: null },
+      { livingAsChrPoint: null },
+      { congBibleStudyPoint: null },
     ],
-    orderedStMC: [{ bibleReadingPointStMC: undefined }],
+    orderedStMC: [{ bibleReadingPointStMC: null }],
     orderedStSC: [],
     orderedAsMC: [],
     orderedAsSC: [],
     unorderedList: [
-      { chairmanPoint: undefined },
-      { congBibleStudyReaderPoint: undefined },
-      { endPrayerPoint: undefined },
+      { chairmanPoint: null },
+      { congBibleStudyReaderPoint: null },
+      { endPrayerPoint: null },
+      { secondChairmanPoint: null },
     ],
 
     // lessonOnePoint: null,
     // lessonTwoPoint: null,
     // liveAndServTwoPoint: null,
     // liveAndServThreePoint: null,
-    // secondChairmPoint: null,
+
+    // secondChairmanPoint: null,
 
     // startPointStMC: null,
     // startPointAsMC: null,
@@ -184,16 +187,18 @@ const AddInfoByWeek: React.FC = () => {
     startWeekTSt: number,
     isPlanned: boolean
   ) => {
-    const newWeek = Object.assign(defaultWeekState, {
+    const newWeek = _.cloneDeep(defaultWeekState)
+
+    Object.assign(newWeek, {
       dateOfMeet: inpDateOfMeet,
       startWeekTSt,
       isPlanned,
     })
 
     delete newWeek._id
-
+    console.log('sending to db', newWeek)
     const result = await window.api.writeNewWeek(newWeek)
-    //console.log('result', result)
+    console.log('getting back from db', result)
     return result
   }
 
@@ -280,58 +285,31 @@ const AddInfoByWeek: React.FC = () => {
             task.includes('makePointSt') ||
             task.includes('explainPointSt')
           ) {
-            let searchPortner: { name: string; _id: string } | undefined =
-              undefined
+            let searchPortner: {
+              name: string
+              _id: string
+            } | null = null
 
             //присваеваем searchPortner имя напарника и его id из недели, если есть
-            switch (task) {
-              case 'startPointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'startPointAsMC'
-                )?.['startPointAsMC']
-                break
+            const taskKeyMap: { [key: string]: string } = {
+              startPointStMC: 'startPointAsMC',
+              startPointStSC: 'startPointAsSC',
+              followPointStMC: 'followPointAsMC',
+              followPointStSC: 'followPointAsSC',
+              makePointStMC: 'makePointAsMC',
+              makePointStSC: 'makePointAsSC',
+              explainPointStMC: 'explainPointAsMC',
+              explainPointStSC: 'explainPointAsSC',
+            }
 
-              case 'startPointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'startPointAsSC'
-                )?.['startPointAsSC']
-                break
-
-              case 'followPointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'followPointAsMC'
-                )?.['followPointAsMC']
-                break
-
-              case 'followPointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'followPointAsSC'
-                )?.['followPointAsSC']
-                break
-
-              case 'makePointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'makePointAsMC'
-                )?.['makePointAsMC']
-                break
-
-              case 'makePointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'makePointAsSC'
-                )?.['makePointAsSC']
-                break
-
-              case 'explainPointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'explainPointAsMC'
-                )?.['explainPointAsMC']
-                break
-
-              case 'explainPointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'explainPointAsSC'
-                )?.['explainPointAsSC']
-                break
+            const keyToFind = taskKeyMap[task]
+            if (keyToFind) {
+              const foundObj = copyWeekState.find((obj) =>
+                obj.hasOwnProperty(keyToFind)
+              )
+              searchPortner = foundObj ? foundObj[keyToFind] : null
+            } else {
+              searchPortner = null
             }
 
             //ищем у студента в массиве этого напарника и если нет добавляем в updateData.newStudentData
@@ -457,58 +435,28 @@ const AddInfoByWeek: React.FC = () => {
             task.includes('makePointSt') ||
             task.includes('explainPointSt')
           ) {
-            let searchPortner: { name: string; _id: string } | undefined =
-              undefined
+            let searchPortner: { name: string; _id: string } | null = null
 
             //присваеваем searchPortner имя напарника и его id из недели, если есть
-            switch (task) {
-              case 'startPointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'startPointAsMC'
-                )?.['startPointAsMC']
-                break
+            const taskKeyMap: { [key: string]: string } = {
+              startPointStMC: 'startPointAsMC',
+              startPointStSC: 'startPointAsSC',
+              followPointStMC: 'followPointAsMC',
+              followPointStSC: 'followPointAsSC',
+              makePointStMC: 'makePointAsMC',
+              makePointStSC: 'makePointAsSC',
+              explainPointStMC: 'explainPointAsMC',
+              explainPointStSC: 'explainPointAsSC',
+            }
 
-              case 'startPointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'startPointAsSC'
-                )?.['startPointAsSC']
-                break
-
-              case 'followPointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'followPointAsMC'
-                )?.['followPointAsMC']
-                break
-
-              case 'followPointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'followPointAsSC'
-                )?.['followPointAsSC']
-                break
-
-              case 'makePointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'makePointAsMC'
-                )?.['makePointAsMC']
-                break
-
-              case 'makePointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'makePointAsSC'
-                )?.['makePointAsSC']
-                break
-
-              case 'explainPointStMC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'explainPointAsMC'
-                )?.['explainPointAsMC']
-                break
-
-              case 'explainPointStSC':
-                searchPortner = copyWeekState.find(
-                  (obj) => Object.keys(obj)[0] === 'explainPointAsSC'
-                )?.['explainPointAsSC']
-                break
+            const keyToFind = taskKeyMap[task]
+            if (keyToFind) {
+              const foundObj = copyWeekState.find((obj) =>
+                obj.hasOwnProperty(keyToFind)
+              )
+              searchPortner = foundObj ? foundObj[keyToFind] : null
+            } else {
+              searchPortner = null
             }
 
             //ищем у студента в массиве этого напарника и если нет добавляем в updateData.newStudentData
@@ -697,7 +645,11 @@ const AddInfoByWeek: React.FC = () => {
       {!weekState.dateOfMeet ? (
         <div>For creating new week just choose the date</div>
       ) : (
-        <div>
+        <div
+          className={`grid-container ${
+            weekState.teachingChBx ? 'teaching' : ''
+          }`}
+        >
           <input
             type="checkbox"
             checked={weekState.teachingChBx}
@@ -714,53 +666,65 @@ const AddInfoByWeek: React.FC = () => {
             }
           />
           -Training points
+          <input
+            type="checkbox"
+            checked={weekState.secondClassChBx}
+            onChange={(e) =>
+              makeChangeChBx('secondClassChBx', !weekState.secondClassChBx)
+            }
+          />
+          - Second class
           {/*---------------------------Teaching--------------------------- */}
           {weekState.teachingChBx && (
             <div className="df">
-              <div>
-                <div>Choose</div>
-
-                <div className="df">
-                  <input
-                    type="checkbox"
-                    checked={weekState.secondChairmChBx}
-                    onChange={(e) =>
-                      makeChangeChBx(
-                        'secondChairmChBx',
-                        !weekState.secondChairmChBx
-                      )
-                    }
-                  />
-                  <div> - Second class</div>
-                </div>
-              </div>
               {weekState.teachingChBx && (
                 <div>
-                  <div>Teaching points </div>
                   <div className="df">
                     {weekState.orderedList.map((person, index) => {
-                      const key = Object.keys(person)[0]
-                      const newTitle = allTitles[key]
-                      let number = 1
                       if (index < 2) {
+                        const key = Object.keys(person)[0]
+                        const newTitle = allTitles[key]
+                        let number = 1
                         number += index
-                      } else {
-                        number += index + weekState.orderedStMC.length
+                        const title = `${number}-${newTitle}`
+                        return (
+                          <SingleInput
+                            key={index}
+                            title={title}
+                            openAndChoose={openAndChoose}
+                            openedList={openedList}
+                            firstInput={person.name}
+                            task={key}
+                            getCurrentWeek={getCurrentWeek}
+                            action={action}
+                            dateOfMeet={weekState.dateOfMeet}
+                          />
+                        )
                       }
-                      const title = `${number}-${newTitle}`
-                      return (
-                        <SingleInput
-                          key={index}
-                          title={title}
-                          openAndChoose={openAndChoose}
-                          openedList={openedList}
-                          firstInput={person.name}
-                          task={key}
-                          getCurrentWeek={getCurrentWeek}
-                          action={action}
-                          dateOfMeet={weekState.dateOfMeet}
-                        />
-                      )
+                    })}
+                  </div>
+                  <div className="df">
+                    {weekState.orderedList.map((person, index) => {
+                      if (index >= 2) {
+                        const key = Object.keys(person)[0]
+                        const newTitle = allTitles[key]
+                        let number = 1
+                        number += index + weekState.orderedStMC.length
+                        const title = `${number}-${newTitle}`
+                        return (
+                          <SingleInput
+                            key={index}
+                            title={title}
+                            openAndChoose={openAndChoose}
+                            openedList={openedList}
+                            firstInput={person.name}
+                            task={key}
+                            getCurrentWeek={getCurrentWeek}
+                            action={action}
+                            dateOfMeet={weekState.dateOfMeet}
+                          />
+                        )
+                      }
                     })}
                   </div>
                   <div className="df">
@@ -783,22 +747,6 @@ const AddInfoByWeek: React.FC = () => {
                       )
                     })}
                   </div>
-                  {/* 
-
-                    {weekState.secondChairmChBx && (
-                      <SingleInput
-                        title={'Second Class Chairman'}
-                        openAndChoose={openAndChoose}
-                        openedList={openedList}
-                        firstInput={getRandomTask('secondChairmPoint')}
-                        task="secondChairmPoint"
-                        getCurrentWeek={getCurrentWeek}
-                        action={action}
-                        dateOfMeet={weekState.dateOfMeet}
-                      />
-                    )}
-
-                       /> */}
                 </div>
               )}
             </div>
@@ -1112,36 +1060,35 @@ const AddInfoByWeek: React.FC = () => {
             //   </div>
             // </div>
           )}
-        </div>
-      )}
-
-      {action === 'plan' && weekState.dateOfMeet && (
-        <div className="df">
-          <div
-            className="myButton"
-            onClick={() => setWeekState(defaultWeekState)}
-          >
-            Close window
-          </div>
-          <div className="myButton" onClick={deletePlan}>
-            Delete week
-          </div>
-          {/* <div className="myButton" onClick={() => console.log('hi')}>
+          {action === 'plan' && weekState.dateOfMeet && (
+            <div className="df">
+              <div
+                className="myButton"
+                onClick={() => setWeekState(defaultWeekState)}
+              >
+                Close window
+              </div>
+              <div className="myButton" onClick={deletePlan}>
+                Delete week
+              </div>
+              {/* <div className="myButton" onClick={() => console.log('hi')}>
             Make Forms
           </div> */}
-        </div>
-      )}
-
-      {action === 'confirm' && <div onClick={confirmWeek}>Confirm week</div>}
-
-      {action === 'update' && (
-        <div className="df">
-          <div className="myButton" onClick={updateWeek}>
-            Update & del
-          </div>
-          <div className="myButton" onClick={deleteWeek}>
-            Delete week
-          </div>
+            </div>
+          )}
+          {action === 'confirm' && (
+            <div onClick={confirmWeek}>Confirm week</div>
+          )}
+          {action === 'update' && (
+            <div className="df">
+              <div className="myButton" onClick={updateWeek}>
+                Update & del
+              </div>
+              <div className="myButton" onClick={deleteWeek}>
+                Delete week
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
