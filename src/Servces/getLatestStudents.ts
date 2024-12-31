@@ -37,7 +37,9 @@ export async function getLatestStudents(
   const getStudents = async (): Promise<IStudent[] | undefined> => {
     try {
       const addParams = addSearchParams()
+      console.log('getLatestSt - addParams: ', addParams)
       const users = await window.api.getUsersByLatest(addParams)
+      console.log('getLatestSt - users: ', users)
       if (users.success) {
         return users.data
       } else {

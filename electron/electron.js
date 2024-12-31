@@ -367,7 +367,7 @@ ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
       usersDB
         .find({ dontUse: false, plan: false, ...addParam })
         .sort({ latest: 1 })
-        .limit(10)
+        .limit(20)
         .exec((err, users) => {
           if (err) {
             reject(err)
@@ -503,7 +503,7 @@ ipcMain.handle('get-one-week', async (event, dateOfMeet) => {
 
 ipcMain.handle('update-one-week', async (event, weekData) => {
   try {
-    const { dateOfMeet, keyName, newValue } = weekData
+    const { dateOfMeet, arrayName, arrayIndex, newValue } = weekData
 
     const originalWeek = await new Promise((resolve, reject) => {
       weeksDB.findOne({ dateOfMeet }, (err, foundWeek) => {
@@ -519,7 +519,10 @@ ipcMain.handle('update-one-week', async (event, weekData) => {
     if (!originalWeek) {
       return { success: false, message: 'The week not found' }
     }
-
+    console.log('originalW1', originalWeek)
+    console.log('name - ', arrayName, ', index - ', arrayIndex)
+    originalWeek[{ arrayName }][{ arrayIndex }] = newValue
+    console.log('originalW2', originalWeek)
     const updatingWeek = { ...originalWeek, [keyName]: newValue }
 
     const updatedWeek = await new Promise((resolve, reject) => {

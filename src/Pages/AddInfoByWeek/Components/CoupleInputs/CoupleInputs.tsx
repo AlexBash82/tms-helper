@@ -13,6 +13,10 @@ interface IProps {
   getCurrentWeek: () => void
   dateOfMeet: string
   action: 'plan' | 'confirm' | 'update' | undefined
+  firstArrayName: string
+  secondArrayName: string
+  firstArrayIndex: number
+  secondArrayIndex: number
 }
 
 const CoupleInputs: React.FC<IProps> = (props) => {
@@ -27,6 +31,10 @@ const CoupleInputs: React.FC<IProps> = (props) => {
     getCurrentWeek,
     dateOfMeet,
     action,
+    firstArrayName,
+    secondArrayName,
+    firstArrayIndex,
+    secondArrayIndex,
   } = props
 
   return (
@@ -40,6 +48,8 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}
+        arrayName={firstArrayName}
+        arrayIndex={firstArrayIndex}
       />
       <SingleInput
         title="Assistant"
@@ -50,6 +60,8 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}
+        arrayName={secondArrayName}
+        arrayIndex={secondArrayIndex}
       />
     </div>
   )

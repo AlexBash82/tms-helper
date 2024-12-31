@@ -123,6 +123,7 @@ export interface IStudentDateToString {
 export interface IFieldsOneSt {
   name: string
   _id: string
+  status: string
 }
 
 export interface IOneStudent {

@@ -22,6 +22,9 @@ const App: React.FC = () => {
           <div>
             <Link to="/forms">Forms</Link>
           </div>
+          <div>
+            <Link to="/epub">Epub</Link>
+          </div>
         </div>
       </nav>
 
@@ -29,6 +32,7 @@ const App: React.FC = () => {
         <Route path="/" element={<AddInfoByWeek />} />
         <Route path="/personsList" element={<PersonsList />} />
         <Route path="/forms" element={<Forms />} />
+        <Route path="/epub" element={<Epub />} />
       </Routes>
     </div>
   )

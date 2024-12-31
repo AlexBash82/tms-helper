@@ -698,6 +698,8 @@ const AddInfoByWeek: React.FC = () => {
                             getCurrentWeek={getCurrentWeek}
                             action={action}
                             dateOfMeet={weekState.dateOfMeet}
+                            arrayName={'orderedList'}
+                            arrayIndex={index}
                           />
                         )
                       }
@@ -722,6 +724,8 @@ const AddInfoByWeek: React.FC = () => {
                             getCurrentWeek={getCurrentWeek}
                             action={action}
                             dateOfMeet={weekState.dateOfMeet}
+                            arrayName={'orderedList'}
+                            arrayIndex={index}
                           />
                         )
                       }
@@ -743,6 +747,8 @@ const AddInfoByWeek: React.FC = () => {
                           getCurrentWeek={getCurrentWeek}
                           action={action}
                           dateOfMeet={weekState.dateOfMeet}
+                          arrayName={'unorderedList'}
+                          arrayIndex={index}
                         />
                       )
                     })}

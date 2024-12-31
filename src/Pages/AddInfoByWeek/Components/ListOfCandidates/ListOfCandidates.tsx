@@ -13,12 +13,14 @@ import { getLatestStudents } from '../../../../Servces/getLatestStudents'
 interface IProps {
   openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
-  presentValue: { name: string; _id: string } | null
+  presentValue: { name: string; _id: string; status: string } | null
   task: string
   dateOfMeet: string
   foundByLetter: Array<IStudent>
   inputIs: string
   action: 'plan' | 'confirm' | 'update' | undefined
+  arrayName: string
+  arrayIndex: number
 }
 
 interface IUpdateStudent {
@@ -35,6 +37,8 @@ const ListOfCandidates: React.FC<IProps> = ({
   action,
   foundByLetter,
   inputIs,
+  arrayName,
+  arrayIndex,
 }) => {
   const listRef = useRef<HTMLDivElement | null>(null)
   const [latestStudents, setLatestStudents] = useState<Array<IStudent>>([])
@@ -42,7 +46,10 @@ const ListOfCandidates: React.FC<IProps> = ({
   useEffect(() => {
     const fetchStudents = async () => {
       if (action === 'plan') {
+        console.log('ready')
         const students = await getLatestStudents(task)
+        console.log('got')
+        console.log('listOfCand fetchStudents - ', students)
         if (students) {
           setLatestStudents(students)
         }
@@ -50,6 +57,9 @@ const ListOfCandidates: React.FC<IProps> = ({
     }
 
     fetchStudents()
+
+    console.log('task', task)
+    console.log('action', action)
   }, [task, action])
 
   const timeEndOfMeet = '21:45'
@@ -196,19 +206,19 @@ const ListOfCandidates: React.FC<IProps> = ({
     return isSuits
   }
 
-  // эта функция получает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя другого студента, то в базе ищем его и меняем поле plan: true на false
+  // эта функция получает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя другого студента, то в базе ищем его и меняем поле plan: true на false---меняем логику: поле status: planed -> free
   const makePlan = async (student: IStudent) => {
-    //если в строке уже имеется студент: presentValue, то получаем его из базы
-    if (presentValue) {
+    //если в строке уже имеется студент: presentValue и новое имя отичается от предыдущего, то получаем его из базы
+    if (presentValue && presentValue.name !== student.lastFirstName) {
       const presentUser = await window.api.getOneUserByLFName(presentValue.name)
 
-      //проверяем у этого студента поле plan: true и меняем на false
-      if (presentUser.success && presentUser.data?.plan) {
+      //меняем у этого студента поле plan: status
+      if (presentUser.success) {
         try {
           const updatePresent = {
             studentName: presentValue.name,
-            keyName: 'plan',
-            newValue: false,
+            keyName: 'status',
+            newValue: 'free',
           }
           const presentResult = await window.api.updateOneUser(updatePresent)
           console.log('presentResult', presentResult)
@@ -218,13 +228,12 @@ const ListOfCandidates: React.FC<IProps> = ({
       }
     }
 
-    //если вновь полученное имя отличается от предыдущего (если оно вообще есть), то меняем поле plan: true
-    if (student.lastFirstName !== presentValue?.name) {
+    if (!presentValue || presentValue.name !== student.lastFirstName) {
       try {
         const updateUser = {
           studentName: student.lastFirstName,
-          keyName: 'plan',
-          newValue: true,
+          keyName: 'status',
+          newValue: 'planned',
         }
         const resultUser = await window.api.updateOneUser(updateUser)
 
@@ -236,11 +245,12 @@ const ListOfCandidates: React.FC<IProps> = ({
         if (resultUser.success) {
           const updateWeek = {
             dateOfMeet,
-            keyName: task,
+            arrayName: arrayName,
+            arrayIndex: arrayIndex,
             newValue: {
               name: resultUser.data.lastFirstName,
               _id: resultUser.data._id,
-              status: 'planned',
+              status: resultUser.data.status,
             },
           }
           const resultWeek = await window.api.updateOneWeek(updateWeek)
