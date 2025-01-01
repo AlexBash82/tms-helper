@@ -19,8 +19,6 @@ interface IProps {
   foundByLetter: Array<IStudent>
   inputIs: string
   action: 'plan' | 'confirm' | 'update' | undefined
-  arrayName: string
-  arrayIndex: number
 }
 
 interface IUpdateStudent {
@@ -37,8 +35,6 @@ const ListOfCandidates: React.FC<IProps> = ({
   action,
   foundByLetter,
   inputIs,
-  arrayName,
-  arrayIndex,
 }) => {
   const listRef = useRef<HTMLDivElement | null>(null)
   const [latestStudents, setLatestStudents] = useState<Array<IStudent>>([])
@@ -245,8 +241,7 @@ const ListOfCandidates: React.FC<IProps> = ({
         if (resultUser.success) {
           const updateWeek = {
             dateOfMeet,
-            arrayName: arrayName,
-            arrayIndex: arrayIndex,
+            task,
             newValue: {
               name: resultUser.data.lastFirstName,
               _id: resultUser.data._id,

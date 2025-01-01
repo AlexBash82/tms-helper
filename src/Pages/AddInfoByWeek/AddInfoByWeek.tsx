@@ -67,21 +67,10 @@ const AddInfoByWeek: React.FC = () => {
     // liveAndServTwoChBx: false,
     // liveAndServThreeChBx: false,
 
-    orderedList: [
-      { firstTalkPoint: null },
-      { gemsPoint: null },
-      { livingAsChrPoint: null },
-      { congBibleStudyPoint: null },
-    ],
-    orderedStMC: [{ bibleReadingPointStMC: null }],
-    orderedStSC: [],
-    orderedAsMC: [],
-    orderedAsSC: [],
-    unorderedList: [
-      { chairmanPoint: null },
-      { congBibleStudyReaderPoint: null },
-      { endPrayerPoint: null },
-      { secondChairmanPoint: null },
+    list: [
+      { chairmanPointT00: null }, // { name: string; _id: string }
+      { firstTalkPointT01: null },
+      { gemsPointT02: null },
     ],
 
     // lessonOnePoint: null,
@@ -233,16 +222,6 @@ const AddInfoByWeek: React.FC = () => {
     // Получаем метку времени даты недели
     const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
 
-    // копируем из weekState в copyWeekState, содержание массивов numbered и randomly, то есть какие пункты и кто выполняет
-    const copyWeekState = [
-      ...weekState.orderedList,
-      ...weekState.orderedStMC,
-      ...weekState.orderedStSC,
-      ...weekState.orderedAsMC,
-      ...weekState.orderedAsSC,
-      ...weekState.unorderedList,
-    ]
-
     // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
       keysOfCopyWeek: 0,
@@ -250,8 +229,8 @@ const AddInfoByWeek: React.FC = () => {
       unSuccessUpdated: [],
     }
 
-    // проходим по copyWeekState, получаем на каждый ход: "name" - студента из БД
-    for (const taskAndName of copyWeekState) {
+    // проходим по weekState.list, получаем на каждый ход: "name" - студента из БД
+    for (const taskAndName of weekState.list) {
       amount.keysOfCopyWeek += 1
 
       const task = Object.keys(taskAndName)[0]
@@ -304,7 +283,7 @@ const AddInfoByWeek: React.FC = () => {
 
             const keyToFind = taskKeyMap[task]
             if (keyToFind) {
-              const foundObj = copyWeekState.find((obj) =>
+              const foundObj = weekState.list.find((obj) =>
                 obj.hasOwnProperty(keyToFind)
               )
               searchPortner = foundObj ? foundObj[keyToFind] : null
@@ -371,16 +350,6 @@ const AddInfoByWeek: React.FC = () => {
     // Получаем метку времени даты недели
     const { timeStampInp } = getTimeStamps(weekState.dateOfMeet, timeEndOfMeet)
 
-    // копируем из weekState в copyWeekState, содержание массивов numbered и randomly, то есть какие пункты и кто выполняет
-    const copyWeekState = [
-      ...weekState.orderedList,
-      ...weekState.orderedStMC,
-      ...weekState.orderedStSC,
-      ...weekState.orderedAsMC,
-      ...weekState.orderedAsSC,
-      ...weekState.unorderedList,
-    ]
-
     // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
       keysOfCopyWeek: 0,
@@ -388,8 +357,8 @@ const AddInfoByWeek: React.FC = () => {
       unSuccessUpdated: [],
     }
 
-    // проходим по copyWeekState, получаем на каждый ход: "name" - студента из БД
-    for (const taskAndName of copyWeekState) {
+    // проходим по weekState.list, получаем на каждый ход: "name" - студента из БД
+    for (const taskAndName of weekState.list) {
       amount.keysOfCopyWeek += 1
 
       const task = Object.keys(taskAndName)[0]
@@ -451,7 +420,7 @@ const AddInfoByWeek: React.FC = () => {
 
             const keyToFind = taskKeyMap[task]
             if (keyToFind) {
-              const foundObj = copyWeekState.find((obj) =>
+              const foundObj = weekState.list.find((obj) =>
                 obj.hasOwnProperty(keyToFind)
               )
               searchPortner = foundObj ? foundObj[keyToFind] : null
@@ -521,16 +490,6 @@ const AddInfoByWeek: React.FC = () => {
   //----DELETE PLAN------------------------------------------------------------------------------------------------
   // меняем plan: trye на false у всех студентов в этой неделе. Удаляем неделю из БД.
   const deletePlan = async () => {
-    // копируем из weekState в copyWeekState, содержание массивов numbered и randomly, то есть какие пункты и кто выполняет
-    const copyWeekState = [
-      ...weekState.orderedList,
-      ...weekState.orderedStMC,
-      ...weekState.orderedStSC,
-      ...weekState.orderedAsMC,
-      ...weekState.orderedAsSC,
-      ...weekState.unorderedList,
-    ]
-
     // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
       keysOfCopyWeek: 0,
@@ -538,8 +497,8 @@ const AddInfoByWeek: React.FC = () => {
       unSuccessUpdated: [],
     }
 
-    // проходим по copyWeekState, получаем на каждый ход: "name" - студента из БД
-    for (const taskAndName of copyWeekState) {
+    // проходим по weekState.list, получаем на каждый ход: "name" - студента из БД
+    for (const taskAndName of weekState.list) {
       amount.keysOfCopyWeek += 1
 
       const task = Object.keys(taskAndName)[0]
@@ -606,17 +565,9 @@ const AddInfoByWeek: React.FC = () => {
 
   const getTask = (title: string) => {
     // нужно пройтись по всем массивам и найти нужный
-    const copyWeekState = [
-      ...weekState.orderedList,
-      ...weekState.orderedStMC,
-      ...weekState.orderedStSC,
-      ...weekState.orderedAsMC,
-      ...weekState.orderedAsSC,
-      ...weekState.unorderedList,
-    ]
-    const result = copyWeekState.find((obj) => Object.keys(obj)[0] === title)?.[
-      title
-    ]
+    const result = weekState.list.find(
+      (obj) => Object.keys(obj)[0] === title
+    )?.[title]
     return result
   }
 
@@ -677,19 +628,21 @@ const AddInfoByWeek: React.FC = () => {
           {/*---------------------------Teaching--------------------------- */}
           {weekState.teachingChBx && (
             <div className="df">
+              <div>TREASURES FROM GOD'S WORD</div>
               {weekState.teachingChBx && (
                 <div>
                   <div className="df">
-                    {weekState.orderedList.map((person, index) => {
-                      if (index < 2) {
-                        const key = Object.keys(person)[0]
-                        const newTitle = allTitles[key]
-                        let number = 1
-                        number += index
-                        const title = `${number}-${newTitle}`
+                    {weekState.list.map((person) => {
+                      const key = Object.keys(person)[0]
+                      if (key) {
+                        const newTitle = allTitles[key.slice(0, -3)]
+                        const number = key.slice(-1)
+
+                        const title =
+                          +number == 0 ? newTitle : `${number}-${newTitle}`
                         return (
                           <SingleInput
-                            key={index}
+                            key={key}
                             title={title}
                             openAndChoose={openAndChoose}
                             openedList={openedList}
@@ -698,20 +651,18 @@ const AddInfoByWeek: React.FC = () => {
                             getCurrentWeek={getCurrentWeek}
                             action={action}
                             dateOfMeet={weekState.dateOfMeet}
-                            arrayName={'orderedList'}
-                            arrayIndex={index}
                           />
                         )
                       }
                     })}
                   </div>
-                  <div className="df">
-                    {weekState.orderedList.map((person, index) => {
+                  {/* <div className="df">
+                    {weekState.list.map((person, index) => {
                       if (index >= 2) {
                         const key = Object.keys(person)[0]
                         const newTitle = allTitles[key]
                         let number = 1
-                        number += index + weekState.orderedStMC.length
+                        number += index + weekState.list.length
                         const title = `${number}-${newTitle}`
                         return (
                           <SingleInput
@@ -724,15 +675,13 @@ const AddInfoByWeek: React.FC = () => {
                             getCurrentWeek={getCurrentWeek}
                             action={action}
                             dateOfMeet={weekState.dateOfMeet}
-                            arrayName={'orderedList'}
-                            arrayIndex={index}
                           />
                         )
                       }
                     })}
-                  </div>
-                  <div className="df">
-                    {weekState.unorderedList.map((person, index) => {
+                  </div> */}
+                  {/* <div className="df">
+                    {weekState.list.map((person, index) => {
                       const key = Object.keys(person)[0]
                       const newTitle = allTitles[key]
 
@@ -747,12 +696,10 @@ const AddInfoByWeek: React.FC = () => {
                           getCurrentWeek={getCurrentWeek}
                           action={action}
                           dateOfMeet={weekState.dateOfMeet}
-                          arrayName={'unorderedList'}
-                          arrayIndex={index}
                         />
                       )
                     })}
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>

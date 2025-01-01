@@ -48,8 +48,6 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}
-        arrayName={firstArrayName}
-        arrayIndex={firstArrayIndex}
       />
       <SingleInput
         title="Assistant"
@@ -60,8 +58,6 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}
-        arrayName={secondArrayName}
-        arrayIndex={secondArrayIndex}
       />
     </div>
   )

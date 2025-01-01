@@ -503,7 +503,7 @@ ipcMain.handle('get-one-week', async (event, dateOfMeet) => {
 
 ipcMain.handle('update-one-week', async (event, weekData) => {
   try {
-    const { dateOfMeet, arrayName, arrayIndex, newValue } = weekData
+    const { dateOfMeet, newValue } = weekData
 
     const originalWeek = await new Promise((resolve, reject) => {
       weeksDB.findOne({ dateOfMeet }, (err, foundWeek) => {
@@ -519,14 +519,9 @@ ipcMain.handle('update-one-week', async (event, weekData) => {
     if (!originalWeek) {
       return { success: false, message: 'The week not found' }
     }
-    console.log('originalW1', originalWeek)
-    console.log('name - ', arrayName, ', index - ', arrayIndex)
-    originalWeek[{ arrayName }][{ arrayIndex }] = newValue
-    console.log('originalW2', originalWeek)
-    const updatingWeek = { ...originalWeek, [keyName]: newValue }
 
     const updatedWeek = await new Promise((resolve, reject) => {
-      weeksDB.update({ dateOfMeet }, updatingWeek, {}, (err, numUpdated) => {
+      weeksDB.update({ dateOfMeet }, newValue, {}, (err, numUpdated) => {
         if (err) {
           console.error('update-one-week error update', err)
           reject(err)

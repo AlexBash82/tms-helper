@@ -12,8 +12,6 @@ interface IProps {
   getCurrentWeek: () => void
   dateOfMeet: string
   action: 'plan' | 'confirm' | 'update' | undefined
-  arrayName: string
-  arrayIndex: number
 }
 
 const SingleInput: React.FC<IProps> = (props) => {
@@ -26,8 +24,6 @@ const SingleInput: React.FC<IProps> = (props) => {
     getCurrentWeek,
     dateOfMeet,
     action,
-    arrayName,
-    arrayIndex,
   } = props
 
   const [inputValue, setInputValue] = useState('')
@@ -138,8 +134,6 @@ const SingleInput: React.FC<IProps> = (props) => {
             dateOfMeet={dateOfMeet}
             foundByLetter={foundByLetter}
             inputIs={inputIs}
-            arrayName={arrayName}
-            arrayIndex={arrayIndex}
           />
         )}
     </div>

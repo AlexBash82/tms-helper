@@ -155,33 +155,27 @@ export interface IWeek {
   // liveAndServTwoChBx: boolean
   // liveAndServThreeChBx: boolean
 
-  orderedList: IOneStudent[]
-  orderedStMC: IOneStudent[]
-  orderedStSC: IOneStudent[]
-  orderedAsMC: IOneStudent[]
-  orderedAsSC: IOneStudent[]
-  unorderedList: IOneStudent[]
+  list: IOneStudent[]
 
-  // chairmanPoint: { name: string; _id: string } | null
-  // firstTalkPoint: { name: string; _id: string } | null
-  // gemsPoint: { name: string; _id: string } | null
-  // lessonOnePoint: { name: string; _id: string } | null
-  // lessonTwoPoint: { name: string; _id: string } | null
-  // livingAsChrPoint: { name: string; _id: string } | null
-  // liveAndServTwoPoint: { name: string; _id: string } | null
-  // liveAndServThreePoint: { name: string; _id: string } | null
-  // congBibleStudyPoint: { name: string; _id: string } | null
-  // congBibleStudyReaderPoint: { name: string; _id: string } | null
-  // endPrayerPoint: { name: string; _id: string } | null
-  // secondChairmanPoint: { name: string; _id: string } | null
+  // examples:
+  // chairmanPointT00: { name: string; _id: string } | null
+  // firstTalkPointT01: { name: string; _id: string } | null
+  // gemsPointT02: { name: string; _id: string } | null
 
-  // bibleReadingPointStMC: { name: string; _id: string } | null
-  // bibleReadingPointStSC: { name: string; _id: string } | null
+  // livingAsChrPointA04: { name: string; _id: string } | null
+  // livingAsChrPointL06: { name: string; _id: string } | null
+  // congBibleStudyPointL00: { name: string; _id: string } | null
+  // congBibleStudyReaderPointL00: { name: string; _id: string } | null
+  // endPrayerPointL00: { name: string; _id: string } | null
+  // secondChairmanPointT00: { name: string; _id: string } | null
 
-  // startPointStMC: { name: string; _id: string } | null
-  // startPointAsMC: { name: string; _id: string } | null
-  // startPointStSC: { name: string; _id: string } | null
-  // startPointAsSC: { name: string; _id: string } | null
+  // bibleReadingPointStMCT03: { name: string; _id: string } | null
+  // bibleReadingPointStSCT03: { name: string; _id: string } | null
+
+  // startPointStMCT04: { name: string; _id: string } | null
+  // startPointAsMCT04: { name: string; _id: string } | null
+  // startPointStSCT04: { name: string; _id: string } | null
+  // startPointAsSCT04: { name: string; _id: string } | null
 
   // followPointStMC: { name: string; _id: string } | null
   // followPointAsMC: { name: string; _id: string } | null
