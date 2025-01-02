@@ -44,7 +44,7 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         openAndChoose={openAndChoose}
         openedList={openedList}
         firstInput={firstInput}
-        task={firstTask}
+        fullTask={firstTask}
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}
@@ -54,7 +54,7 @@ const CoupleInputs: React.FC<IProps> = (props) => {
         openAndChoose={openAndChoose}
         openedList={openedList}
         firstInput={secondInput}
-        task={secondTask}
+        fullTask={secondTask}
         getCurrentWeek={getCurrentWeek}
         action={action}
         dateOfMeet={dateOfMeet}

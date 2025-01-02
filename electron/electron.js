@@ -359,13 +359,13 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
 })
 
 //------------------------GET-SORTED-USERS-BY-LATEST-------------------------------------------
-//условия фильтрации: dontUse: false, plan: false, ...addParam
+//условия фильтрации: dontUse: false, status: "free", ...addParam
 
 ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
   try {
     const filteredUsers = await new Promise((resolve, reject) => {
       usersDB
-        .find({ dontUse: false, plan: false, ...addParam })
+        .find({ dontUse: false, status: 'free', ...addParam })
         .sort({ latest: 1 })
         .limit(20)
         .exec((err, users) => {
@@ -503,7 +503,7 @@ ipcMain.handle('get-one-week', async (event, dateOfMeet) => {
 
 ipcMain.handle('update-one-week', async (event, weekData) => {
   try {
-    const { dateOfMeet, newValue } = weekData
+    const { dateOfMeet, fullTask, newValue } = weekData
 
     const originalWeek = await new Promise((resolve, reject) => {
       weeksDB.findOne({ dateOfMeet }, (err, foundWeek) => {
@@ -520,8 +520,17 @@ ipcMain.handle('update-one-week', async (event, weekData) => {
       return { success: false, message: 'The week not found' }
     }
 
+    const newList = originalWeek.list.map((obj) => {
+      if (obj[fullTask] !== undefined) {
+        return { [fullTask]: newValue }
+      }
+      return obj
+    })
+
+    const newWeek = { ...originalWeek, list: newList }
+
     const updatedWeek = await new Promise((resolve, reject) => {
-      weeksDB.update({ dateOfMeet }, newValue, {}, (err, numUpdated) => {
+      weeksDB.update({ dateOfMeet }, newWeek, {}, (err, numUpdated) => {
         if (err) {
           console.error('update-one-week error update', err)
           reject(err)
@@ -537,7 +546,7 @@ ipcMain.handle('update-one-week', async (event, weekData) => {
     return {
       success: true,
       message: 'Week updated successfully',
-      data: updatingWeek,
+      data: newWeek,
     }
   } catch (error) {
     console.error('update-one-week error', error)

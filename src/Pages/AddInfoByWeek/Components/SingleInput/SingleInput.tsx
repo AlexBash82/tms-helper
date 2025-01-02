@@ -8,7 +8,7 @@ interface IProps {
   openAndChoose: (arg: string) => void
   openedList: string | undefined
   firstInput: { name: string; _id: string; status: string } | null
-  task: string
+  fullTask: string
   getCurrentWeek: () => void
   dateOfMeet: string
   action: 'plan' | 'confirm' | 'update' | undefined
@@ -20,7 +20,7 @@ const SingleInput: React.FC<IProps> = (props) => {
     openAndChoose,
     openedList,
     firstInput,
-    task,
+    fullTask,
     getCurrentWeek,
     dateOfMeet,
     action,
@@ -99,7 +99,7 @@ const SingleInput: React.FC<IProps> = (props) => {
           type="text"
           value={inputValue}
           readOnly
-          onFocus={() => focusOrBlur('focus', task)}
+          onFocus={() => focusOrBlur('focus', fullTask)}
           onBlur={() => focusOrBlur('blur', '')}
         />
       ) : action === 'confirm' ? (
@@ -109,7 +109,7 @@ const SingleInput: React.FC<IProps> = (props) => {
           type="text"
           value={inputValue}
           readOnly
-          onFocus={() => focusOrBlur('focus', task)}
+          onFocus={() => focusOrBlur('focus', fullTask)}
           onBlur={() => focusOrBlur('blur', '')}
         />
       ) : (
@@ -119,16 +119,16 @@ const SingleInput: React.FC<IProps> = (props) => {
           type="text"
           value={inputValue}
           onChange={(e) => searchByLetter(e.target.value)}
-          onFocus={() => focusOrBlur('focus', task)}
+          onFocus={() => focusOrBlur('focus', fullTask)}
           onBlur={() => focusOrBlur('blur', '')}
         />
       )}
-      {openedList === task &&
+      {openedList === fullTask &&
         (action === 'plan' || foundByLetter.length || action === 'confirm') && (
           <ListOfCandidates
             openAndChoose={openAndChoose}
             presentValue={firstInput}
-            task={task}
+            fullTask={fullTask}
             getCurrentWeek={getCurrentWeek}
             action={action}
             dateOfMeet={dateOfMeet}

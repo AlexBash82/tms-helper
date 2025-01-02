@@ -22,9 +22,9 @@ interface IUpdateData {
       | boolean
       | Array<{ name: string; _id: string }>
       | undefined
+      | string
     // latest?: number
     // portners?: Array<{ name: string; _id: string }>
-    // plan?: boolean
   }
 }
 
@@ -214,7 +214,7 @@ const AddInfoByWeek: React.FC = () => {
   }
 
   //---CONFIRM WEEK------------------------------------------------------------------------------------------------
-  // меняем plan: trye на false у всех студентов в этой неделе
+  // меняем (plan: trye на false) status !!!! у всех студентов в этой неделе
   // в БД студента вносим дату в поля задания и в latest
   // Обновляем напарников студента
   // Удаляем неделю из БД.
@@ -253,7 +253,7 @@ const AddInfoByWeek: React.FC = () => {
             newStudentData: {
               [key]: timeStampInp,
               latest: timeStampInp,
-              plan: false,
+              status: 'free',
             },
           }
 
@@ -488,7 +488,7 @@ const AddInfoByWeek: React.FC = () => {
     }
   }
   //----DELETE PLAN------------------------------------------------------------------------------------------------
-  // меняем plan: trye на false у всех студентов в этой неделе. Удаляем неделю из БД.
+  // меняем (plan: trye на false) status!!!! у всех студентов в этой неделе. Удаляем неделю из БД.
   const deletePlan = async () => {
     // инициализируем счетчики: количества заданий недели, количества успешных и провальных обновлений
     const amount: Amount = {
@@ -510,7 +510,7 @@ const AddInfoByWeek: React.FC = () => {
           const updateData = {
             idStudent: student.data._id,
             newStudentData: {
-              plan: false,
+              status: 'free',
             },
           }
 
@@ -632,27 +632,30 @@ const AddInfoByWeek: React.FC = () => {
               {weekState.teachingChBx && (
                 <div>
                   <div className="df">
-                    {weekState.list.map((person) => {
-                      const key = Object.keys(person)[0]
-                      if (key) {
-                        const newTitle = allTitles[key.slice(0, -3)]
-                        const number = key.slice(-1)
-
-                        const title =
-                          +number == 0 ? newTitle : `${number}-${newTitle}`
-                        return (
-                          <SingleInput
-                            key={key}
-                            title={title}
-                            openAndChoose={openAndChoose}
-                            openedList={openedList}
-                            firstInput={person.name}
-                            task={key}
-                            getCurrentWeek={getCurrentWeek}
-                            action={action}
-                            dateOfMeet={weekState.dateOfMeet}
-                          />
-                        )
+                    {weekState.list.map((itemOfList) => {
+                      const fullTask = Object.keys(itemOfList)[0]
+                      if (fullTask) {
+                        const title = allTitles[fullTask.slice(0, -3)]
+                        const numberOfTask = +fullTask.slice(-1)
+                        if (numberOfTask < 3) {
+                          const fullTitle =
+                            numberOfTask == 0
+                              ? title
+                              : `${numberOfTask}-${title}`
+                          return (
+                            <SingleInput
+                              key={fullTask}
+                              title={fullTitle}
+                              openAndChoose={openAndChoose}
+                              openedList={openedList}
+                              firstInput={itemOfList[fullTask]}
+                              fullTask={fullTask}
+                              getCurrentWeek={getCurrentWeek}
+                              action={action}
+                              dateOfMeet={weekState.dateOfMeet}
+                            />
+                          )
+                        }
                       }
                     })}
                   </div>

@@ -245,7 +245,6 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           gender: gender,
           dontUse: dontUse,
           comments: comments,
-          plan: false,
           status: 'free',
           portners: [],
 
@@ -325,7 +324,6 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
         gender: gender,
         dontUse: dontUse,
         comments: comments,
-        plan: editPropPerson.plan,
         status: editPropPerson.status,
         portners: editPropPerson.portners,
 
@@ -541,7 +539,7 @@ const AddAndEditPerson: React.FC<IProps> = ({ PropPerson, getAllStudents }) => {
           <div>
             assistantPointAsSC - {studentDateToString?.assistantPointAsSC}
           </div>
-          {editPropPerson.plan ? (
+          {editPropPerson.status == 'planed' ? (
             <div>student has planned</div>
           ) : (
             <div>student is open to plan</div>

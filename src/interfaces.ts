@@ -4,7 +4,6 @@ export interface IStudent {
   gender: string
   dontUse: boolean
   comments: string
-  plan: false
   status: 'free' | 'planed' | 'sent' | 'accepted' | 'rejected'
   portners: Array<{ name: string; _id: string }>
 

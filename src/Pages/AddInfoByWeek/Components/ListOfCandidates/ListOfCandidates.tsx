@@ -14,7 +14,7 @@ interface IProps {
   openAndChoose: (arg: string) => void
   getCurrentWeek: () => void
   presentValue: { name: string; _id: string; status: string } | null
-  task: string
+  fullTask: string
   dateOfMeet: string
   foundByLetter: Array<IStudent>
   inputIs: string
@@ -23,14 +23,14 @@ interface IProps {
 
 interface IUpdateStudent {
   idStudent: string
-  newStudentData: { plan: boolean; latest?: number }
+  newStudentData: { status: string; latest?: number }
 }
 
 const ListOfCandidates: React.FC<IProps> = ({
   openAndChoose,
   getCurrentWeek,
   presentValue,
-  task,
+  fullTask,
   dateOfMeet, //example '2024-01-10'
   action,
   foundByLetter,
@@ -42,10 +42,10 @@ const ListOfCandidates: React.FC<IProps> = ({
   useEffect(() => {
     const fetchStudents = async () => {
       if (action === 'plan') {
-        console.log('ready')
-        const students = await getLatestStudents(task)
-        console.log('got')
-        console.log('listOfCand fetchStudents - ', students)
+        //console.log('ready')
+        const students = await getLatestStudents(fullTask.slice(0, -3))
+        //console.log('got')
+        //console.log('listOfCand fetchStudents - ', students)
         if (students) {
           setLatestStudents(students)
         }
@@ -54,9 +54,9 @@ const ListOfCandidates: React.FC<IProps> = ({
 
     fetchStudents()
 
-    console.log('task', task)
-    console.log('action', action)
-  }, [task, action])
+    //console.log('task', task)
+    //console.log('action', action)
+  }, [fullTask, action])
 
   const timeEndOfMeet = '21:45'
   // вешаем слушатель на клик. Если вне родительского инпута и вне списка - закрываем список.
@@ -114,7 +114,7 @@ const ListOfCandidates: React.FC<IProps> = ({
 
     let isSuits = false
     //сравниваем название task и строки массива ключей и если совпадения есть, то isSuits присваиваем true
-    switch (task) {
+    switch (fullTask.slice(0, -3)) {
       case 'bibleReadingPointStMC':
         isSuits = minValues.includes('bibleReadingPointStMC')
         break
@@ -202,13 +202,13 @@ const ListOfCandidates: React.FC<IProps> = ({
     return isSuits
   }
 
-  // эта функция получает student: студента, у которого нужно в базе сделать plan: true. И если в этой строке уже есть имя другого студента, то в базе ищем его и меняем поле plan: true на false---меняем логику: поле status: planed -> free
+  //---------------------------------------MAKE PLAN--------------------------------------------------------------------
+  // эта функция получает (student) студента, у которого нужно в базе сделать status: 'planned'. И если в этой строке уже есть имя другого студента, то в базе ищем его и меняем поле status: 'free'
   const makePlan = async (student: IStudent) => {
-    //если в строке уже имеется студент: presentValue и новое имя отичается от предыдущего, то получаем его из базы
+    //меняем поле status у имеющегося студента
     if (presentValue && presentValue.name !== student.lastFirstName) {
       const presentUser = await window.api.getOneUserByLFName(presentValue.name)
 
-      //меняем у этого студента поле plan: status
       if (presentUser.success) {
         try {
           const updatePresent = {
@@ -221,9 +221,12 @@ const ListOfCandidates: React.FC<IProps> = ({
         } catch (error) {
           console.error('Error updating item:', error)
         }
+      } else {
+        alert('I can not find prior student!')
       }
     }
 
+    //обновляем поле status у нового студента
     if (!presentValue || presentValue.name !== student.lastFirstName) {
       try {
         const updateUser = {
@@ -232,26 +235,38 @@ const ListOfCandidates: React.FC<IProps> = ({
           newValue: 'planned',
         }
         const resultUser = await window.api.updateOneUser(updateUser)
-
         //если обновить студента получилось, то обновляем данные в базе недели
-        //----------------------------------------------------------------------------------
-        //---------переписать логику: получать здесь имя массива и индекс элемента и
-        //---------и обновлять в базе данных по имень массива и индексу елмента т.е.
-        //---------переписать логику в базе данных
         if (resultUser.success) {
           const updateWeek = {
             dateOfMeet,
-            task,
+            fullTask,
             newValue: {
               name: resultUser.data.lastFirstName,
               _id: resultUser.data._id,
-              status: resultUser.data.status,
             },
           }
+          console.log('try to update by: ', updateWeek)
           const resultWeek = await window.api.updateOneWeek(updateWeek)
+          console.log('got result as: ', resultWeek)
 
           if (resultWeek.success) {
             getCurrentWeek()
+          } else {
+            //если обновить неделю не получилось - отзываем изменения у студента и выводим alert
+            const updateUser = {
+              studentName: student.lastFirstName,
+              keyName: 'status',
+              newValue: 'free',
+            }
+            const resultUser = await window.api.updateOneUser(updateUser)
+
+            if (resultUser.success) {
+              alert('I can not updete this week!')
+            } else {
+              alert(
+                `WARNING! I updated stedent ${student.lastFirstName} as "planed", but I can not update this week`
+              )
+            }
           }
         }
       } catch (error) {
@@ -266,7 +281,7 @@ const ListOfCandidates: React.FC<IProps> = ({
     try {
       const updateWeek = {
         dateOfMeet,
-        keyName: task,
+        keyName: fullTask,
         newValue: { name: student.lastFirstName, id: student._id },
       }
       const resultWeek = await window.api.updateOneWeek(updateWeek)
@@ -285,7 +300,7 @@ const ListOfCandidates: React.FC<IProps> = ({
 
   //План - Если пропустил без причины, то обновлем поле latest на дату недели (ставим в конец списка).
   //План -  Если пропустил по причине, то оставляем его в начале списка.
-  // В любом случае меняем plan: truе на false и удаляем имя из поля в БД недели.
+  // В любом случае меняем (plan: truе на false) status!!! и удаляем имя из поля в БД недели.
   const makeConfirm = async (reason: string) => {
     if (presentValue) {
       const presentUser = await window.api.getOneUserByLFName(presentValue.name)
@@ -294,7 +309,7 @@ const ListOfCandidates: React.FC<IProps> = ({
         // формируем данные для обновления полей студента в БД
         const updatePresent: IUpdateStudent = {
           idStudent: presentUser.data._id,
-          newStudentData: { plan: false },
+          newStudentData: { status: 'free' },
         }
 
         if (reason === 'Absence for NO reason') {
@@ -303,7 +318,7 @@ const ListOfCandidates: React.FC<IProps> = ({
         }
         //console.log('makeConfirm', updatePresent)
 
-        // обновляем данные полей plan и, если нужно, latest
+        // обновляем данные полей (plan) status!!! и, если нужно, latest
         try {
           const resultUser = await window.api.editOneUser(updatePresent)
 
@@ -311,7 +326,7 @@ const ListOfCandidates: React.FC<IProps> = ({
           if (resultUser.success) {
             const updateWeek = {
               dateOfMeet,
-              keyName: task,
+              keyName: fullTask,
               newValue: null,
             }
             const resultWeek = await window.api.updateOneWeek(updateWeek)
