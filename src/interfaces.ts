@@ -265,3 +265,10 @@ export interface IAddParams {
   isCongBibleStudyReader?: boolean
   isEndPrayer?: boolean
 }
+
+export interface ISettings {
+  teachingChBx: boolean
+  trainingChBx: boolean
+  secondClassChBx: boolean
+  timeEndOfMeet: string
+}

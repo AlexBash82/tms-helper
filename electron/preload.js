@@ -31,6 +31,10 @@ contextBridge.exposeInMainWorld('api', {
   getAllWeeks: async () => ipcRenderer.invoke('get-all-weeks'),
   updateOneWeek: async (weekData) =>
     ipcRenderer.invoke('update-one-week', weekData),
+  updateListOfWeek: async (weekData) =>
+    ipcRenderer.invoke('update-list-of-week', weekData),
   deleteOneWeek: async (dateOfMeet) =>
     ipcRenderer.invoke('delete-one-week', dateOfMeet),
+
+  getSettings: async () => ipcRenderer.invoke('get-settings'),
 })

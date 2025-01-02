@@ -217,7 +217,7 @@ const ListOfCandidates: React.FC<IProps> = ({
             newValue: 'free',
           }
           const presentResult = await window.api.updateOneUser(updatePresent)
-          console.log('presentResult', presentResult)
+          //console.log('presentResult', presentResult)
         } catch (error) {
           console.error('Error updating item:', error)
         }
@@ -245,9 +245,9 @@ const ListOfCandidates: React.FC<IProps> = ({
               _id: resultUser.data._id,
             },
           }
-          console.log('try to update by: ', updateWeek)
-          const resultWeek = await window.api.updateOneWeek(updateWeek)
-          console.log('got result as: ', resultWeek)
+          //console.log('try to update by: ', updateWeek)
+          const resultWeek = await window.api.updateListOfWeek(updateWeek)
+          //console.log('got result as: ', resultWeek)
 
           if (resultWeek.success) {
             getCurrentWeek()
@@ -284,6 +284,7 @@ const ListOfCandidates: React.FC<IProps> = ({
         keyName: fullTask,
         newValue: { name: student.lastFirstName, id: student._id },
       }
+      //перепроверить логику!!!!!!!!!!!!!!!!!!!!!!!!!
       const resultWeek = await window.api.updateOneWeek(updateWeek)
 
       if (resultWeek.success) {
@@ -298,8 +299,8 @@ const ListOfCandidates: React.FC<IProps> = ({
 
   const absence = ['Absence for a reason', 'Absence for NO reason']
 
-  //План - Если пропустил без причины, то обновлем поле latest на дату недели (ставим в конец списка).
-  //План -  Если пропустил по причине, то оставляем его в начале списка.
+  //Сделать - Если пропустил без причины, то обновлем поле latest на дату недели (ставим в конец списка).
+  //Сделать -  Если пропустил по причине, то оставляем его в начале списка.
   // В любом случае меняем (plan: truе на false) status!!! и удаляем имя из поля в БД недели.
   const makeConfirm = async (reason: string) => {
     if (presentValue) {
@@ -329,6 +330,7 @@ const ListOfCandidates: React.FC<IProps> = ({
               keyName: fullTask,
               newValue: null,
             }
+            //поменять на upateListOfWeek и перепроверить логику
             const resultWeek = await window.api.updateOneWeek(updateWeek)
 
             if (resultWeek.success) {

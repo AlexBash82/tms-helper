@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
-import { IAddParams, IStudent, IWeek } from './interfaces'
+import { IAddParams, IStudent, IWeek, ISettings } from './interfaces'
 
 type Result = {
   success: boolean
@@ -35,13 +35,13 @@ type Failure = {
   message: string
 }
 
-type SuccessStudent = {
+type SuccessOneStudent = {
   success: true
   message: string
   data: IStudent
 }
 
-type ResultStudent = SuccessStudent | Failure
+type ResultOneStudent = SuccessOneStudent | Failure
 
 type SuccessStudents = {
   success: true
@@ -51,6 +51,14 @@ type SuccessStudents = {
 
 type ResultStudents = SuccessStudents | Failure
 
+type SuccesSetting = {
+  success: true
+  message: string
+  data: ISettings
+}
+
+type ResultSettings = SuccesSetting | Failure
+
 declare global {
   interface Window {
     api: {
@@ -59,9 +67,9 @@ declare global {
 
       getAllStudents: () => Promise<ResultStudents>
       getUsersByLastname: (lastFirstName: string) => Promise<ResultStudents>
-      updateOneUser: (personData: object) => Promise<ResultStudent>
-      getOneUserByLFName: (lastFirstName: string) => Promise<ResultStudent>
-      editOneUser: (data: object) => Promise<ResultStudent>
+      updateOneUser: (personData: object) => Promise<ResultOneStudent>
+      getOneUserByLFName: (lastFirstName: string) => Promise<ResultOneStudent>
+      editOneUser: (data: object) => Promise<ResultOneStudent>
       getUsersByLatest: (addParam: IAddParams) => Promise<ResultStudents>
       //обновить типы функций что ниже
       writeOneUser: (personData: object) => Promise<Result>
@@ -75,7 +83,10 @@ declare global {
       ) => Promise<SuccecWithNewWeek | UnSuccessWithNewWeek>
       getAllWeeks: () => Promise<SuccesResultAllWeeks | UnSuccessResultAllWeeks>
       updateOneWeek: (weekData: object) => Promise<Result>
+      updateListOfWeek: (weekData: object) => Promise<Result>
       deleteOneWeek: (dateOfMeet: string) => Promise<Result>
+
+      getSettings: () => Promise<ResultSettings>
     }
   }
 }

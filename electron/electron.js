@@ -499,16 +499,16 @@ ipcMain.handle('get-one-week', async (event, dateOfMeet) => {
   }
 })
 
-//-------------------------UPDATE-ONE-WEEK---------------------------------------------
+//-------------------------UPDATE-LIST-OF-WEEK---------------------------------------------
 
-ipcMain.handle('update-one-week', async (event, weekData) => {
+ipcMain.handle('update-list-of-week', async (event, weekData) => {
   try {
     const { dateOfMeet, fullTask, newValue } = weekData
 
     const originalWeek = await new Promise((resolve, reject) => {
       weeksDB.findOne({ dateOfMeet }, (err, foundWeek) => {
         if (err) {
-          console.error('update-one-week error findOne', err)
+          console.error('update-list-of-week error findOne', err)
           reject(err)
         } else {
           resolve(foundWeek)
@@ -532,6 +532,54 @@ ipcMain.handle('update-one-week', async (event, weekData) => {
     const updatedWeek = await new Promise((resolve, reject) => {
       weeksDB.update({ dateOfMeet }, newWeek, {}, (err, numUpdated) => {
         if (err) {
+          console.error('update-list-of-week error update', err)
+          reject(err)
+        } else {
+          //console.log('update-list-of-week number', numUpdated)
+          resolve(numUpdated)
+        }
+      })
+    })
+
+    weeksDB.persistence.compactDatafile()
+
+    return {
+      success: true,
+      message: 'List of week updated successfully',
+      data: newWeek,
+    }
+  } catch (error) {
+    console.error('update-list-of-week error', error)
+    return { success: false, message: 'Error updating list of week' }
+  }
+})
+
+//-------------------------UPDATE-ONE-WEEK---------------------------------------------
+
+ipcMain.handle('update-one-week', async (event, weekData) => {
+  try {
+    const { dateOfMeet, keyName, newValue } = weekData
+
+    const originalWeek = await new Promise((resolve, reject) => {
+      weeksDB.findOne({ dateOfMeet }, (err, foundWeek) => {
+        if (err) {
+          console.error('update-one-week error findOne', err)
+          reject(err)
+        } else {
+          resolve(foundWeek)
+        }
+      })
+    })
+
+    if (!originalWeek) {
+      return { success: false, message: 'The week not found' }
+    }
+
+    const newWeek = { ...originalWeek, [keyName]: newValue }
+
+    const updatedWeek = await new Promise((resolve, reject) => {
+      weeksDB.update({ dateOfMeet }, newWeek, {}, (err, numUpdated) => {
+        if (err) {
           console.error('update-one-week error update', err)
           reject(err)
         } else {
@@ -545,7 +593,7 @@ ipcMain.handle('update-one-week', async (event, weekData) => {
 
     return {
       success: true,
-      message: 'Week updated successfully',
+      message: 'One week updated successfully',
       data: newWeek,
     }
   } catch (error) {
@@ -574,5 +622,28 @@ ipcMain.handle('delete-one-week', async (event, dateOfMeet) => {
   } catch (error) {
     console.error('delete-one-week error', error)
     return { success: false, message: 'Error deleting week' }
+  }
+})
+
+//--------------------------GET-SETTINGS---------------------------------------------
+
+ipcMain.handle('get-settings', async (event) => {
+  try {
+    const allSettings = await new Promise((resolve, reject) => {
+      settingsDB.find({}, (err, settings) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(settings)
+        }
+      })
+    })
+
+    if (allSettings) {
+      return { success: true, message: '', data: allSettings }
+    }
+  } catch (error) {
+    //console.error('read-settings error', error)
+    return { success: false, message: 'Error with geting settings' }
   }
 })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AddInfoByWeek.css'
 import { getStartAndEndWeek } from '../../Servces/getStartAndEndWeek'
 import { getTimeStamps } from '../../Servces/getTimeStamps'
@@ -51,9 +51,9 @@ const AddInfoByWeek: React.FC = () => {
     comment: '',
     range: '',
 
-    teachingChBx: true,
-    trainingChBx: true,
-    secondClassChBx: true,
+    teachingChBx: false,
+    trainingChBx: false,
+    secondClassChBx: false,
 
     // startPointChBx: false,
     // followPointChBx: false,
@@ -67,11 +67,10 @@ const AddInfoByWeek: React.FC = () => {
     // liveAndServTwoChBx: false,
     // liveAndServThreeChBx: false,
 
-    list: [
-      { chairmanPointT00: null }, // { name: string; _id: string }
-      { firstTalkPointT01: null },
-      { gemsPointT02: null },
-    ],
+    list: [],
+    // { chairmanPointT00: null }, // { name: string; _id: string }
+    // { firstTalkPointT01: null },
+    // { gemsPointT02: null },
 
     // lessonOnePoint: null,
     // lessonTwoPoint: null,
@@ -109,7 +108,16 @@ const AddInfoByWeek: React.FC = () => {
     'plan' | 'confirm' | 'update' | undefined
   >()
 
-  const timeEndOfMeet = '20:45' //--------------------------------------------------------------------
+  const timeEndOfMeet = '20:45' //------------настроить получение из бд--------------------------------------------------------
+
+  useEffect(() => {
+    const defaultWeekChBx = getSettings()
+  }, [])
+
+  const getSettings = async () => {
+    const result = await window.api.getSettings()
+    console.log('settiongs', result)
+  }
 
   const openAndChoose = (task: string) => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
@@ -659,50 +667,6 @@ const AddInfoByWeek: React.FC = () => {
                       }
                     })}
                   </div>
-                  {/* <div className="df">
-                    {weekState.list.map((person, index) => {
-                      if (index >= 2) {
-                        const key = Object.keys(person)[0]
-                        const newTitle = allTitles[key]
-                        let number = 1
-                        number += index + weekState.list.length
-                        const title = `${number}-${newTitle}`
-                        return (
-                          <SingleInput
-                            key={index}
-                            title={title}
-                            openAndChoose={openAndChoose}
-                            openedList={openedList}
-                            firstInput={person.name}
-                            task={key}
-                            getCurrentWeek={getCurrentWeek}
-                            action={action}
-                            dateOfMeet={weekState.dateOfMeet}
-                          />
-                        )
-                      }
-                    })}
-                  </div> */}
-                  {/* <div className="df">
-                    {weekState.list.map((person, index) => {
-                      const key = Object.keys(person)[0]
-                      const newTitle = allTitles[key]
-
-                      return (
-                        <SingleInput
-                          key={index}
-                          title={newTitle}
-                          openAndChoose={openAndChoose}
-                          openedList={openedList}
-                          firstInput={person.name}
-                          task={key}
-                          getCurrentWeek={getCurrentWeek}
-                          action={action}
-                          dateOfMeet={weekState.dateOfMeet}
-                        />
-                      )
-                    })}
-                  </div> */}
                 </div>
               )}
             </div>
