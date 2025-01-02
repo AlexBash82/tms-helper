@@ -110,14 +110,24 @@ const AddInfoByWeek: React.FC = () => {
 
   const timeEndOfMeet = '20:45' //------------настроить получение из бд--------------------------------------------------------
 
+  //---------------------------------------------------------------------------------этот код работает не корректно
   useEffect(() => {
-    const defaultWeekChBx = getSettings()
+    getSettings()
   }, [])
 
   const getSettings = async () => {
-    const result = await window.api.getSettings()
-    console.log('settiongs', result)
+    const defaultSetting = await window.api.getSettings()
+    if (defaultSetting.success) {
+      if (defaultSetting.data.teachingChBx !== weekState.teachingChBx) {
+        console.log('defaul ', defaultSetting.data.teachingChBx)
+        setWeekState({
+          ...weekState,
+          teachingChBx: defaultSetting.data.teachingChBx,
+        })
+      }
+    }
   }
+  //---------------------------------------------------------------------------------
 
   const openAndChoose = (task: string) => {
     openedList === task ? setOpenedList('') : setOpenedList(task)

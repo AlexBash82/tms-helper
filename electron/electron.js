@@ -630,20 +630,22 @@ ipcMain.handle('delete-one-week', async (event, dateOfMeet) => {
 ipcMain.handle('get-settings', async (event) => {
   try {
     const allSettings = await new Promise((resolve, reject) => {
-      settingsDB.find({}, (err, settings) => {
+      settingsDB.find({}, (err, set) => {
         if (err) {
           reject(err)
         } else {
-          resolve(settings)
+          resolve(set)
         }
       })
     })
 
-    if (allSettings) {
-      return { success: true, message: '', data: allSettings }
+    return {
+      success: true,
+      message: 'Get settings successfully',
+      data: allSettings[0],
     }
   } catch (error) {
-    //console.error('read-settings error', error)
+    console.error('Get-settings error', error)
     return { success: false, message: 'Error with geting settings' }
   }
 })
