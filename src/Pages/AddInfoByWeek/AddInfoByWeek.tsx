@@ -110,24 +110,10 @@ const AddInfoByWeek: React.FC = () => {
 
   const timeEndOfMeet = '20:45' //------------настроить получение из бд--------------------------------------------------------
 
-  //---------------------------------------------------------------------------------этот код работает не корректно
-  useEffect(() => {
-    getSettings()
-  }, [])
-
   const getSettings = async () => {
     const defaultSetting = await window.api.getSettings()
-    if (defaultSetting.success) {
-      if (defaultSetting.data.teachingChBx !== weekState.teachingChBx) {
-        console.log('defaul ', defaultSetting.data.teachingChBx)
-        setWeekState({
-          ...weekState,
-          teachingChBx: defaultSetting.data.teachingChBx,
-        })
-      }
-    }
+    return defaultSetting.success ? defaultSetting.data : undefined
   }
-  //---------------------------------------------------------------------------------
 
   const openAndChoose = (task: string) => {
     openedList === task ? setOpenedList('') : setOpenedList(task)
@@ -202,10 +188,55 @@ const AddInfoByWeek: React.FC = () => {
       isPlanned,
     })
 
+    //------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+    //------добавить вставку дефолтной недели в зависимости от того что выбрано в настройках.
+
+    //const gotSettings = await getSettings()
+    //console.log('def ', gotSettings)
+    const gotSettings = {
+      teachingChBx: true,
+      trainingChBx: true,
+      secondClassChBx: true,
+      timeEndOfMeet: '20:45',
+      _id: '6qTAW7vEdD5QVOZG',
+    }
+
+    if (gotSettings && gotSettings.teachingChBx) {
+      Object.assign(newWeek, {
+        teachingChBx: true,
+      })
+      newWeek.list.push(
+        { chairmanPointT00: null },
+        { firstTalkPointT01: null },
+        { gemsPointT02: null }
+      )
+
+      if (gotSettings.secondClassChBx) {
+        Object.assign(newWeek, {
+          secondClassChBx: true,
+        })
+        newWeek.list.push()
+      }
+    }
+
+    if (gotSettings && gotSettings.trainingChBx) {
+      Object.assign(newWeek, {
+        trainingChBx: true,
+      })
+      newWeek.list.push({ bibleReadingPointStMCT03: null })
+
+      if (gotSettings.secondClassChBx) {
+        Object.assign(newWeek, {
+          secondClassChBx: true,
+        })
+        newWeek.list.push()
+      }
+    }
+
     delete newWeek._id
-    console.log('sending to db', newWeek)
+    //console.log('sending to db', newWeek)
     const result = await window.api.writeNewWeek(newWeek)
-    console.log('getting back from db', result)
+    //console.log('getting back from db', result)
     return result
   }
 
