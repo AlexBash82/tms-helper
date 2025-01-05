@@ -5,6 +5,7 @@ import { getTimeStamps } from '../../Servces/getTimeStamps'
 import Weeks from './Components/Weeks/Weeks'
 import SingleInput from './Components/SingleInput/SingleInput'
 import CoupleInputs from './Components/CoupleInputs/CoupleInputs'
+import BuildWeek from './Components/BuildWeek/BuildWeek'
 import { IWeek, IWeekCopy } from '../../interfaces'
 import _ from 'lodash'
 
@@ -40,6 +41,8 @@ const AddInfoByWeek: React.FC = () => {
     congBibleStudyReaderPoint: 'Cong. Bible St. reader',
     endPrayerPoint: 'Prayer',
     secondChairmanPoint: 'Second Class Chairman',
+    bibleReadingPointStMC: 'Bible Reading',
+    bibleReadingPointStSC: 'Bible Reading',
   }
 
   const defaultWeekState: IWeek = {
@@ -72,10 +75,7 @@ const AddInfoByWeek: React.FC = () => {
     // { firstTalkPointT01: null },
     // { gemsPointT02: null },
 
-    // lessonOnePoint: null,
-    // lessonTwoPoint: null,
-    // liveAndServTwoPoint: null,
-    // liveAndServThreePoint: null,
+    // bibleReadingPointStSCT03: null,
 
     // secondChairmanPoint: null,
 
@@ -88,7 +88,7 @@ const AddInfoByWeek: React.FC = () => {
     // explainPointStMC: null,
     // explainPointAsMC: null,
     // talkPointStMC: null,
-    // bibleReadingPointStSC: null,
+
     // startPointStSC: null,
     // startPointAsSC: null,
     // followPointStSC: null,
@@ -102,6 +102,7 @@ const AddInfoByWeek: React.FC = () => {
     // talkPointStSC: null,
   }
   const [weekState, setWeekState] = useState<IWeek>(defaultWeekState)
+  const [isBuildWeekOpen, setBuildWeekOpen] = useState(false)
 
   const [openedList, setOpenedList] = useState<string | undefined>()
   const [action, setAction] = useState<
@@ -193,13 +194,16 @@ const AddInfoByWeek: React.FC = () => {
 
     //const gotSettings = await getSettings()
     //console.log('def ', gotSettings)
+    //закомментировал метод и пока поставил загушку:
     const gotSettings = {
-      teachingChBx: true,
+      teachingChBx: false,
       trainingChBx: true,
       secondClassChBx: true,
       timeEndOfMeet: '20:45',
       _id: '6qTAW7vEdD5QVOZG',
     }
+
+    setBuildWeekOpen(true)
 
     if (gotSettings && gotSettings.teachingChBx) {
       Object.assign(newWeek, {
@@ -240,18 +244,18 @@ const AddInfoByWeek: React.FC = () => {
     return result
   }
 
-  const makeChangeChBx = async (nameChBx: string, value: boolean) => {
-    const updateWeek = {
-      dateOfMeet: weekState.dateOfMeet,
-      keyName: nameChBx,
-      newValue: value,
-    }
-    const resultWeek = await window.api.updateOneWeek(updateWeek)
-    //console.log('makeChangeChBx', resultWeek)
-    if (resultWeek.success) {
-      getCurrentWeek()
-    }
-  }
+  // const makeChangeChBx = async (nameChBx: string, value: boolean) => {
+  //   const updateWeek = {
+  //     dateOfMeet: weekState.dateOfMeet,
+  //     keyName: nameChBx,
+  //     newValue: value,
+  //   }
+  //   const resultWeek = await window.api.updateOneWeek(updateWeek)
+  //   //console.log('makeChangeChBx', resultWeek)
+  //   if (resultWeek.success) {
+  //     getCurrentWeek()
+  //   }
+  // }
 
   const getCurrentWeek = async () => {
     if (weekState.dateOfMeet) {
@@ -622,6 +626,10 @@ const AddInfoByWeek: React.FC = () => {
 
   return (
     <div>
+      <BuildWeek
+        isBildWeekOpen={isBuildWeekOpen}
+        onCloseBildWeek={() => setBuildWeekOpen(false)}
+      />
       <Weeks
         timeEndOfMeet={timeEndOfMeet}
         makeAMeet={makeAMeet}
@@ -650,69 +658,71 @@ const AddInfoByWeek: React.FC = () => {
             weekState.teachingChBx ? 'teaching' : ''
           }`}
         >
-          <input
-            type="checkbox"
-            checked={weekState.teachingChBx}
-            onChange={(e) =>
-              makeChangeChBx('teachingChBx', !weekState.teachingChBx)
-            }
-          />
+          <input type="checkbox" checked={weekState.teachingChBx} readOnly />
           -Teaching points
-          <input
-            type="checkbox"
-            checked={weekState.trainingChBx}
-            onChange={(e) =>
-              makeChangeChBx('trainingChBx', !weekState.trainingChBx)
-            }
-          />
+          <input type="checkbox" checked={weekState.trainingChBx} readOnly />
           -Training points
-          <input
-            type="checkbox"
-            checked={weekState.secondClassChBx}
-            onChange={(e) =>
-              makeChangeChBx('secondClassChBx', !weekState.secondClassChBx)
-            }
-          />
+          <input type="checkbox" checked={weekState.secondClassChBx} readOnly />
           - Second class
           {/*---------------------------Teaching--------------------------- */}
+          <div>TREASURES FROM GOD'S WORD</div>
           {weekState.teachingChBx && (
             <div className="df">
-              <div>TREASURES FROM GOD'S WORD</div>
-              {weekState.teachingChBx && (
-                <div>
-                  <div className="df">
-                    {weekState.list.map((itemOfList) => {
-                      const fullTask = Object.keys(itemOfList)[0]
-                      if (fullTask) {
-                        const title = allTitles[fullTask.slice(0, -3)]
-                        const numberOfTask = +fullTask.slice(-1)
-                        if (numberOfTask < 3) {
-                          const fullTitle =
-                            numberOfTask == 0
-                              ? title
-                              : `${numberOfTask}-${title}`
-                          return (
-                            <SingleInput
-                              key={fullTask}
-                              title={fullTitle}
-                              openAndChoose={openAndChoose}
-                              openedList={openedList}
-                              firstInput={itemOfList[fullTask]}
-                              fullTask={fullTask}
-                              getCurrentWeek={getCurrentWeek}
-                              action={action}
-                              dateOfMeet={weekState.dateOfMeet}
-                            />
-                          )
-                        }
-                      }
-                    })}
-                  </div>
-                </div>
-              )}
+              {weekState.list.map((itemOfList) => {
+                const fullTask = Object.keys(itemOfList)[0]
+                if (fullTask) {
+                  const title = allTitles[fullTask.slice(0, -3)]
+                  const numberOfTask = +fullTask.slice(-1)
+                  if (numberOfTask < 3) {
+                    const fullTitle =
+                      numberOfTask == 0 ? title : `${numberOfTask}-${title}`
+                    return (
+                      <SingleInput
+                        key={fullTask}
+                        title={fullTitle}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={itemOfList[fullTask]}
+                        fullTask={fullTask}
+                        getCurrentWeek={getCurrentWeek}
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )
+                  }
+                }
+              })}
             </div>
           )}
           {/*---------------------------Training--------------------------- */}
+          {weekState.trainingChBx && (
+            <div className="df">
+              {weekState.list.map((itemOfList) => {
+                const fullTask = Object.keys(itemOfList)[0]
+                if (fullTask) {
+                  const title = allTitles[fullTask.slice(0, -3)]
+                  const numberOfTask = +fullTask.slice(-1)
+                  if (numberOfTask == 3) {
+                    const fullTitle = `${numberOfTask}-${title}`
+                    return (
+                      <SingleInput
+                        key={fullTask}
+                        title={fullTitle}
+                        openAndChoose={openAndChoose}
+                        openedList={openedList}
+                        firstInput={itemOfList[fullTask]}
+                        fullTask={fullTask}
+                        getCurrentWeek={getCurrentWeek}
+                        action={action}
+                        dateOfMeet={weekState.dateOfMeet}
+                      />
+                    )
+                  }
+                }
+              })}
+            </div>
+          )}
+          <div>APPLY YOURSELF TO THE FIELD MINISTRY</div>
           {weekState.trainingChBx && (
             <></>
             // <div className="df">

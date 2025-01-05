@@ -42,9 +42,8 @@ const ListOfCandidates: React.FC<IProps> = ({
   useEffect(() => {
     const fetchStudents = async () => {
       if (action === 'plan') {
-        //console.log('ready')
         const students = await getLatestStudents(fullTask.slice(0, -3))
-        //console.log('got')
+
         //console.log('listOfCand fetchStudents - ', students)
         if (students) {
           setLatestStudents(students)

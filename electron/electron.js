@@ -363,6 +363,7 @@ ipcMain.handle('delete-one-user', async (event, lastFirstName) => {
 
 ipcMain.handle('get-sorted-users-by-latest', async (event, addParam) => {
   try {
+    console.log('get-latest-st addParam: ', addParam)
     const filteredUsers = await new Promise((resolve, reject) => {
       usersDB
         .find({ dontUse: false, status: 'free', ...addParam })

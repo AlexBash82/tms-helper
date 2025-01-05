@@ -4,19 +4,17 @@ export async function getLatestStudents(
   task: string
 ): Promise<IStudent[] | undefined> {
   const taskMappings = [
-    { keyword: 'readPoint', param: { isBibleReading: true } },
-    { keyword: 'speechPoint', param: { isTalk: true } },
+    { keyword: 'bibleReadingPoint', param: { isBibleReading: true } },
+    { keyword: 'talkPoint', param: { isTalk: true } },
     { keyword: 'makePoint', param: { isNotBibleStudy: false } },
     { keyword: 'MC', param: { isSecondClassOnly: false } },
     { keyword: 'St', param: { isPortnerOnly: false } },
     { keyword: 'chairmanPoint', param: { isChairman: true } },
     { keyword: 'firstTalkPoint', param: { isFirstSpeech: true } },
-    { keyword: 'explainSpPoint', param: { isExplainTalk: true } },
+    { keyword: 'explainTalkPoint', param: { isExplainTalk: true } },
     { keyword: 'gemsPoint', param: { isGems: true } },
     { keyword: 'secondChairmanPoint', param: { isSecondChairm: true } },
     { keyword: 'livingAsChrPoint', param: { isLivingAsChr: true } },
-    { keyword: 'lessonOnePoint', param: { isLivingAsChr: true } },
-    { keyword: 'lessonTwoPoint', param: { isLivingAsChr: true } },
     { keyword: 'congBibleStudyPoint', param: { isCongBibleStudy: true } },
     {
       keyword: 'congBibleStudyReaderPoint',
@@ -37,9 +35,9 @@ export async function getLatestStudents(
   const getStudents = async (): Promise<IStudent[] | undefined> => {
     try {
       const addParams = addSearchParams()
-      console.log('getLatestSt - addParams: ', addParams)
+      //console.log('getLatestSt - addParams: ', addParams)
       const users = await window.api.getUsersByLatest(addParams)
-      console.log('getLatestSt - users: ', users)
+      //console.log('getLatestSt - users: ', users)
       if (users.success) {
         return users.data
       } else {
